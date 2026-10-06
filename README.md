@@ -1,8 +1,8 @@
-# okww-charcode-dev-skill
+# okww-charcode-dev
 
-用于编写 [ok-wuthering-waves](https://github.com/ok-oldking/ok-wuthering-waves)（ok-ww，鸣潮自动战斗脚本）角色代码的 agent skill。
+为 [ok-wuthering-waves](https://github.com/ok-oldking/ok-wuthering-waves)（ok-ww，鸣潮自动战斗脚本）生成角色代码的 harness：输入文字作战轴和实机视频，AI 对照理解出招，信息不全时向用户确认，最后生成角色代码。
 
-它要求 AI：
+目前仓库里只有其中的代码规则部分，以 agent skill 形式提供。它要求 AI：
 
 - 优先调用框架内置函数，并在相近的函数之间选对；
 - 内置函数不够用时，按项目已有的经验自己实现；
@@ -32,7 +32,7 @@ templates/verify_chain.py     交场链静态自检模板
 
 ## 安装
 
-把仓库克隆或链接到 agent 的 skills 目录，目录名用 skill 名 `okww-charcode-dev`（不是仓库名）：
+把仓库克隆或链接到 agent 的 skills 目录，目录名 `okww-charcode-dev`：
 
 - Claude Code：`~/.claude/skills/okww-charcode-dev`
 - pi：`~/.pi/agent/skills/okww-charcode-dev`
