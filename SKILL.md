@@ -58,7 +58,7 @@ description: 编写、修改、调试 ok-ww（ok-wuthering-waves，鸣潮自动�
   - `click_echo` 循环模式超时一律返回 False，即使已经按了出去。
 
   要确认技能是否放出，看 CD 是否出现、资源或图标是否变化。
-- **1-6** 反复按某技能直到它进入 CD，用 `self.task.wait_until(lambda: not self.resonance_available(), post_action=self.send_resonance_key, time_out=N)`，不手写 while。
+- **1-6** 反复按某技能直到它进入 CD，用 `self.task.wait_until(lambda: not self.resonance_available(), post_action=self.send_resonance_key, time_out=N)`，不手写 while。这是 1-1 认可的例外，不需要另写注释。
 - **1-7** 分清看的是什么：
   - `resonance_available()` / `echo_available()` 只看 CD 数字；要确认图标是亮的，再加 `current_resonance() > 0`；
   - `liberation_available()` 同时看图标和 CD；
@@ -87,7 +87,7 @@ description: 编写、修改、调试 ok-ww（ok-wuthering-waves，鸣潮自动�
 - **3-1** `do_perform` 以 `return self.switch_next_char()` 结尾，后面不再接动作。不要假设切人一定发生：没有候选人时它只普攻 0.2 秒就返回，随后 `perform` 会再次执行。
 - **3-2** 想决定下一个上场的人，覆写**目标角色**的 `get_switch_priority`，返回 `MUST` / `NO` / `HIGH + 1`，其余情况返回 `super()`。不要写死数字键。
 - **3-3** `get_switch_priority` 在角色**不在场**时被调用：每次切人对每个候选人各调一次，`need_fast_perform` 也会调用它。里面只能读时间戳、已存状态和 `*_available()`。不做 HUD 识别、不 sleep、不改状态、不打 info 日志。
-- **3-4** 在可选分支之前检查 `need_fast_perform()`，为真就提前切人。不要在紧凑循环里调用它（反例：上游 Zhezhi）。
+- **3-4** 只有队里有人会**不带 intro 也返回 MUST**（例如按时间戳返回 MUST 的覆写）时，才需要检查 `need_fast_perform()`；默认的 `get_switch_priority` 从不返回 MUST，其他情况下它恒为 False。检查点放在可以跳过的动作之前（R、重击、填充普攻），为真就提前切人，exit 行写 `reason=fast_switch`。不要在紧凑循环里调用它（反例：上游 Zhezhi）。
 - **3-5** 覆写 `wait_switch()` 时必须自带时间上限（框架那一支没有超时），并且只读时间戳和已存状态。
 - **3-6** `switch_other_char()` 只在 `on_combat_end` 里用；战斗中切人一律用 `switch_next_char()`。
 - **3-7** `switch_next_char()` 不带参数调用。只有当游戏机制允许不满协奏也能出延奏时（例如今汐）才传 `free_intro=True`。不要用 `post_action`；切人后要做的事放进目标角色的 `do_perform`，根据 `has_intro` 判断。
@@ -155,7 +155,7 @@ description: 编写、修改、调试 ok-ww（ok-wuthering-waves，鸣潮自动�
   - 中断。
 - **L-4** 不按帧、不按点击打日志；只在状态翻转时打，或在循环结束时打一条汇总。
 - **L-5** 日志里不写耗时，看两行时间戳的差。
-- **L-6 / L-7** 字段名和 `reason` 码都用固定的 snake_case 词表，新词先加进词表再用。格式：布尔写 True/False，比例保留 3 位小数，其他浮点保留 2 位。
+- **L-6 / L-7** 字段名和 `reason` 码都用固定的 snake_case 词表，新词先加进词表再用。格式：布尔写 True/False，比例保留 3 位小数，其他浮点保留 2 位。fail 行分不出原因时（又不能额外读状态，L-8），省略 `reason`。
 - **L-8** 不为打日志额外读状态，失败路径也一样；需要的值在做判断时就存进变量。两个坑：`get_current_con()` 会写 `current_con`，`has_cd()` 会触发 OCR。
 - **L-9 / L-10** 两种模式的写法不同：
   - 内置模式：保留框架日志、不重复打，直接内联写 `self.logger.info(f'...')`；

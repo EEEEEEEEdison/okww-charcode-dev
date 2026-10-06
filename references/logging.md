@@ -58,7 +58,7 @@
 
 - `event`：取自下方的事件词表，用小写短语。
 - `: ok` / `: fail`：只用于尝试类事件（cast、retry）。`decide` / `fallback` 的冒号后写分支名。
-- `reason=`：取自 reason 词表（L-7）。
+- `reason=`：取自 reason 词表（L-7）。fail 行分不出原因时省略，不新造码，也不为此额外读状态（L-8）；做判断时已经读到的值照常作为字段写上。
 - `key=value`：取自字段词表（L-6）。
 - 不写角色名，Logger 已经加了 `类名:` 前缀。
 
@@ -70,7 +70,7 @@
 | `decide: <branch>` | 选了哪个分支，以及决定它的状态值 | `decide: liberate lib_ready=True con=1.000` |
 | `cast E` / `cast R` / `cast echo` / `cast heavy` | 技能尝试与结果 | `cast R: fail reason=no_animation lib_ready=False in_team=True` |
 | `retry E` / `retry R` / `retry echo` | 重试（5-3 的第 2 次尝试） | `retry R: ok attempt=2` |
-| `attack` | 一段普攻结束时的汇总（L-4） | `attack attacks=12` |
+| `attack` | 手写普攻循环结束时的汇总（L-4）。用 `continues_normal_attack` 等框架函数时不打：`decide` 行已经记录了分支，时长看时间戳差（L-5） | `attack attacks=12` |
 | `fallback: <what>` | 兜底分支被触发，用 **warning** 级别 | `fallback: switch_without_r` |
 | `exit` | 离场：原因和下一个上场的人 | `exit reason=done next=Phrolova.f4` |
 | `interrupt` | 角色代码自己识别到的中断：超时、交还框架等 | `interrupt reason=startup_in_progress` |
@@ -98,7 +98,7 @@
 循环里每一帧、每一次点击都不打日志。只在两种时候打：
 
 - 状态翻转时；
-- 循环结束时打一条汇总，例如 `attack attacks=12`。
+- 手写循环结束时打一条汇总，例如 `attack attacks=12`。框架普攻函数（`continues_normal_attack` 等）不返回点击次数，不打这一行。
 
 ## L-5 不写耗时
 
@@ -149,6 +149,7 @@
 | `out_of_combat` | 角色代码自己判断出已脱战（例如工坊 `skip_combat_check` 放手时） |
 | `startup_in_progress` | 循环轴：启动轴进行中，却发生了自然入场，于是交还框架 |
 | `unknown_mode` | 循环轴：`perform_<mode>` 不存在，于是交还框架 |
+| `fast_switch` | `need_fast_perform()` 为真，跳过可选动作提前切人（3-4） |
 | `teammate_missing` | 循环轴：`_find_teammate` 没找到目标，于是交给框架选人 |
 
 ## L-8 不为日志额外读状态

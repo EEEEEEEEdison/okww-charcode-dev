@@ -177,7 +177,9 @@ def get_switch_priority(self, current_char=None, has_intro=False, target_low_con
 
 遍历非在场队友，只要有人的 `get_switch_priority(...) >= MUST` 就返回 True，并打 info `In lock with {char}`。
 
-用法（3-4）：放在可选分支之前，为真就跳过可选动作、直接切人。不要在紧凑循环里调用：每次调用都会触发全部队友的优先级计算并打 info。上游 `Zhezhi.py` 就在循环里调用，这是反例。
+默认的 `get_switch_priority` 只返回 NORMAL 或 NO（`:701-710`），所以只有队里有人覆写成不带 intro 也返回 MUST 时，它才可能为真。上游 9 个文件、12 处调用，多数用来给 R 或重击当门控，例如 `Brant.py:32`。
+
+用法（3-4）：放在可以跳过的动作之前（R、重击、填充普攻），为真就跳过、直接切人，exit 行写 `reason=fast_switch`。不要在紧凑循环里调用：每次调用都会触发全部队友的优先级计算并打 info。上游 `Zhezhi.py` 就在循环里调用，这是反例。
 
 ### wait_switch()（`:959`，覆写 2 处）
 
