@@ -47,10 +47,10 @@
 | `task` | — | 构造 | 所属 `BaseCombatTask` |
 | `index` | — | 构造 | 队伍位置 0/1/2；切人键 = `index + 1` |
 | `char_name` | — | 构造 | 如 `'char_jinhsi'` |
-| `last_perform` | `0` | `perform()` | 本次上场开始时间 |
+| `last_perform` | `0` | `perform()` | 本次 `do_perform` 开始时间。每次 `perform()` 都会刷新，包括 `switch_next_char` 没切走、`perform` 再次执行的时候，所以它不一定等于上场时刻 |
 | `last_res` / `last_echo` / `last_liberation` | `-1` | `record_*_use()` | 各技能最近一次使用时间 |
 | `last_switch_time` | `-1` | `switch_out()` | 最近一次下场时间 |
-| `last_switch_in_time` | `-1` | task 切人成功时 | 最近一次上场时间 |
+| `last_switch_in_time` | `-1` | task 切人成功时（`BaseCombatTask.py:677`） | 最近一次被切上场的时间。开战首发角色没有经过切人，所以仍是 `-1`；`reset_state` 不清这个值 |
 | `last_outro_time` | `-1` | task（带 intro 切出时） | 最近一次出延奏的时间 |
 | `last_full_con_switch_time` | `-1` | `switch_out()`（仅治疗） | 治疗锁定的起点 |
 | `has_intro` / `has_sub_dps_intro` | `False` | task 切人时 | 本次上场是否带入场（变奏） |
@@ -468,7 +468,7 @@ send_liberation_key(after_sleep=0, interval=-1, down_time=0.01)
 
 - `start < 0` 时返回 10000（视为“很久以前”）；
 - 否则返回 `time.time() - start - Σ(start 之后登记的冻结时长 - freeze_time)`；
-- 入场冻结（`freeze_time=-100`）只有在 `intro_motion_freeze=True` 时才扣除。
+- 入场冻结（`freeze_time=-100`）只有在 `intro_motion_freeze=True` 时才扣除。它由带 intro 的切人登记，时长取目标角色的 `intro_motion_freeze_duration`（默认 0.9 秒，`BaseCombatTask.py:680`）。
 
 **冻结的来源**：
 

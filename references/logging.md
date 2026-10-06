@@ -142,7 +142,7 @@
 |---|---|
 | `done` | 正常完成（exit 用） |
 | `not_ready` | 进入时技能、资源不满足 |
-| `timeout` | 等确认信号超时 |
+| `timeout` | 等确认信号超时，并且没有更具体的码可用（E / 声骸用 `icon_still_lit`，R 用 `no_animation`，按住用 `not_consumed`） |
 | `no_animation` | 按了 R 但没确认到演出（`not in_team` 没出现） |
 | `icon_still_lit` | 按键后图标仍亮着，没进 CD |
 | `not_consumed` | 按住后回路没被消耗 |

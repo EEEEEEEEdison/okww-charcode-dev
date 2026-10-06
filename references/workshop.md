@@ -33,6 +33,9 @@
 
 - `name`、`description`、`author`、`version`、`team` 五个字段都必须是非空字符串；
 - `team` 是逗号分隔的英文角色名，必须按字母序排列（不区分大小写），并且每个名字都必须是已注册的角色。
+  - 名字用**英文显示名**，不是 `char_xxx` 这种 key。大多数角色的显示名就是类名，少数有映射（`CustomCharLoader.py:25-34`）：例如类 `Linnai` 写 `Lynae`，类 `Xiangliyao` 写 `Xiangli Yao`，类 `Luhesi` 写 `Luuk Herssen`。排序按显示名比较。
+  - 逗号两侧的空格会被去掉，例如 `"Cantarella, Jinhsi, Phrolova"`。
+  - zip 里的 `.py` 文件名用**类名**（`Linnai.py`），不是显示名。
 
 **每个 .py 文件**
 

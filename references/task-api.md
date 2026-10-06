@@ -104,6 +104,7 @@
 - 发送前会 `reset_scene()`；
 - 技能键一律用 `self.get_*_key()` 取，不写死（1-2）；
 - 长按例子：`self.task.send_key(self.get_resonance_key(), down_time=1.2)`（`Chisa.py:90`）。
+- `down_time` 期间是**阻塞**的：交互层在按下和松开之间直接 `time.sleep(down_time)`（ok-ww 默认交互方式是 `PostMessage`，见 `config.py:206`；实现在 ok-script `ok/device/interaction_methods/post_message.py:31-35`）。这段时间里不抓帧、不做战斗检查，也不能中途松开。需要按住期间看画面、做战斗检查或按条件松开时，改用 `send_key_down` / `send_key_up`，写成 try/finally（5-4）。
 
 ### send_key_down(key, after_sleep=0) / send_key_up(key, after_sleep=0)
 

@@ -89,16 +89,18 @@ class Example(BaseChar):
 
 ```python
 def cast_resonance_confirmed(self):
+    if not self.resonance_available():
+        self.logger.info('cast E: fail reason=not_ready')
+        return False
     for attempt in range(2):
-        if not self.resonance_available():
-            self.logger.info(f'cast E: fail reason=not_ready attempt={attempt + 1}')
-            return False
-        self.send_resonance_key()
+        # If E already shows CD here, the first press landed after its window: confirm it, don't press again.
+        if attempt == 0 or self.resonance_available():
+            self.send_resonance_key()
         if self.task.wait_until(lambda: not self.resonance_available(), time_out=0.5):
             self.record_resonance_use()
-            self.logger.info(f'cast E: ok attempt={attempt + 1}')
+            self.logger.info(f'{"cast E" if attempt == 0 else "retry E"}: ok attempt={attempt + 1}')
             return True
-    self.logger.info('cast E: fail reason=timeout attempt=2')
+    self.logger.info('retry E: fail reason=icon_still_lit attempt=2')
     return False
 ```
 
