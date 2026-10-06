@@ -1,4 +1,4 @@
-# okww-charcode-dev
+# okww-charcode-dev-skill
 
 用于编写 [ok-wuthering-waves](https://github.com/ok-oldking/ok-wuthering-waves)（ok-ww，鸣潮自动战斗脚本）角色代码的 agent skill。
 
@@ -32,7 +32,7 @@ templates/verify_chain.py     交场链静态自检模板
 
 ## 安装
 
-把仓库克隆或链接到 agent 的 skills 目录，目录名用 `okww-charcode-dev`：
+把仓库克隆或链接到 agent 的 skills 目录，目录名用 skill 名 `okww-charcode-dev`（不是仓库名）：
 
 - Claude Code：`~/.claude/skills/okww-charcode-dev`
 - pi：`~/.pi/agent/skills/okww-charcode-dev`
