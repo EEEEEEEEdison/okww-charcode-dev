@@ -28,6 +28,7 @@ references/self-impl-patterns.md  自实现套路
 references/logging.md         日志模板、词表、_trace 参考实现
 references/workshop.md        工坊 zip 格式、循环轴骨架、可选案例
 templates/verify_chain.py     交场链静态自检模板
+knowledge/basics.md           harness 游戏常识：按键与操作、记号、画面识别
 ```
 
 ## 安装
