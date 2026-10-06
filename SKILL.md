@@ -1,6 +1,6 @@
 ---
 name: okww-charcode-dev
-description: 编写、修改、调试 ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码与工坊配队代码时使用。教 AI 优先调用 BaseChar / BaseCombatTask 内置函数并在相近函数之间选对；内置函数不够时按项目惯例自实现（时间戳 + 冻结时间、有界等待、区域颜色识别、模板）；统一英文日志模板（何时打、打什么）；工坊循环轴骨架（f 启动轴 / s 循环轴、强切交场、交场链自检）。也用于根据游戏日志和录像定位并修改出招、切人逻辑。Triggers: ok-ww, okww, ok-wuthering-waves, 鸣潮, Wuthering Waves, 角色代码, 写角色, char code, src/char, BaseChar, do_perform, switch_next_char, get_switch_priority, click_resonance, click_liberation, click_echo, heavy_click_forte, wait_until, 协奏, 回路, 切人, 出招, 工坊, 工坊配队, workshop, team zip, team.json, 循环轴, 启动轴, 强切, 交场链, 日志模板, log template, 根据日志改代码, 根据视频改代码.
+description: 编写、修改、调试 ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码与工坊配队代码时使用。教 AI 优先调用 BaseChar / BaseCombatTask 内置函数并在相近函数之间选对；内置函数不够时按项目惯例自实现（时间戳 + 冻结时间、有界等待、区域颜色识别、模板）；统一英文日志模板（何时打、打什么）；工坊循环轴骨架（f 启动轴 / s 循环轴、强切交场、交场链自检）。也用于根据游戏日志和录像定位并修改出招、切人逻辑。Triggers：ok-ww, okww, ok-wuthering-waves, 鸣潮, Wuthering Waves, 角色代码, 写角色, char code, src/char, BaseChar, do_perform, switch_next_char, get_switch_priority, click_resonance, click_liberation, click_echo, heavy_click_forte, wait_until, 协奏, 回路, 切人, 出招, 工坊, 工坊配队, workshop, team zip, team.json, 循环轴, 启动轴, 强切, 交场链, 日志模板, log template, 根据日志改代码, 根据视频改代码.
 ---
 
 # ok-ww 角色代码开发（okww-charcode-dev）
