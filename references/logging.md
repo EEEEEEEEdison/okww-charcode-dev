@@ -131,7 +131,7 @@
 | `in_team` | bool | `task.in_team()[0]`（演出中为 False） |
 | `flying` | bool | `flying()` |
 | `forte` | bool | 回路判断（`is_forte_full` 或角色专用变体）的结果 |
-| `heavy` | str | `heavy_click_forte` 三态：`none`（未按）、`consumed`、`timeout` |
+| `heavy` | bool | `heavy_click_forte` 的返回值是否为真：True = 2 秒内回路被消耗；False = 没按或按满 2 秒未消耗（两者都返回 None，分不开，fail 行因此不带 reason） |
 | `attacks` | int | 本段普攻实际点击次数 |
 | `attempt` | int | 第几次尝试（5-3） |
 | `round` | int | 循环轮次 |
