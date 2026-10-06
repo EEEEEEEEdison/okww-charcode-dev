@@ -27,7 +27,7 @@ harness/timeline.md           timeline.json 格式与关口 G2 清单
 harness/step2.md              步骤 2：节点映射、记号到代码、时限、自检清单、打包交付
 harness/iterate.md            实测迭代：读日志、两段视频对比、先说明再改
 knowledge/basics.md           游戏常识：按键与操作、记号、画面识别
-knowledge/cards/README.md     角色语义卡的规则与模板（一角色一命座一张卡）
+knowledge/cards/README.md     角色语义卡的规则与模板（一角色一共鸣链一张卡）
 cases/                        每个案例的 timeline.json（视频等媒体不进仓库）
 rules.md                      代码规则（1-1 … 6-8、L-1 … L-10）、决策阶梯、迭代工作流
 references/basechar-api.md    BaseChar 函数详条 + 成员索引

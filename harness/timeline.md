@@ -38,7 +38,7 @@
 |---|---|
 | `case.chars` | 3 个角色的类名 |
 | `sources.axis_text.from` | `user` / `video_frame` / `description` / `comment` |
-| `sources.constellations.<类名>` | `author`（作者）与 `user`（用户）的命座，0–6；还不知道时填 null |
+| `sources.constellations.<类名>` | `author`（作者）与 `user`（用户）的共鸣链，0–6；还不知道时填 null |
 | `nodes[].id` | `<类名>.<f|s><序号>`。f 是启动轴，s 是循环轴，每个角色各自从 1 开始编号 |
 | `nodes[].next` | 下一个节点的 id。启动轴最后一个节点接到循环轴，循环轴首尾相接 |
 | `steps[].token` | `A` `Z` `E` `R` `Q` `闪` `跳` `↓` |
