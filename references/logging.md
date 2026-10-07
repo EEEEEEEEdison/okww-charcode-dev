@@ -134,7 +134,7 @@
 | `heavy` | bool | `heavy_click_forte` 的返回值是否为真：True = 2 秒内回路被消耗；False = 没按或按满 2 秒未消耗（两者都返回 None，分不开，fail 行因此不带 reason） |
 | `attacks` | int | 本段普攻实际点击次数 |
 | `attempt` | int | 第几次尝试（5-3） |
-| `skill` | str | 同一个键能放出几种技能时，本行是哪一种，例如坎特蕾拉 E 的 `enhanced` / `finisher` |
+| `skill` | str | 同一个键能放出几种技能时，本行是哪一种。取值按图标起名，不用“强化”“终结”这类各处叫法不一的词，例如坎特蕾拉 E 的 `umbrella`（伞形）/ `vortex`（粉圈漩涡） |
 | `round` | int | 循环轮次 |
 
 ## L-7 reason 词表
