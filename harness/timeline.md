@@ -10,7 +10,7 @@
   "sources": {
     "video": {"ref": "BV1nAC6BRETp", "file": "<媒体目录>/video.m4s", "width": 768, "height": 480, "fps": 30},
     "axis_text": {"raw": "启动轴\n坎 RQ\n...", "from": "video_frame", "confirmed": true},
-    "legend": {"from": "description", "entries": {"<记号>": "<本案作者说明的含义>"}},
+    "legend": {"from": "description", "entries": {"A": "普攻", "红字": "强化技"}},
     "constellations": {"Cantarella": {"author": 0, "user": 0}}
   },
   "nodes": [
@@ -43,7 +43,7 @@
 | `nodes[].next` | 下一个节点的 id。启动轴最后一个节点接到循环轴，循环轴首尾相接 |
 | `steps[].token` | `A` `Z` `E` `R` `Q` `闪` `跳` `↓` |
 | `steps[].count` | 只用于 A，表示连续几段 |
-| `steps[].enhanced` | 是否强化技，只按本案 `sources.legend` 判断（每个案例重新收集，basics.md N-1） |
+| `steps[].enhanced` | 是否强化技，按本案 `sources.legend` 判断（例如该作者用红字表示强化；basics.md N-2 只作候选） |
 | `steps[].op` | `tap` / `hold` / `unknown` / `n/a`（↓ 之类没有按法的记号） |
 | `steps[].hold_s` | op 为 `hold` 时的按住秒数 |
 | `steps[].timing` | `fixed`（固定时长）/ `condition`（满足条件才触发，条件写在 note 里） |
