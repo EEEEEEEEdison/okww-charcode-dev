@@ -78,6 +78,7 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
 - **2-7** 等入场动作或落地用 `wait_down()`，不要用固定秒数普攻代替。只有要等 E/R 变得可用时才用 `wait_intro()`。
 - **2-8** 固定时长普攻用 `continues_normal_attack(duration)`，配合它的 `click_resonance_if_ready_and_return` / `until_con_full` 参数。`duration` 是真实时间，不扣冻结。
 - **2-9** 手写的轮询循环必须有真实时间上限，每轮必须调用 `self.sleep()` 或 `self.task.next_frame()`。反例：上游 `normal_attack_until_can_switch` 是忙等。
+- **2-10** `click_liberation` 在 `in_team()` 第一次为真的那一帧返回，那一帧 HUD 可能还在淡入（队伍编号已过阈值、技能栏图标还没亮全）。R 后紧接着判 HUD 图标时，用 `wait_until(图标出现, time_out=0.3)` 从下一帧开始判，不在当前帧上做单帧判定，也不拿一次没认出就当“状态已结束”。案例：弗坎嘉 v7 test_1621，爆发图标在那一帧只有 0.62，两场都判成没进爆发。
 
 ### 3 切人
 
