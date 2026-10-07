@@ -41,10 +41,10 @@
 | `sources.constellations.<类名>` | `author`（作者）与 `user`（用户）的共鸣链，0–6；还不知道时填 null |
 | `nodes[].id` | `<类名>.<f|s><序号>`。f 是启动轴，s 是循环轴，每个角色各自从 1 开始编号 |
 | `nodes[].next` | 下一个节点的 id。启动轴最后一个节点接到循环轴，循环轴首尾相接 |
-| `steps[].token` | `A` `Z` `E` `R` `Q` `闪` `跳` `延奏`。harness 内部记法，作者的记号按本案 `sources.legend` 映射过来 |
+| `steps[].token` | `A` `Z` `E` `R` `Q` `闪` `跳` `↓` |
 | `steps[].count` | 只用于 A，表示连续几段 |
 | `steps[].enhanced` | 是否强化技，只按本案 `sources.legend` 判断（每个案例重新收集，basics.md N-1） |
-| `steps[].op` | `tap` / `hold` / `unknown` / `n/a`（`延奏` 之类没有按法的记号） |
+| `steps[].op` | `tap` / `hold` / `unknown` / `n/a`（↓ 之类没有按法的记号） |
 | `steps[].hold_s` | op 为 `hold` 时的按住秒数 |
 | `steps[].timing` | `fixed`（固定时长）/ `condition`（满足条件才触发，条件写在 note 里） |
 | `steps[].evidence.grade` | A 按键显示 / B HUD 变化 / C 动作画面 / D 时间推断 / none |
