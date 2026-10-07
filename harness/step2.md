@@ -34,7 +34,7 @@
 | Z | 消耗回路的重击用 `self.heavy_click_forte(...)`，固定时长的用 `self.heavy_attack(<时长>)`，具体看语义卡（4-2） |
 | 闪 | `self.task.send_key(self.task.key_config.get('Dodge Key'))`。用用户设置的闪避键，不写死按键 |
 | 跳 | `self.task.jump()` |
-| ↓ | 协奏满了直接走出口切人。没满就普攻等协奏满（`continues_normal_attack(<时限>, until_con_full=True)`），超时也照样切人 |
+| 延奏 | 协奏满了直接走出口切人。没满就普攻等协奏满（`continues_normal_attack(<时限>, until_con_full=True)`），超时也照样切人 |
 
 - `timing: condition` 的步骤，用 `self.task.wait_until(<条件>, time_out=<时限>, ...)` 等条件成立，不用固定时长。
 - 按住类操作（`mouse_down`、`send_key_down`）放进 try/finally，在 finally 里松开（5-4）。
