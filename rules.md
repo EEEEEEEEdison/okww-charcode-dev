@@ -79,7 +79,7 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
 - **2-8** 固定时长普攻用 `continues_normal_attack(duration)`，配合它的 `click_resonance_if_ready_and_return` / `until_con_full` 参数。`duration` 是真实时间，不扣冻结。
 - **2-9** 手写的轮询循环必须有真实时间上限，每轮必须调用 `self.sleep()` 或 `self.task.next_frame()`。反例：上游 `normal_attack_until_can_switch` 是忙等。
 - **2-10** `click_liberation` 在 `in_team()` 第一次为真的那一帧返回，那一帧 HUD 可能还在淡入（队伍编号已过阈值、技能栏图标还没亮全）。R 后紧接着判 HUD 图标时，用 `wait_until(图标出现, time_out=0.3)` 从下一帧开始判，不在当前帧上做单帧判定，也不拿一次没认出就当“状态已结束”。案例：弗坎嘉 v7 test_1621，爆发图标在那一帧只有 0.62，两场都判成没进爆发。
-- **2-11** `click_liberation` 和 `click_resonance(has_animation=True)` 默认 `click_f=True`，演出期间（`in_team()` 为假）每 0.1 秒按一次 F。敌人韧性已空时，演出一结束就会触发击破。击破演出是全局时停：挑战计时器、技能冷却都停 1.3–1.5 秒，冻结记账（2-5）也算不进去。演出后紧跟按真实时间计时的动作（2-8 的固定时长普攻、按秒分组的爆发）时，传 `click_f=False`，击破留给切人时的 `f_break(check_f_on_switch=True)`。注意治疗位 `check_f_on_switch` 为假，切人时不按 F。案例：弗坎嘉 v10 test_2142、v11 首版 test_2257，嘉贝莉娜 R 后爆发第 1 组被时停吃掉约 1.3 秒，协奏不满、无延奏切人。
+- **2-11** `click_liberation` 和 `click_resonance(has_animation=True)` 默认 `click_f=True`，演出期间（`in_team()` 为假）每 0.1 秒按一次 F。敌人韧性已空时，演出一结束就会触发击破。击破演出是全局时停：挑战计时器、技能冷却都停 1.3–1.5 秒，冻结记账（2-5）也算不进去。演出后紧跟按真实时间计时的动作（2-8 的固定时长普攻、按秒分组的爆发）时，传 `click_f=False`，击破留给切人时的 `f_break(check_f_on_switch=True)`（它的代价见 3-9）。注意治疗位 `check_f_on_switch` 为假，切人时不按 F。案例：弗坎嘉 v10 test_2142、v11 首版 test_2257，嘉贝莉娜 R 后爆发第 1 组被时停吃掉约 1.3 秒，协奏不满、无延奏切人。
 
 ### 3 切人
 
@@ -93,6 +93,7 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
 - **3-8** 状态清理分两处，两处都先调用 `super()`，并且 `__init__` 里的初始值要和 `reset_state` 一致：
   - 每次上场的状态，在覆写的 `switch_out(con_full)` 里清；
   - 每场战斗的状态，在覆写的 `reset_state()` 里清（战斗结束和重新读队伍时都会调用）。
+- **3-9** 切人时框架会调出场角色的 `f_break(check_f_on_switch=True)`：有变奏时在发切人键**之前**（`BaseCombatTask.py:642-643`），无变奏时在认到换人**之后**（`:673-674`）。命中击破时 `task.f_break` 连按 F 加左键，直到认不到击破图标才返回，这时击破时停已经结束。所以有变奏的切人要等完整段演出：实测从切人日志行到技能栏换人约 1.8 秒，其中时停约 1.5 秒；没有击破时约 0.1 秒。出场节点靠切人取消最后一下的后摇（合轴）时，合轴会被这一段打断。不想在某个节点离场时击破，就覆写出场角色的 `f_break`，对该节点 `check_f_on_switch=True` 的调用返回 False（9b 是不分节点的版本）。案例：弗坎嘉 v12 test_0043 T1、T3。
 
 ### 4 资源判断
 
