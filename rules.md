@@ -79,6 +79,7 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
 - **2-8** 固定时长普攻用 `continues_normal_attack(duration)`，配合它的 `click_resonance_if_ready_and_return` / `until_con_full` 参数。`duration` 是真实时间，不扣冻结。
 - **2-9** 手写的轮询循环必须有真实时间上限，每轮必须调用 `self.sleep()` 或 `self.task.next_frame()`。反例：上游 `normal_attack_until_can_switch` 是忙等。
 - **2-10** `click_liberation` 在 `in_team()` 第一次为真的那一帧返回，那一帧 HUD 可能还在淡入（队伍编号已过阈值、技能栏图标还没亮全）。R 后紧接着判 HUD 图标时，用 `wait_until(图标出现, time_out=0.3)` 从下一帧开始判，不在当前帧上做单帧判定，也不拿一次没认出就当“状态已结束”。案例：弗坎嘉 v7 test_1621，爆发图标在那一帧只有 0.62，两场都判成没进爆发。
+- **2-11** `click_liberation` 和 `click_resonance(has_animation=True)` 默认 `click_f=True`，演出期间（`in_team()` 为假）每 0.1 秒按一次 F。敌人韧性已空时，演出一结束就会触发击破。击破演出是全局时停：挑战计时器、技能冷却都停 1.3–1.5 秒，冻结记账（2-5）也算不进去。演出后紧跟按真实时间计时的动作（2-8 的固定时长普攻、按秒分组的爆发）时，传 `click_f=False`，击破留给切人时的 `f_break(check_f_on_switch=True)`。注意治疗位 `check_f_on_switch` 为假，切人时不按 F。案例：弗坎嘉 v10 test_2142、v11 首版 test_2257，嘉贝莉娜 R 后爆发第 1 组被时停吃掉约 1.3 秒，协奏不满、无延奏切人。
 
 ### 3 切人
 
