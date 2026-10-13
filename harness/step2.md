@@ -77,7 +77,7 @@
 ## 8 打包交付
 
 1. **先问用户** team.json 的四个字段：`name`、`description`、`author`、`version`。
-2. **写输出目录** `E:\GameAutoScript\workspace\okww-test\ok-ww-char\<队名>\harness-v<N>\`，必须是新目录，已存在就把 N 加 1：
+2. **写版本目录**：工作区里的 `<队名>/harness-v<N>/`（见 SKILL.md 的“工作区”一节）。必须是新目录，已存在就把 N 加 1。目录里放：
    - 3 个角色 `<类名>.py`；
    - `verify_chain.py`；
    - `team.json`。它的 `team` 字段用逗号分隔的英文显示名，按不区分大小写的字母序排列。显示名大多等于类名，例外以运行目录 `src/char/CustomCharLoader.py` 里的 `CHARACTER_DISPLAY_NAMES` 为准；
@@ -87,9 +87,11 @@
      - 用了临时方案或属于待专题的地方；
      - 未经验证的地方（尚未实测）；
      - 出处：视频、文字轴来源、本案 timeline 的路径。
-3. **打 zip**：
-   - 平铺结构，内容恰好是 `team.json` 加 3 个角色 `.py`，不放 verify_chain 和 README；
-   - 文件名为 `<类名>_<类名>_<类名>_<author>_<version>.zip`，类名按 team 的顺序，放在输出目录里；
-   - 同名文件已存在时不覆盖，请用户换一个版本号。
-4. **校验 zip**：把运行目录 `E:\GameAutoScript\ok-ww\data\apps\ok-ww\working` 加进 `sys.path`，调用 `src.char.CustomCharLoader.inspect_team_archive(<zip路径>)`。不报错，并且返回的 `team` 是这 3 个角色，才算通过。在 scratchpad 里运行，避免在其他目录留下 `configs/`。
+3. **打 zip 并校验**：用本地配置里的 Python 运行本仓库的 `scripts/pack_team.py <版本目录> <ok-ww 运行目录>`，不得另写打包脚本。
+   - 项目约定上传前先清洗代码时，先按项目约定生成清洗后的 3 个 `.py`，再加参数 `--src <清洗结果目录>`。
+   - 脚本打出平铺的 zip，内容恰好是 `team.json` 加 3 个角色 `.py`。文件名为 `<类名>_<类名>_<类名>_<author>_<version>.zip`，写在版本目录里。
+   - 脚本再调用 ok-ww 的 `inspect_team_archive` 校验。输出 `OK` 才算通过。
+   - 输出 `REFUSE`：同名 zip 已存在，请用户换一个版本号。
+   - 输出 `FAIL`：按给出的原因改 team.json 或代码，再重新运行。
+4. **写 notes.md**：记下这一版的来源和要点。第一版写依据的视频和文字轴；迭代版本的写法见 [iterate.md](iterate.md) §4。
 5. **交付说明**：告诉用户 zip 的路径、自检结果、待专题和未验证的地方，请用户实机测试，然后进入 [iterate.md](iterate.md)。

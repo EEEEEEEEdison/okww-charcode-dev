@@ -21,7 +21,7 @@ harness 只由流程文档组成，不带工具：需要的脚本（抽帧、下
 ## 目录
 
 ```
-SKILL.md                      入口：两种用法、总原则、本机位置、流程总表、提问方式
+SKILL.md                      入口：两种用法、总原则、工作区与本地配置、流程总表、提问方式
 harness/step1.md              步骤 1：收集素材、确认文字轴、HUD 时间线、对齐、集中提问
 harness/baseline.md           代码基线：上游内置类、在线工坊、历史版本里该角色的写法
 harness/timeline.md           timeline.json 格式与关口 G2 清单
@@ -29,7 +29,7 @@ harness/step2.md              步骤 2：节点映射、记号到代码、时限
 harness/iterate.md            实测迭代：读日志、两段视频对比、先说明再改
 knowledge/basics.md           游戏常识：按键与操作、记号、画面识别
 knowledge/cards/README.md     角色语义卡的规则、补卡机制与模板（一角色一共鸣链一张卡）
-cases/                        每个案例的 timeline.json（视频等媒体不进仓库）
+cases/                        弗坎嘉试点 v1–v15 的 timeline.json（旧数据；新案例写到工作区）
 rules.md                      代码规则（1-1 … 6-8、L-1 … L-10）、决策阶梯、迭代工作流
 references/basechar-api.md    BaseChar 函数详条 + 成员索引
 references/task-api.md        角色代码用到的 self.task.* 与战斗检查机制
@@ -37,6 +37,7 @@ references/self-impl-patterns.md  自实现套路
 references/logging.md         日志模板、词表、_trace 参考实现
 references/workshop.md        工坊 zip 格式、循环轴骨架、可选案例
 templates/verify_chain.py     交场链静态自检模板
+scripts/pack_team.py          打工坊 zip，并用 ok-ww 的 inspect_team_archive 校验
 ```
 
 ## 安装

@@ -1,6 +1,6 @@
 # timeline.json 格式与关口 G2
 
-每个案例一份：`cases/<队名>/harness-v<N>/timeline.json`。由 AI 按本文件手写、维护，不依赖校验工具。
+每个案例一份：工作区里的 `<队名>/harness-v<N>/timeline.json`。由 AI 按本文件手写、维护，不依赖校验工具。
 
 ## 1 结构
 

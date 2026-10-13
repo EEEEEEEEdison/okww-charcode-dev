@@ -14,9 +14,9 @@
 | 来源 | 怎么取 | 记录的版本 |
 |---|---|---|
 | 语义卡 | `knowledge/cards/<类名>_C<共鸣链>.md` | — |
-| 上游内置类 | 在 `E:\GameAutoScript\contrib\ok-wuthering-waves-pr` 里先 `git fetch upstream`，再 `git show upstream/master:src/char/<类名>.py`。没有这个文件就记“内置没有” | upstream/master 的提交号 |
+| 上游内置类 | 在本地配置的上游仓库里先 `git fetch upstream`，再 `git show upstream/master:src/char/<类名>.py`。没有这个文件就记“内置没有” | upstream/master 的提交号 |
 | 在线工坊 | 见下 | 每条代码的 `name`、`author`、`version`、`modifiedAt` |
-| 用户的历史版本 | `E:\GameAutoScript\workspace\okww-test\ok-ww-char\<队名>\<版本目录>\<类名>.py`：所有含这个角色的队，每个队取最新的版本目录，早期版本只在需要对比时看 | 队名、版本目录 |
+| 用户的历史版本 | 查本地配置的历史版本目录和工作区里已有的队。每个含这个角色的队取最新版本，早期版本只在对比时看 | 队名、版本目录 |
 
 **在线工坊**：ok-ww 角色代码页上的“工坊”按钮用的就是这套接口，实现在运行目录 `src/gui/CharacterCodeTab.py` 的 `fetch_all_workshop_teams` 和 `_import_workshop_code`。不需要登录。
 
@@ -31,7 +31,7 @@
 
 ## 3 输出 baseline.md
 
-用法 A 写到 `cases/<队名>/harness-v<N>/baseline.md`，用法 B 写到 scratchpad。每个角色一节，下面每条都带上来源的 `文件:行号`：
+用法 A 写到工作区里的 `<队名>/harness-v<N>/baseline.md`，用法 B 写到 scratchpad。每个角色一节，下面每条都带上来源的 `文件:行号`：
 
 - **来源清单**：用到了哪些文件和版本；取不到的也要列上，并写明原因。
 - **状态与识别**：代码怎么判断这个角色的状态，用了哪些函数、区域、颜色、阈值。

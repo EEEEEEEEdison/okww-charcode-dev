@@ -26,20 +26,33 @@ ok-ww 角色代码 harness。
   - 文字轴要经用户确认；
   - 语义卡条目写入之前要用户确认（起草后批量确认）；
   - 实测迭代时，改代码之前先向用户说明方案。
-- **不自备工具**：抽帧、下载、打包之类的脚本，按文档当场写，放在会话 scratchpad 或本案的媒体目录里，不进仓库。
+- **不自备工具**：打 zip 和校验固定用 `scripts/pack_team.py`；抽帧、下载之类的脚本按文档当场写，放在会话 scratchpad 或本案的媒体目录里，不进仓库。
 - **不上网查 wiki**：上网只用来取 B 站素材和 ok-ww 在线工坊的代码。角色知识只来自视频简介和评论、视频画面、用户提供的攻略、用户的回答、实测日志和录屏，以及已有代码（上游内置类、在线工坊、用户的历史版本）。
 
-## 位置（本机）
+## 工作区
 
-| 内容 | 位置 |
+本仓库只放流程、规则、常识和语义卡，不放本机路径和某个队的数据。每个队的产物都放在会话的当前目录，即工作区：
+
+```
+<工作区>/<队名>/
+  harness-v<N>/   timeline.json、notes.md、baseline.md、3 个角色 .py、verify_chain.py、team.json、README.md、zip
+  media/          视频、截图、临时脚本（文档里的“媒体目录”）
+```
+
+- 开始前必须先读工作区里的 AGENTS.md 和 CLAUDE.md。项目对目录、分支、打包有约定时按项目约定；和本文件冲突时，以项目约定为准。
+- 工作区是本仓库或 ok-ww 的安装目录，或者看不出是用户要的目录时，必须先问用户工作区放在哪。
+- `harness-v<N>` 必须是新目录。`<N>` 从 1 开始，每次迭代加 1，不得覆盖已有版本。
+- `media/` 和本地配置文件不得提交到 git。
+- 本仓库的 `cases/` 是弗坎嘉试点 v1–v15 的旧数据，只读，新案例不再写入。
+
+**本地配置**：本机路径写在工作区根目录的 `okww-harness.local.md`。没有这个文件或缺少某一项时，必须先问用户，再写进去。
+
+| 项 | 用途 |
 |---|---|
-| 案例数据（timeline.json、记录） | 本仓库 `cases/<队名>/harness-v<N>/` |
-| 媒体（视频、截图、临时脚本） | `E:\GameAutoScript\okww-charcode-dev-media\<队名>\harness-v<N>\`，不进仓库 |
-| 生成的代码与 zip | `E:\GameAutoScript\workspace\okww-test\ok-ww-char\<队名>\harness-v<N>\`，新建目录，不覆盖已有版本 |
-| Python | `E:\GameAutoScript\ok-ww\data\apps\ok-ww\python\python.exe`，带 `-I -B` 运行。环境里有 cv2，机器上没有 ffmpeg |
-| ok-ww 运行目录（校验 zip 用） | `E:\GameAutoScript\ok-ww\data\apps\ok-ww\working` |
-
-`<N>` 从 1 开始，每次迭代加 1。
+| ok-ww 运行目录（`working`） | 校验 zip，查 `CHARACTER_DISPLAY_NAMES` 和框架源码 |
+| Python | ok-ww 自带的 `python.exe`，带 `-I -B` 运行，要能 `import cv2`；抽帧用 cv2 |
+| 上游仓库 | 有 `upstream` 远端的 ok-wuthering-waves 克隆，收集代码基线用 |
+| 用户历史版本目录 | 用户以前写的配队代码，收集代码基线用；没有就写“无” |
 
 ## 流程（用法 A）
 

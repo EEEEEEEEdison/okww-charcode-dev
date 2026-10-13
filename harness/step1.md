@@ -1,8 +1,8 @@
 # 步骤 1：对照文字轴与视频，产出时序数据
 
-输出是本案的 `cases/<队名>/harness-v<N>/timeline.json`，格式见 [timeline.md](timeline.md)。常识见 [../knowledge/basics.md](../knowledge/basics.md)。
+输出是工作区里本案的 `<队名>/harness-v<N>/timeline.json`，格式见 [timeline.md](timeline.md)。工作区和本地配置见 [../SKILL.md](../SKILL.md) 的“工作区”一节。常识见 [../knowledge/basics.md](../knowledge/basics.md)。
 
-脚本都当场写，用 ok-ww 自带的 Python 跑（带 `-I -B`），放在媒体目录或 scratchpad 里。
+脚本都当场写，用本地配置里的 Python 跑（带 `-I -B`），放在媒体目录或 scratchpad 里。
 
 ## 1 收集素材
 
