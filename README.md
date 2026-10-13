@@ -29,7 +29,6 @@ harness/step2.md              步骤 2：节点映射、记号到代码、时限
 harness/iterate.md            实测迭代：读日志、两段视频对比、先说明再改
 knowledge/basics.md           游戏常识：按键与操作、记号、画面识别
 knowledge/cards/README.md     角色语义卡的规则、补卡机制与模板（一角色一共鸣链一张卡）
-cases/                        弗坎嘉试点 v1–v15 的 timeline.json（旧数据；新案例写到工作区）
 rules.md                      代码规则（1-1 … 6-8、L-1 … L-10）、决策阶梯、迭代工作流
 references/basechar-api.md    BaseChar 函数详条 + 成员索引
 references/task-api.md        角色代码用到的 self.task.* 与战斗检查机制
