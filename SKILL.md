@@ -1,6 +1,6 @@
 ---
 name: okww-charcode-dev
-description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码 harness。两种用法。一是根据文字作战轴和实机视频（B 站链接或本地文件）理解出招，发现问题向用户确认，信息齐全后生成工坊循环轴角色代码并打包 zip。二是直接编写、修改、调试 ok-ww 角色代码与工坊配队代码（内置函数优先、自实现套路、统一英文日志模板、循环轴骨架、根据日志和录像迭代）。Triggers：ok-ww, okww, ok-wuthering-waves, 鸣潮, Wuthering Waves, 文字轴, 作战轴, 战斗轴, 配队轴, 启动轴, 循环轴, 轴转代码, 视频, 实机视频, 教程视频, B站, BV, 生成角色代码, harness, 角色代码, 写角色, char code, src/char, BaseChar, do_perform, switch_next_char, get_switch_priority, click_resonance, click_liberation, click_echo, heavy_click_forte, wait_until, 协奏, 回路, 切人, 出招, 工坊, 工坊配队, workshop, team zip, team.json, 强切, 交场链, 日志模板, log template, 根据日志改代码, 根据视频改代码, 语义卡, 补卡.
+description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码 harness。两种用法。一是根据文字作战轴和实机视频（B 站链接或本地文件）理解出招，发现问题向用户确认，信息齐全后生成工坊循环轴角色代码并打包 zip。二是直接编写、修改、调试 ok-ww 角色代码与工坊配队代码（内置函数优先、自实现套路、统一英文日志模板、循环轴骨架、根据日志和录像迭代）。Triggers：ok-ww, okww, ok-wuthering-waves, 鸣潮, Wuthering Waves, 文字轴, 作战轴, 战斗轴, 配队轴, 启动轴, 循环轴, 轴转代码, 视频, 实机视频, 教程视频, B站, BV, 生成角色代码, harness, 角色代码, 写角色, char code, src/char, BaseChar, do_perform, switch_next_char, get_switch_priority, click_resonance, click_liberation, click_echo, heavy_click_forte, wait_until, 协奏, 回路, 切人, 出招, 工坊, 工坊配队, workshop, team zip, team.json, 强切, 交场链, 日志模板, log template, 根据日志改代码, 根据视频改代码, 语义卡, 补卡, 代码基线, 工坊代码.
 ---
 
 # okww-charcode-dev
@@ -12,7 +12,7 @@ ok-ww 角色代码 harness。
 | 用法 | 什么时候用 | 读什么 |
 |---|---|---|
 | A 轴 → 代码 | 用户给了文字轴和/或视频，要生成一队角色代码 | 本文件的流程 + `harness/*.md` |
-| B 直接写或改代码 | 改已有角色代码，或者根据日志、录像修问题 | [rules.md](rules.md)，以及涉及角色的语义卡 |
+| B 直接写或改代码 | 改已有角色代码，或者根据日志、录像修问题 | [rules.md](rules.md)，以及涉及角色的语义卡和代码基线（[harness/baseline.md](harness/baseline.md)） |
 
 用法 A 的步骤 2（生成代码）同样遵守 rules.md。
 
@@ -27,7 +27,7 @@ ok-ww 角色代码 harness。
   - 语义卡条目写入之前要用户确认（起草后批量确认）；
   - 实测迭代时，改代码之前先向用户说明方案。
 - **不自备工具**：抽帧、下载、打包之类的脚本，按文档当场写，放在会话 scratchpad 或本案的媒体目录里，不进仓库。
-- **不上网查 wiki**：角色知识只来自视频简介和评论、视频画面、用户提供的攻略、用户的回答，以及实测日志和录屏。
+- **不上网查 wiki**：上网只用来取 B 站素材和 ok-ww 在线工坊的代码。角色知识只来自视频简介和评论、视频画面、用户提供的攻略、用户的回答、实测日志和录屏，以及已有代码（上游内置类、在线工坊、用户的历史版本）。
 
 ## 位置（本机）
 
@@ -46,7 +46,7 @@ ok-ww 角色代码 harness。
 | 步骤 | 做什么 | 详见 |
 |---|---|---|
 | S1 收集素材 | 下载视频，获取简介和评论，截出画面里的轴表 | [harness/step1.md](harness/step1.md) §1 |
-| S2 确认文字轴（关口 G1） | 拼出候选文字轴和作者的记号说明，**单独**请用户确认；同时问双方的共鸣链 | step1.md §2 |
+| S2 确认文字轴（关口 G1） | 拼出候选文字轴和作者的记号说明，**单独**请用户确认；同时问双方的共鸣链。确认后给每个角色收集代码基线 | step1.md §2、[harness/baseline.md](harness/baseline.md) |
 | S3 识别与对齐 | 拆分记号，建立 HUD 时间线，把轴和视频对齐，再推断其余记号 | step1.md §3–7 |
 | S4 集中提问 | 把问题清单一次问完；问完后起草语义卡条目，批量确认后写入 | step1.md §8 |
 | S5 生成前检查（关口 G2） | 按清单检查 timeline.json，全部满足才能生成代码 | [harness/timeline.md](harness/timeline.md) §3 |

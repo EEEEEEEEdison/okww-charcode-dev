@@ -23,6 +23,7 @@ harness 只由流程文档组成，不带工具：需要的脚本（抽帧、下
 ```
 SKILL.md                      入口：两种用法、总原则、本机位置、流程总表、提问方式
 harness/step1.md              步骤 1：收集素材、确认文字轴、HUD 时间线、对齐、集中提问
+harness/baseline.md           代码基线：上游内置类、在线工坊、历史版本里该角色的写法
 harness/timeline.md           timeline.json 格式与关口 G2 清单
 harness/step2.md              步骤 2：节点映射、记号到代码、时限、自检清单、打包交付
 harness/iterate.md            实测迭代：读日志、两段视频对比、先说明再改
