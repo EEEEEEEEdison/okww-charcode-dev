@@ -17,7 +17,7 @@ okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照�
 
 - 上游 `ok-oldking/ok-wuthering-waves` master `2243d465`（2026-10-05），引用写作 `src/char/BaseChar.py:369`。
 - 框架 ok-script `v2.0.8`，引用写作 `ok/task/task.py:508`。
-- **0-1 源码为准**：本规则或 references 的条目与源码不一致时，以源码为准，并在当次会话里修正对应条目。
+- **0-1 源码为准**：本规则或 references 的条目与源码不一致时，以源码为准，并在本案工作区记录差异和来源。知识使用边界见 [语义卡说明](knowledge/cards/README.md#使用边界)。
 
 ## 两种模式（按文件位置判定）
 
@@ -192,7 +192,7 @@ okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照�
 流程与完成标准见 [harness/iterate.md](harness/iterate.md)。
 按同一事件核对日志和录屏，先确认根因再改代码。
 每次试验隔离因果影响，未知保留缺项。
-语义卡候选按 [补卡机制](knowledge/cards/README.md#补卡机制) 批量确认。
+知识使用边界见 [语义卡说明](knowledge/cards/README.md#使用边界)。
 
 ## references
 

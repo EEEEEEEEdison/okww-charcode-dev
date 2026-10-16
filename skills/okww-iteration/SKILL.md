@@ -15,7 +15,7 @@ description: ok-ww 开发的实测迭代阶段。用于核对实际代码版本�
 2. 按 [evidence.md](../../harness/evidence.md) 核对运行条件与证据。
 3. 按 [timing.md](../../harness/timing.md) 比较参考与实测耗时。
 4. 解释偏差，按根因选择退回阶段。
-5. 按 iterate.md §5–6 更新知识候选和验收状态。
+5. 按 iterate.md §5–6 更新案例证据和验收状态。
 
 ## 输出与通过条件
 

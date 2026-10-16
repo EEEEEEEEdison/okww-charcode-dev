@@ -1,11 +1,12 @@
 ---
 name: okww-charcode-dev
-description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。根据文字轴、教程视频、已有代码或实测日志选择阶段：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、日志录像排错和语义卡维护。
+description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。根据文字轴、教程视频、已有代码或实测日志选择阶段：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、日志录像排错。
 ---
 
 # okww-charcode-dev
 
 ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
+安装版本见 [VERSION](VERSION)，固定版本安装见 [README](README.md#使用与安装)。
 
 ## 阶段选择
 
@@ -31,12 +32,12 @@ ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
 - 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
 - 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
 - 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
-- 补卡按 [knowledge/cards/README.md](knowledge/cards/README.md) 批量确认后写入。
+- 语义卡的读取、冲突记录和安装目录边界见 [knowledge/cards/README.md](knowledge/cards/README.md)。
 
 ## 执行原则
 
 - 忠实复现已确认的轴。不得擅自改变动作意图。
-- G1 确认、关键歧义和语义卡写入，按各阶段的要求提问。
+- G1 确认和关键歧义，按各阶段的要求提问。
 - 实测改动前说明根因和改法。已有明确授权时，直接执行授权范围内的修改。
 - 打包固定用 `scripts/pack_team.py`。
 - 下载、抽帧和比较脚本放在媒体目录或会话 scratchpad。

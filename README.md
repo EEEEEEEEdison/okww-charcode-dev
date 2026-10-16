@@ -8,6 +8,8 @@
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
+版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.0.1`。
+普通开发只读取随版本提供的知识；知识维护由独立入口处理。
 
 ## 六个阶段 Skill
 
@@ -62,11 +64,46 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 使用与安装
 
-把仓库克隆或链接到 Agent 的 skills 目录。
-目录名使用 `okww-charcode-dev`，并保留完整目录结构：
+GitHub 的正式版本标签固定指向对应提交。
+例如，“安装 0.0.1 版本”表示安装 `v0.0.1` 标签的内容。
+安装不依赖专用 zip，不能用默认分支代替指定版本。
 
-- Claude Code：`~/.claude/skills/okww-charcode-dev`
-- pi：`~/.pi/agent/skills/okww-charcode-dev`
+可向 Agent 提出：
+
+> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.0.1。
+> 按该标签的 README 安装，并核对版本、加载路径和重复副本。
+
+全新安装时，目标目录必须不存在。
+以下命令按宿主选择一条，并保留完整目录结构：
+
+```sh
+# pi
+git clone --branch v0.0.1 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okww-charcode-dev"
+
+# Claude Code
+git clone --branch v0.0.1 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okww-charcode-dev"
+```
+
+已有安装时，先核对实际路径、链接目标及未提交改动。
+已有安装不是 Git 仓库或含本地改动时，不执行切换命令。
+先将旧安装完整移到宿主不扫描的位置保存，再按全新安装步骤安装。
+不得删除或覆盖旧安装中的用户改动。
+已有安装是干净的 Git 仓库时，在实际仓库中执行：
+
+```sh
+git fetch origin tag v0.0.1 --no-tags
+git switch --detach v0.0.1
+```
+
+安装后核对：
+
+- `HEAD` 与 `refs/tags/v0.0.1^{commit}` 指向同一提交；
+- 实际安装目录中的 `VERSION` 为 `0.0.1`；
+- `git status --porcelain --untracked-files=all` 没有输出；
+- 宿主加载的是该安装目录，不存在同名旧副本。
+
+更新到其他版本时，显式指定新的标签，并重复核对。
+已发布标签不得移动；修复通过新版本发布。
 
 默认从总入口加载，再按路由读取相应阶段。
 共用规则、知识和脚本使用仓库内的相对路径。
@@ -86,7 +123,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 已有 `skills` 数组时，追加该路径并保留其他配置。
 仓库安装在其他位置时，数组需同时列出仓库根目录和其 `skills/` 子目录。
-保存后运行 `/reload`。
+保存后在 pi 运行 `/reload`；Claude Code 重新开启会话。
 默认启用 Skill 命令时，可用 `/skill:okww-charcode-dev` 调用总入口。
 六个阶段可分别用 `/skill:okww-materials` 等命令调用。
 阶段目录必须保留在仓库内，以便读取 `../../` 下的共用文件。
@@ -103,10 +140,27 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 本机路径按总入口保存在工作区的 `okww-harness.local.md`。
 媒体、角色产物和本地配置不得提交到本仓库。
 
+## 知识维护
+
+角色代码开发仍可根据日志与录屏迭代队伍代码。
+新证据与知识冲突时，先记录在用户工作区。
+普通开发流程不自动补卡、不发起补卡确认、不改写安装目录。
+详见 [知识使用边界](knowledge/cards/README.md#使用边界)。
+
+维护源码保存在 `maintainer/`，随仓库源码可见。
+该目录独立于六阶段的 `skills/`，默认安装不注册维护 Skill。
+维护者明确需要补卡或修正规则时，可单独加载
+[知识维护 Skill](maintainer/okww-knowledge-maintenance/SKILL.md)。
+在 pi 中，可将该文件的实际路径追加到 `settings.json` 的 `skills` 数组。
+运行 `/reload` 后，手动调用 `/skill:okww-knowledge-maintenance`。
+该 Skill 设置 `disable-model-invocation: true`，仅供显式调用。
+审核后的知识随新版本交付，旧版本保持原内容。
+
 ## 目录与工具
 
 | 路径 | 内容 |
 |---|---|
+| [VERSION](VERSION) | 发布版本号；对应 `v<版本号>` 标签 |
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
 | `skills/*/SKILL.md` | 六个阶段的输入、任务、交付与退回条件 |
 | [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
@@ -117,7 +171,8 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [harness/step2.md](harness/step2.md) | 节点实现、定向检查和打包交付 |
 | [harness/iterate.md](harness/iterate.md) | 日志录像比较、根因、修改和复验 |
 | [knowledge/basics.md](knowledge/basics.md) | 游戏操作、记号和画面识别知识 |
-| [knowledge/cards/README.md](knowledge/cards/README.md) | 按角色和共鸣链维护语义卡 |
+| [knowledge/cards/README.md](knowledge/cards/README.md) | 语义卡读取、适用条件与知识使用边界 |
+| [maintainer/knowledge-maintenance.md](maintainer/knowledge-maintenance.md) | 维护者的补卡、确认与知识审核规则 |
 | [rules.md](rules.md) | 代码规则、API 选择、日志和循环轴约束 |
 | [references/basechar-api.md](references/basechar-api.md) | `BaseChar` API 与成员索引 |
 | [references/task-api.md](references/task-api.md) | `self.task.*` 与战斗检查 |
@@ -138,7 +193,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 - ok-script `v2.0.8`。
 
 实际开发必须核对当前框架源码与所用版本。
-上游变化后，按 rules.md 0-1 修正受影响的引用。
+上游变化后，按 rules.md 0-1 在案例中记录差异和正确来源。
 
 ## 与上游角色接入 Skill 的关系
 

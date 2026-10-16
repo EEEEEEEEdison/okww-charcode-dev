@@ -160,6 +160,5 @@ C/D 推断不得写成已观察事实。
 待测项和非关键项按 evidence.md §4 交接。
 不得为清空列表，把未验证机制写成用户已确认事实。
 
-按 [语义卡规则](../knowledge/cards/README.md) 起草可复用知识候选。
-用户确认后才能写入知识库。
+新证据及与语义卡的冲突留在本案，见 [知识使用边界](../knowledge/cards/README.md#使用边界)。
 按 evidence.md §5 更新 `notes.md`，再执行 [G2](timeline.md#3-关口-g2)。
