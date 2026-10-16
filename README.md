@@ -68,8 +68,28 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 - Claude Code：`~/.claude/skills/okww-charcode-dev`
 - pi：`~/.pi/agent/skills/okww-charcode-dev`
 
-从总入口加载，再按路由读取相应阶段。
+默认从总入口加载，再按路由读取相应阶段。
 共用规则、知识和脚本使用仓库内的相对路径。
+
+在当前 pi 中，扫描到含 `SKILL.md` 的目录后便停止递归。
+因此，上述安装方式只注册总入口；六个阶段仍可由总入口读取。
+
+需要分别调用阶段 Skill 时，在 `~/.pi/agent/settings.json` 中添加：
+
+```json
+{
+  "skills": [
+    "~/.pi/agent/skills/okww-charcode-dev/skills"
+  ]
+}
+```
+
+已有 `skills` 数组时，追加该路径并保留其他配置。
+仓库安装在其他位置时，数组需同时列出仓库根目录和其 `skills/` 子目录。
+保存后运行 `/reload`。
+默认启用 Skill 命令时，可用 `/skill:okww-charcode-dev` 调用总入口。
+六个阶段可分别用 `/skill:okww-materials` 等命令调用。
+阶段目录必须保留在仓库内，以便读取 `../../` 下的共用文件。
 
 队伍素材和产物放在独立工作区：
 
@@ -132,3 +152,8 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 上游 `2243d465` 的 Skill 示例使用了不存在的 `Priority` 和 `do_get_switch_priority`。
 该版源码实际使用 `SwitchPriority` 和 `get_switch_priority`。
 对应说明见 [BaseChar API](references/basechar-api.md)。
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。
+上游项目及引用内容沿用各自的许可。

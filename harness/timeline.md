@@ -170,7 +170,7 @@
 | `issues[].refs` | 节点、`<节点id>#<从0开始的步骤序号>`、判断或时间区间编号 |
 | `issues[].kind` | `axis_text` / `notation` / `conflict` / `low_confidence` / `missing` / `constellation` / `timing` / `state` / `trigger` / `dependency` / `other` |
 | `issues[].impact` | `blocking` / `trial` / `noncritical`，判定见 evidence.md §4 |
-| `issues[].status` | `open` / `resolved`；解决时填写 `answer` 和依据 |
+| `issues[].status` | `open` / `resolved`；暂存、迁入及状态回写遵守 [evidence.md §4](evidence.md) |
 | `issues[].assumption/verify/on_failure` | 试验采用的假设或数值、验证办法、失败处理 |
 
 未知用 `null` 或明确的 `unknown`，不得填造值。
