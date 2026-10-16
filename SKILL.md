@@ -1,75 +1,78 @@
 ---
 name: okww-charcode-dev
-description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码 harness。两种用法。一是根据文字作战轴和实机视频（B 站链接或本地文件）理解出招，发现问题向用户确认，信息齐全后生成工坊循环轴角色代码并打包 zip。二是直接编写、修改、调试 ok-ww 角色代码与工坊配队代码（内置函数优先、自实现套路、统一英文日志模板、循环轴骨架、根据日志和录像迭代）。Triggers：ok-ww, okww, ok-wuthering-waves, 鸣潮, Wuthering Waves, 文字轴, 作战轴, 战斗轴, 配队轴, 启动轴, 循环轴, 轴转代码, 视频, 实机视频, 教程视频, B站, BV, 生成角色代码, harness, 角色代码, 写角色, char code, src/char, BaseChar, do_perform, switch_next_char, get_switch_priority, click_resonance, click_liberation, click_echo, heavy_click_forte, wait_until, 协奏, 回路, 切人, 出招, 工坊, 工坊配队, workshop, team zip, team.json, 强切, 交场链, 日志模板, log template, 根据日志改代码, 根据视频改代码, 语义卡, 补卡, 代码基线, 工坊代码.
+description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。根据文字轴、教程视频、已有代码或实测日志选择阶段：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、日志录像排错和语义卡维护。
 ---
 
 # okww-charcode-dev
 
-ok-ww 角色代码 harness。
+ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
 
-## 两种用法
+## 阶段选择
 
-| 用法 | 什么时候用 | 读什么 |
-|---|---|---|
-| A 轴 → 代码 | 用户给了文字轴和/或视频，要生成一队角色代码 | 本文件的流程 + `harness/*.md` |
-| B 直接写或改代码 | 改已有角色代码，或者根据日志、录像修问题 | [rules.md](rules.md)，以及涉及角色的语义卡和代码基线（[harness/baseline.md](harness/baseline.md)） |
+| 阶段 Skill | 进入条件 | 交付物 | 细则 |
+|---|---|---|---|
+| [素材获取](skills/okww-materials/SKILL.md) | 有视频、文字轴或待整理来源 | `media/info.md`、原素材、质量限制 | [step1.md §1](harness/step1.md) |
+| [轴解析](skills/okww-rotation/SKILL.md) | 素材能覆盖选定片段 | G1 确认、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](harness/step1.md) |
+| [时序建模](skills/okww-timeline/SKILL.md) | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、G2 结果 | [step1.md §4–5、§7–8](harness/step1.md)、[timeline.md](harness/timeline.md) |
+| [代码实现](skills/okww-implementation/SKILL.md) | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](harness/step2.md) |
+| [验证交付](skills/okww-delivery/SKILL.md) | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](harness/step2.md) |
+| [实测迭代](skills/okww-iteration/SKILL.md) | 有可定位版本的日志或录屏 | 差异表、根因、下一版依据或验收结果 | [iterate.md](harness/iterate.md) |
 
-用法 A 的步骤 2（生成代码）同样遵守 rules.md。
+- 读取所选阶段的 `SKILL.md`，再读取阶段引用的细则。
+- 从中间阶段进入时，检查该阶段的输入和通过条件。
+- 缺少前提时，退回负责该前提的阶段。
+- 直接改代码时，可从代码实现或实测迭代进入。
+- 局部任务不必创建整队时序。必须记录修改依据和影响范围。
+- 已有确认且仍适用时，不必重复提问。
 
-两种用法都要补卡：按 [knowledge/cards/README.md](knowledge/cards/README.md) 的「补卡机制」，在触发点主动起草语义卡条目，批量请用户确认后写入。用法 B 里，用户纠正了某个角色的出招、时长或写法，就是触发点之一。
+## 共用规范
 
-## 总原则（用法 A）
+- 信息来源、证据、缺项分级和阶段交接见 [evidence.md](harness/evidence.md)。
+- 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
+- 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
+- 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
+- 补卡按 [knowledge/cards/README.md](knowledge/cards/README.md) 批量确认后写入。
 
-- **只做匹配，不做挑剔**：忠实地把轴翻译成代码，不评价轴的好坏，也不擅自优化。
-- **先自己识别，不确定再问**：只靠动作画面或时间推断得出的结论（C/D 级证据），也算不确定，要问。
-- **尽量全自动，但以下三处必须停下来问用户**：
-  - 文字轴要经用户确认；
-  - 语义卡条目写入之前要用户确认（起草后批量确认）；
-  - 实测迭代时，改代码之前先向用户说明方案。
-- **不自备工具**：打 zip 和校验固定用 `scripts/pack_team.py`；抽帧、下载之类的脚本按文档当场写，放在会话 scratchpad 或本案的媒体目录里，不进仓库。
-- **不上网查 wiki**：上网只用来取 B 站素材和 ok-ww 在线工坊的代码。角色知识只来自视频简介和评论、视频画面、用户提供的攻略、用户的回答、实测日志和录屏，以及已有代码（上游内置类、在线工坊、用户的历史版本）。
+## 执行原则
+
+- 忠实复现已确认的轴。不得擅自改变动作意图。
+- G1 确认、关键歧义和语义卡写入，按各阶段的要求提问。
+- 实测改动前说明根因和改法。已有明确授权时，直接执行授权范围内的修改。
+- 打包固定用 `scripts/pack_team.py`。
+- 下载、抽帧和比较脚本放在媒体目录或会话 scratchpad。
+- 素材来源范围按 evidence.md。不得查第三方 wiki 补角色机制。
 
 ## 工作区
 
-本仓库只放流程、规则、常识和语义卡，不放本机路径和某个队的数据。每个队的产物都放在会话的当前目录，即工作区：
+本仓库保存 Skill、共用规范、知识、模板和打包脚本。
+每个队的素材与产物放在独立工作区：
 
-```
+```text
 <工作区>/<队名>/
-  harness-v<N>/   timeline.json、notes.md、baseline.md、3 个角色 .py、verify_chain.py、team.json、README.md、zip
-  media/          视频、截图、临时脚本（文档里的“媒体目录”）
+  harness-v<N>/   timeline.json、notes.md、baseline.md、角色代码、检查文件、team.json、README.md、zip
+  media/          info.md、原视频、口播或字幕、截图、取证脚本
 ```
 
-- 开始前必须先读工作区里的 AGENTS.md 和 CLAUDE.md。项目对目录、分支、打包有约定时按项目约定；和本文件冲突时，以项目约定为准。
-- 工作区是本仓库或 ok-ww 的安装目录，或者看不出是用户要的目录时，必须先问用户工作区放在哪。
-- `harness-v<N>` 必须是新目录。`<N>` 从 1 开始，每次迭代加 1，不得覆盖已有版本。
-- `media/` 和本地配置文件不得提交到 git。
+- 开始前读取工作区的 `AGENTS.md` 和 `CLAUDE.md`。
+- 工作区是本仓库或 ok-ww 安装目录时，先确认队伍产物的位置。
+- 版本目录必须新建。`<N>` 从 1 开始，迭代时加 1。
+- 不得覆盖已有版本。
+- 媒体和本地配置不得提交到本仓库。
 
-**本地配置**：本机路径写在工作区根目录的 `okww-harness.local.md`。没有这个文件或缺少某一项时，必须先问用户，再写进去。
+本机路径保存在工作区根目录的 `okww-harness.local.md`。
+只在所选阶段需要且无法从已有配置确定时提问。
 
-| 项 | 用途 |
+| 配置项 | 用途 |
 |---|---|
-| ok-ww 运行目录（`working`） | 校验 zip，查 `CHARACTER_DISPLAY_NAMES` 和框架源码 |
-| Python | ok-ww 自带的 `python.exe`，带 `-I -B` 运行，要能 `import cv2`；抽帧用 cv2 |
-| 上游仓库 | 有 `upstream` 远端的 ok-wuthering-waves 克隆，收集代码基线用 |
-| 用户历史版本目录 | 用户以前写的配队代码，收集代码基线用；没有就写“无” |
+| ok-ww 运行目录 `working` | 查框架源码、显示名和 zip 校验器 |
+| Python | ok-ww 的 `python.exe`；取证用 `-I -B`，视频处理需能 `import cv2` |
+| 上游仓库 | 收集角色代码基线，记录提交号 |
+| 用户历史版本目录 | 收集已有配队代码；没有时记“无” |
 
-## 流程（用法 A）
+## 提问
 
-| 步骤 | 做什么 | 详见 |
-|---|---|---|
-| S1 收集素材 | 下载视频，获取简介和评论，截出画面里的轴表 | [harness/step1.md](harness/step1.md) §1 |
-| S2 确认文字轴（关口 G1） | 拼出候选文字轴和作者的记号说明，**单独**请用户确认；同时问双方的共鸣链。确认后给每个角色收集代码基线 | step1.md §2、[harness/baseline.md](harness/baseline.md) |
-| S3 识别与对齐 | 拆分记号，建立 HUD 时间线，把轴和视频对齐，再推断其余记号 | step1.md §3–7 |
-| S4 集中提问 | 把问题清单一次问完；问完后起草语义卡条目，批量确认后写入 | step1.md §8 |
-| S5 生成前检查（关口 G2） | 按清单检查 timeline.json，全部满足才能生成代码 | [harness/timeline.md](harness/timeline.md) §3 |
-| S6 生成代码并自检 | 按骨架生成 3 个角色文件和 verify_chain，然后自检 | [harness/step2.md](harness/step2.md) §1–7 |
-| S7 打包交付 | 先问 team.json 的字段，再打 zip 并校验，写 README | step2.md §8 |
-| S8 实测迭代 | 读日志、对比视频，先说明方案，用户同意后再出下一版；每轮分析完补卡 | [harness/iterate.md](harness/iterate.md) |
-
-常识见 [knowledge/basics.md](knowledge/basics.md)，角色语义卡见 [knowledge/cards/](knowledge/cards/README.md)。
-
-## 怎么问用户
-
-- 用 AskUserQuestion 提问，每题只问一个点，每次调用最多 4 题。
-- 涉及视频的问题，附上截图路径和视频时刻。
-- 第一个问题永远是确认文字轴（G1），单独问；其余问题等 S3 全部做完后再集中问。
+- 使用宿主提供的结构化提问工具。
+- 一个问题只问一个决策点，互相关联的问题合并在一次调用中。
+- 视频问题附截图路径、视频时刻和缺项影响。
+- G1 单独确认所选文字轴，见 step1.md §2。
+- 其他问题在完成可独立执行的取证后集中提出。

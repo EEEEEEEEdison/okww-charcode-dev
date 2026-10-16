@@ -1,17 +1,17 @@
 # 代码规则
 
-okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照本文件，直接写或改角色代码时也依照本文件。入口见 [SKILL.md](SKILL.md)。
+okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照本文件。入口见 [SKILL.md](SKILL.md)。
 
 ## 这是什么
 
 教 AI 写 ok-ww 的角色代码（`BaseChar` 子类）：
 
-1. 尽量调用框架现成函数，并在相近函数之间选对（`click_*` vs `send_*_key`、`is_con_full` vs `get_current_con`……）。
+1. 宜调用框架现成函数，并在相近函数之间选对（`click_*` vs `send_*_key`、`is_con_full` vs `get_current_con`……）。
 2. 没有现成函数时，按项目已有经验自实现（时间推算或画面识别）。
 3. 日志统一用英文模板，规定何时打、打什么。
 4. 工坊脚本化配队使用统一的循环轴骨架。
 
-日常工作流：用户给游戏日志和录像，AI 定位出招或切人问题后修改代码（见「迭代工作流」）。
+日常工作流：用户给游戏日志和录像，AI 定位出招或切人问题后修改代码（见“迭代工作流”）。
 
 ## 基线
 
@@ -51,7 +51,7 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
 - **1-2** 技能键一律经 `send_*_key()` 或 `self.get_*_key()` 发送，不写死 `'e'/'q'/'r'`（用户可能改过键位）。长按写成 `self.task.send_key(self.get_resonance_key(), down_time=秒数)`。
 - **1-3** 用 `send_*_key` 手动放技能后，如果后续要用 `last_res` / `last_liberation` / `last_echo` 计时，必须调用对应的 `record_*_use()`。记录时机优先放在确认技能生效之后；确认不了才在按键时记录，并在注释里说明。
 - **1-4** E 可能一直亮着时（强化 E、多段 E、识别不稳），`click_resonance` 必须传正数 `time_out`。注意它的 `time_out=0` 表示默认 15 秒，和 `click_echo(time_out=0)`（只按一次）意思相反。
-- **1-5** 不要直接相信返回值：
+- **1-5** 不得直接相信返回值：
   - `click_liberation` 遇到没有动画的大招会返回 False；
   - `click_echo` 循环模式超时一律返回 False，即使已经按了出去。
 
@@ -61,43 +61,43 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
   - `resonance_available()` / `echo_available()` 只看 CD 数字；要确认图标是亮的，再加 `current_resonance() > 0`；
   - `liberation_available()` 同时看图标和 CD；
   - 不在场角色的“可用”是用上次看到的 CD 推算的。
-- **1-8** 带 `interval>0` 的 `click` 和 `send_key` 共用同一个节流时间戳，挨得太近的后一次会被静默丢弃，所以必须发出去的键不要传 `interval`。另外，发键和点击都会清空当前帧缓存，紧接着的画面判断会重新截图，截到的可能是动作刚开始时的画面。
+- **1-8** 带 `interval>0` 的 `click` 和 `send_key` 共用同一个节流时间戳，挨得太近的后一次会被静默丢弃，所以必须发出去的键不得传 `interval`。另外，发键和点击都会清空当前帧缓存，紧接着的画面判断会重新截图，截到的可能是动作刚开始时的画面。
 
 ### 2 等待与计时
 
 - **2-1** 一律用 `self.sleep()`，不用 `time.sleep()`。要跳过战斗检查时传 `check_combat=False`。
 - **2-2** 等条件用 `self.task.wait_until`，并且必须传正数 `time_out`（`0` 表示默认 10 秒）。
 - **2-3** 只有可能单帧闪烁的识别才传 `settle_time=0.1~0.2`（条件需要连续成立这么久）；其他等待不传。
-- **2-4** `time_out` 超过 1 秒的等待，传 `pre_action=self.check_combat`。不要把 `check_combat` 写进条件函数里，它返回 None。
+- **2-4** `time_out` 超过 1 秒的等待，传 `pre_action=self.check_combat`。不得把 `check_combat` 写进条件函数里，它返回 None。
 - **2-5** 游戏内时长（buff、技能持续、冷却）用 `time_elapsed_accounting_for_freeze(anchor)` 计算；循环的时间上限用真实时间 `time.time() - start`。
 - **2-6** 按含义选锚点：
   - `last_perform`：本次上场；
   - `last_res` / `last_liberation` / `last_echo`：对应技能；
   - 局部 `start`：本次动作。
 
-  不要新建和已有时间戳重复的变量。
-- **2-7** 等入场动作或落地用 `wait_down()`，不要用固定秒数普攻代替。只有要等 E/R 变得可用时才用 `wait_intro()`。
+  不得新建和已有时间戳重复的变量。
+- **2-7** 等入场动作结束或角色回到地面，用 `wait_down()`，不得用固定秒数普攻代替。只有要等 E/R 变得可用时才用 `wait_intro()`。
 - **2-8** 固定时长普攻用 `continues_normal_attack(duration)`，配合它的 `click_resonance_if_ready_and_return` / `until_con_full` 参数。`duration` 是真实时间，不扣冻结。
 - **2-9** 手写的轮询循环必须有真实时间上限，每轮必须调用 `self.sleep()` 或 `self.task.next_frame()`。反例：上游 `normal_attack_until_can_switch` 是忙等。
 - **2-10** `click_liberation` 在 `in_team()` 第一次为真的那一帧返回，那一帧 HUD 可能还在淡入（队伍编号已过阈值、技能栏图标还没亮全）。R 后紧接着判 HUD 图标时，用 `wait_until(图标出现, time_out=0.3)` 从下一帧开始判，不在当前帧上做单帧判定，也不拿一次没认出就当“状态已结束”。案例：弗坎嘉 v7 test_1621，爆发图标在那一帧只有 0.62，两场都判成没进爆发。
 - **2-11** `click_liberation` 和 `click_resonance(has_animation=True)` 默认 `click_f=True`，演出期间（`in_team()` 为假）每 0.1 秒按一次 F。敌人韧性已空时，演出一结束就会触发击破。击破演出是全局时停：挑战计时器、技能冷却都停 1.3–1.5 秒，冻结记账（2-5）也算不进去。演出后紧跟按真实时间计时的动作（2-8 的固定时长普攻、按秒分组的爆发）时，传 `click_f=False`，击破留给切人时的 `f_break(check_f_on_switch=True)`（它的代价见 3-9）。注意治疗位 `check_f_on_switch` 为假，切人时不按 F。案例：弗坎嘉 v10 test_2142、v11 首版 test_2257，嘉贝莉娜 R 后爆发第 1 组被时停吃掉约 1.3 秒，协奏不满、无延奏切人。
-- **2-12** 日志里的 `cast … ok` 要等识别到技能进入冷却才打，比实际按键晚约 0.2–0.35 秒。把参考视频里“按键到按键”的时长写成常量、又从 ok 起算时，每处都会多出这一段，常量要扣掉它。案例：弗坎嘉 v7 改动说明；v8 test_1644、v10 test_2142、v11 test_2257 里，弗洛洛 E 冷却首帧都比 ok 早 0.16–0.34 秒（用户确认 2026-10-13）。
+- **2-12** 日志 `cast … ok` 的含义由当前实现决定。先核对发送、生效、冷却和函数返回的对应关系，再选计时锚点，见 [timing.md §2](harness/timing.md)。历史案例中，弗洛洛 E 冷却首帧比 ok 早 0.16–0.34 秒；该值来自 v8 test_1644、v10 test_2142、v11 test_2257，用户于 2026-10-13 确认。不得把该偏移用于所有技能，也不得统一从参考时长扣除。
 
 ### 3 切人
 
-- **3-1** `do_perform` 以 `return self.switch_next_char()` 结尾，后面不再接动作。不要假设切人一定发生：没有候选人时它只普攻 0.2 秒就返回，随后 `perform` 会再次执行。
-- **3-2** 想决定下一个上场的人，覆写**目标角色**的 `get_switch_priority`，返回 `MUST` / `NO` / `HIGH + 1`，其余情况返回 `super()`。不要写死数字键。
+- **3-1** `do_perform` 以 `return self.switch_next_char()` 结尾，后面不再接动作。不得假设切人一定发生：没有候选人时它只普攻 0.2 秒就返回，随后 `perform` 会再次执行。
+- **3-2** 想决定下一个上场的人，覆写**目标角色**的 `get_switch_priority`，返回 `MUST` / `NO` / `HIGH + 1`，其余情况返回 `super()`。不得写死数字键。
 - **3-3** `get_switch_priority` 在角色**不在场**时被调用：每次切人对每个候选人各调一次，`need_fast_perform` 也会调用它。里面只能读时间戳、已存状态和 `*_available()`。不做 HUD 识别、不 sleep、不改状态、不打 info 日志。
-- **3-4** 只有队里有人会**不带 intro 也返回 MUST**（例如按时间戳返回 MUST 的覆写）时，才需要检查 `need_fast_perform()`；默认的 `get_switch_priority` 从不返回 MUST，其他情况下它恒为 False。检查点放在可以跳过的动作之前（R、重击、填充普攻），为真就提前切人，exit 行写 `reason=fast_switch`。不要在紧凑循环里调用它（反例：上游 Zhezhi）。
+- **3-4** 只有队里有人会**不带 intro 也返回 MUST**（例如按时间戳返回 MUST 的覆写）时，才需要检查 `need_fast_perform()`；默认的 `get_switch_priority` 从不返回 MUST，其他情况下它恒为 False。检查点放在可以跳过的动作之前（R、重击、填充普攻），为真就提前切人，exit 行写 `reason=fast_switch`。不得在紧凑循环里调用它（反例：上游 Zhezhi）。
 - **3-5** 覆写 `wait_switch()` 时必须自带时间上限（框架那一支没有超时），并且只读时间戳和已存状态。
 - **3-6** `switch_other_char()` 只在 `on_combat_end` 里用；战斗中切人一律用 `switch_next_char()`。
-- **3-7** `switch_next_char()` 不带参数调用。只有当游戏机制允许不满协奏也能出延奏时（例如今汐）才传 `free_intro=True`。不要用 `post_action`；切人后要做的事放进目标角色的 `do_perform`，根据 `has_intro` 判断。
+- **3-7** `switch_next_char()` 不带参数调用。只有当游戏机制允许不满协奏也能出延奏时（例如今汐）才传 `free_intro=True`。不得用 `post_action`；切人后要做的事放进目标角色的 `do_perform`，根据 `has_intro` 判断。
 - **3-8** 状态清理分两处，两处都先调用 `super()`，并且 `__init__` 里的初始值要和 `reset_state` 一致：
   - 每次上场的状态，在覆写的 `switch_out(con_full)` 里清；
   - 每场战斗的状态，在覆写的 `reset_state()` 里清（战斗结束和重新读队伍时都会调用）。
 - **3-9** 切人时框架会调出场角色的 `f_break(check_f_on_switch=True)`：有变奏时在发切人键**之前**（`BaseCombatTask.py:642-643`），无变奏时在认到换人**之后**（`:673-674`）。命中击破时 `task.f_break` 连按 F 加左键，直到认不到击破图标才返回，这时击破时停已近结束：v12 切人键在计时器恢复后约 0.1 秒发出，v13 坎 s1 开局的 `decide: break` 在恢复前 0.14–0.32 秒。所以有变奏的切人要等完整段演出：实测从切人日志行到技能栏换人约 1.8 秒，其中时停约 1.5 秒；没有击破时约 0.1 秒。出场节点靠切人取消最后一下的后摇（合轴）时，合轴会被这一段打断。不想在某个节点离场时击破，就覆写出场角色的 `f_break`，对该节点 `check_f_on_switch=True` 的调用返回 False（9b 是不分节点的版本）。案例：弗坎嘉 v12 test_0043 T1、T3。
-- **3-10** `task.can_break` 是粘滞标记：`check_f_break` 在战斗检查（`CombatCheck.py:145`）和 `cycle_sleep`（`BaseChar.py:184`）里认到 `f_break_full`（boss 血条左边的击破环满了）或击破图标就置真，之后只有 `task.f_break` 按过 F、或者战斗状态重置才清。认到以后如果没人按 F，比如离场的 `f_break` 被覆写跳过（3-9），或者 boss 没被击破就死了、换了场，这个旧标记会一直留到下一次 `f_break`。那时对着击破环是空的新 boss，照样连按 F 加左键至少 0.5 秒。节点里主动击破（不是切人时框架那一下）之前，先 `self.task.can_break = False`，只认当下的图标。真击破不受影响：`f_break_full` 每轮都能实时认到。案例：弗坎嘉 v13 test_0110 t2、t3。
-- **3-11** 生成代码前，按参考视频、文字轴和常识 K-7 给每次切人定表：变奏入场还是普通切人，拿不准就问用户。要变奏的，离场前等协奏满（2-8 的 `until_con_full`），等不到就普通切人并记 fallback。不该变奏的，离场前最后一个动作达成判据就收手切人，不加保险时长：按住类动作判据一满足就松手，多打的输出会把协奏打满。实测时按 `switch_next_char` 日志行的 `has_intro`、`current_con` 逐条对表。案例：弗坎嘉 25 秒轴 v2 test_2304，弗洛洛强化重击后至少按住 1.0 秒再切，离场协奏 1，坎特蕾拉变奏入场，没打出普攻；参考视频第 6 音符到切人约 0.35 秒（用户确认 2026-10-13）。
+- **3-10** `task.can_break` 是粘滞标记：`check_f_break` 在战斗检查（`CombatCheck.py:145`）和 `cycle_sleep`（`BaseChar.py:184`）里认到 `f_break_full`（boss 血条左边的击破环满了）或击破图标就置真，之后只有 `task.f_break` 按过 F、或者战斗状态重置才清。认到以后如果没人按 F，比如离场的 `f_break` 被覆写跳过（3-9），或者 boss 没被击破就死了、换了场，这个旧标记会一直留到下一次 `f_break`。那时对着击破环是空的新 boss，照样连按 F 加左键至少 0.5 秒。节点里主动击破之前，先 `self.task.can_break = False`，只认当下的图标。切人流程中的击破调用遵守 3-9。真击破不受影响：`f_break_full` 每轮都能实时认到。案例：弗坎嘉 v13 test_0110 t2、t3。
+- **3-11** 生成代码前，按 [timeline.md](harness/timeline.md) 记录每次切人的类型、协奏状态、完成判据和 `allow_fill`。切人实现遵守 [step2.md §3](harness/step2.md)，不得默认补满协奏。实测按 `switch_next_char` 日志的 `has_intro`、`current_con` 逐条核对。案例：弗坎嘉 25 秒轴 v2 test_2304，弗洛洛强化重击后至少按住 1.0 秒再切，离场协奏 1，坎特蕾拉变奏入场，没打出普攻。参考视频第 6 音符到切人约 0.35 秒，用户于 2026-10-13 确认。
 - **3-12** 节点要“打到能切某人就切”时，宜按框架选人的同一判据等：`self.task.wait_until(lambda: not self.task._target_has_switch_cd(target), post_action=self.click_with_interval, time_out=N)`，N 取 1.5–2.0 秒，超时记 fallback 照切。框架选人会滤掉离场不到 1 秒（扣冻结）的角色（`BaseCombatTask.py:456`），切早了认不到候选，只普攻 0.2 秒就返回（3-1）；改用固定时长普攻又要留余量，会多等。案例：弗坎嘉 25 秒轴坎特蕾拉 s2。v5 固定普攻 1.0 秒，切回时嘉贝莉娜已过切人冷却 0.41 秒和 1.64 秒。2.0.7 改成条件等，`attack_s` 1.02–1.04 秒，节点游戏时长 1.25 秒，参考 1.19 秒（test_2358；用户确认 2026-10-15）。
 
 ### 4 资源判断
@@ -154,7 +154,7 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
   - 角色代码不用 `error`。
 - **L-2** 模板：`[TAG] event[: ok|fail] [reason=code] [key=value ...]`。通用层不带 `[TAG]`；只有工坊循环轴层加 `[F1]`/`[S2]` 这样的节点标签。Logger 会自动加 `类名:` 前缀，所以消息里不写角色名。
 - **L-3** 必打的时机：
-  - `enter`：带入场方式，同时作为和视频对齐的锚点；
+  - `enter`：带入场方式；作为视频候选锚点前，按 timing.md §2 核对事件边界；
   - `decide`；
   - `cast X: ok|fail`；
   - `fallback`；
@@ -189,11 +189,10 @@ okww-charcode-dev harness 的代码规则部分：步骤 2 生成代码时依照
 
 ## 迭代工作流（日志 + 视频）
 
-1. 读日志，找到出问题的节点（`enter` 行即视频锚点），看 `cast X: ok|fail` 和 `reason=`。
-2. 用相邻两行的时间戳差换算出视频时刻，对照画面确认根因。
-3. 只改一个变量（时长、阈值、分支），重新实机验证。
-4. 原因不明时不加兜底（5-8）。
-5. 用户纠正了某个角色的出招、时长或写法，或者某个改法经实测确认有效时，按 [knowledge/cards/README.md](knowledge/cards/README.md) 的「补卡机制」起草语义卡条目，批量确认后写入。
+流程与完成标准见 [harness/iterate.md](harness/iterate.md)。
+按同一事件核对日志和录屏，先确认根因再改代码。
+每次试验隔离因果影响，未知保留缺项。
+语义卡候选按 [补卡机制](knowledge/cards/README.md#补卡机制) 批量确认。
 
 ## references
 
