@@ -3,6 +3,8 @@ name: timeline
 description: okwwcharcode（ok-ww 角色代码开发）的时序建模阶段。用于把已确认的轴对应到视频事件，建立节点链、动作条件、切人状态和参考耗时表；检查阻断项及 G2，输出可用于实现和实测比较的 timeline.json。
 ---
 
+> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
+
 # 时序建模
 
 ## 输入

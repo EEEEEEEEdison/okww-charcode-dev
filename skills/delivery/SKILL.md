@@ -3,6 +3,8 @@ name: delivery
 description: okwwcharcode（ok-ww 角色代码开发）的验证交付阶段。用于定向语法检查、交场链验证、模型与代码核对、工坊 zip 打包及 inspect_team_archive 校验；检查包内外一致，交付 README、验证结果和待实测项。
 ---
 
+> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
+
 # 验证交付
 
 ## 输入

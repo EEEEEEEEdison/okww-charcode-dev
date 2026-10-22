@@ -128,6 +128,9 @@ git clone --branch v0.1.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charco
 该方式不经过 marketplace。
 运行 `claude plugin details okwwcharcode@skills-dir` 核对，结果应列出 7 个 Skill。
 
+每个 `SKILL.md` 的正文首行是一行英文提示，不得删除。
+实测 Claude Code 2.1.308 在中文 Windows 上用 Skill 工具加载正文时，没有这行会整篇乱码；有这行时 8 个 Skill 均正常。
+
 ### pi
 
 pi 扫描到含 `SKILL.md` 的目录后便停止递归。

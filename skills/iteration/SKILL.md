@@ -3,6 +3,8 @@ name: iteration
 description: okwwcharcode（ok-ww 角色代码开发）的实测迭代阶段。用于核对实际代码版本与运行条件，对照日志、参考视频和实测录屏，比较动作、触发、协奏切人、整轮及节点耗时；定位根因并验证下一版或记录未验证项。
 ---
 
+> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
+
 # 实测迭代
 
 ## 输入
