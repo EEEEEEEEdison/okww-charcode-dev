@@ -4,7 +4,7 @@
 输入文字作战轴、教程视频或已有代码，交付工坊配队代码和 zip。
 也支持根据实测日志与录屏修改角色代码。
 
-项目包含一个总入口和六个阶段 Skill。
+项目包含一个总入口、六个阶段 Skill 和一个日志 Skill。
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
@@ -25,6 +25,8 @@
 整队生成按上述顺序推进。
 局部修改可从代码实现或实测迭代进入。
 局部任务只补受影响的依据和验证，不必重建整队时序。
+
+[日志 Skill](skills/okww-logging/SKILL.md) 跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
 
 ## 信息如何贯穿流程
 
@@ -109,7 +111,7 @@ git switch --detach v0.0.1
 共用规则、知识和脚本使用仓库内的相对路径。
 
 在当前 pi 中，扫描到含 `SKILL.md` 的目录后便停止递归。
-因此，上述安装方式只注册总入口；六个阶段仍可由总入口读取。
+因此，上述安装方式只注册总入口；六个阶段和日志 Skill 仍可由总入口读取。
 
 需要分别调用阶段 Skill 时，在 `~/.pi/agent/settings.json` 中添加：
 
@@ -125,7 +127,7 @@ git switch --detach v0.0.1
 仓库安装在其他位置时，数组需同时列出仓库根目录和其 `skills/` 子目录。
 保存后在 pi 运行 `/reload`；Claude Code 重新开启会话。
 默认启用 Skill 命令时，可用 `/skill:okww-charcode-dev` 调用总入口。
-六个阶段可分别用 `/skill:okww-materials` 等命令调用。
+六个阶段和日志 Skill 可分别用 `/skill:okww-materials`、`/skill:okww-logging` 等命令调用。
 阶段目录必须保留在仓库内，以便读取 `../../` 下的共用文件。
 
 队伍素材和产物放在独立工作区：
@@ -162,7 +164,7 @@ git switch --detach v0.0.1
 |---|---|
 | [VERSION](VERSION) | 发布版本号；对应 `v<版本号>` 标签 |
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
-| `skills/*/SKILL.md` | 六个阶段的输入、任务、交付与退回条件 |
+| `skills/*/SKILL.md` | 六个阶段和日志 Skill 的输入、任务、交付与退回条件 |
 | [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
 | [harness/timing.md](harness/timing.md) | 计时口径、参考耗时、差值和时间验收 |
 | [harness/step1.md](harness/step1.md) | 素材、文字轴确认、画面取证与事件标记 |
@@ -177,10 +179,11 @@ git switch --detach v0.0.1
 | [references/basechar-api.md](references/basechar-api.md) | `BaseChar` API 与成员索引 |
 | [references/task-api.md](references/task-api.md) | `self.task.*` 与战斗检查 |
 | [references/self-impl-patterns.md](references/self-impl-patterns.md) | 框架函数不足时的实现经验 |
-| [references/logging.md](references/logging.md) | 英文日志模板与参考实现 |
+| [references/logging.md](references/logging.md) | 英文日志模板、词表与参考实现 |
 | [references/workshop.md](references/workshop.md) | 工坊格式、循环轴骨架与案例 |
 | [templates/verify_chain.py](templates/verify_chain.py) | 静态交场链检查模板 |
 | [scripts/pack_team.py](scripts/pack_team.py) | 打包 zip，并调用 ok-ww 的校验器 |
+| [scripts/check_logs.py](scripts/check_logs.py) | 按 logging.md 的词表和规则检查日志调用 |
 
 下载、抽帧和分析脚本按任务编写，放在媒体目录或 scratchpad。
 交场链检查使用模板，打包固定使用 `scripts/pack_team.py`。

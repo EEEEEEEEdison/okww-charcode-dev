@@ -13,9 +13,10 @@ description: ok-ww 开发的实测迭代阶段。用于核对实际代码版本�
 
 1. 读取 [总入口](../../SKILL.md) 和 [iterate.md](../../harness/iterate.md)。
 2. 按 [evidence.md](../../harness/evidence.md) 核对运行条件与证据。
-3. 按 [timing.md](../../harness/timing.md) 比较参考与实测耗时。
-4. 解释偏差，按根因选择退回阶段。
-5. 按 iterate.md §5–6 更新案例证据和验收状态。
+3. 按 [日志 Skill](../okww-logging/SKILL.md) 用 `wait` 行和 probe 行定位卡点。
+4. 按 [timing.md](../../harness/timing.md) 比较参考与实测耗时。
+5. 解释偏差，按根因选择退回阶段。
+6. 按 iterate.md §5–6 更新案例证据和验收状态。
 
 ## 输出与通过条件
 
@@ -23,6 +24,7 @@ description: ok-ww 开发的实测迭代阶段。用于核对实际代码版本�
 - 本段差值与累计差值已分别记录。
 - 根因结论区分观测、解释和待验证假设。
 - 新版本的改动目标和验证办法可复查。
+- 已查清问题的 probe 行在新版本删除。
 - 完成声明满足 iterate.md §6；缺视频时写明验证限制。
 
 来源缺失或片段不可读时，退回 [素材获取](../okww-materials/SKILL.md)。

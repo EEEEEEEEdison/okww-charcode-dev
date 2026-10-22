@@ -1,6 +1,6 @@
 ---
 name: okww-charcode-dev
-description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。根据文字轴、教程视频、已有代码或实测日志选择阶段：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、日志录像排错。
+description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。根据文字轴、教程视频、已有代码或实测日志选择阶段：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、游戏内日志写法、日志录像排错。
 ---
 
 # okww-charcode-dev
@@ -31,6 +31,7 @@ ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
 - 信息来源、证据、缺项分级和阶段交接见 [evidence.md](harness/evidence.md)。
 - 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
 - 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
+- 写或改游戏内日志时，按 [日志 Skill](skills/okww-logging/SKILL.md) 写和检查。
 - 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
 - 语义卡的读取、冲突记录和安装目录边界见 [knowledge/cards/README.md](knowledge/cards/README.md)。
 

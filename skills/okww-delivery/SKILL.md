@@ -12,7 +12,7 @@ description: ok-ww 开发的验证交付阶段。用于定向语法检查、交�
 ## 执行
 
 1. 读取 [总入口](../../SKILL.md) 的产物位置要求。
-2. 按 [step2.md §7](../../harness/step2.md) 检查候选代码。
+2. 按 [step2.md §7](../../harness/step2.md) 检查候选代码。日志按 [日志 Skill](../okww-logging/SKILL.md) 检查。
 3. 工坊交付按 step2.md §8 打包与校验。
 4. 局部代码交付只运行改动目标的检查。
 5. 按 [evidence.md §5](../../harness/evidence.md) 记录结果。

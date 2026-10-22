@@ -79,12 +79,13 @@ self._force_switch_to(self._find_teammate('<下一个类名>'), '<下个节点�
 
 ## 5 日志与实现交接
 
-按 logging.md 和骨架记录：
+按 logging.md、骨架和 [日志 Skill](../skills/okww-logging/SKILL.md) 记录：
 
 - 节点 `enter`、`exit`；
-- 技能 `cast X: ok|fail`；
+- 技能 `cast X: ok|fail`，没有确认信号的发键写 `send X`；
 - 分支 `decide`；
-- 兜底 `fallback`。
+- 兜底 `fallback`；
+- 上限 ≥2s 的条件等待前打 `wait`。
 
 核对日志与实际事件的关系。
 不得用 `ok` 直接替代所有生效时刻。
@@ -102,7 +103,7 @@ self._force_switch_to(self._find_teammate('<下一个类名>'), '<下个节点�
 最终候选必须恢复正确边并再次通过。
 
 检查只覆盖静态交场链。
-它不能证明协奏、技能效果或耗时符合。
+这项检查不能证明协奏、技能效果或耗时符合。
 
 ## 7 自检清单
 
@@ -122,6 +123,7 @@ self._force_switch_to(self._find_teammate('<下一个类名>'), '<下个节点�
 - [ ] 不吞战斗异常；日志 helper 按规则处理自身异常。
 - [ ] 3 个文件的共用协议与日志 helper 逐字一致。
 - [ ] 节点日志齐全；fallback 用 warning；日志不额外读状态。
+- [ ] `scripts/check_logs.py` 报 0 条问题，或剩下的问题已在 README 写明原因。
 - [ ] 待测项均有预期、验证办法和失败处理。
 
 ## 8 打包交付

@@ -1,6 +1,7 @@
 # 日志规范
 
-本篇对应日志组规则 L-0 ～ L-10，外加工坊循环轴相关的 6-6 / 6-7。
+本篇对应日志组规则 L-0 ～ L-11，外加工坊循环轴相关的 6-6 / 6-7。
+写日志的流程和交付前自检见 [日志 Skill](../skills/okww-logging/SKILL.md)，词表检查用 `scripts/check_logs.py`。
 
 ## 事实
 
@@ -57,7 +58,7 @@
 各部分的写法：
 
 - `event`：取自下方的事件词表，用小写短语。
-- `: ok` / `: fail`：只用于尝试类事件（cast、retry）。`decide` / `fallback` 的冒号后写分支名。
+- `: ok` / `: fail`：只用于尝试类事件（cast、retry、switch）。`decide` / `fallback` 的冒号后写分支名，`wait` 的冒号后写等什么。
 - `reason=`：取自 reason 词表（L-7）。fail 行分不出原因时省略，不新造码，也不为此额外读状态（L-8）；做判断时已经读到的值照常作为字段写上。
 - `key=value`：取自字段词表（L-6）。
 - 不写角色名，Logger 已经加了 `类名:` 前缀。
@@ -66,14 +67,18 @@
 
 | 事件 | 用途 | 例 |
 |---|---|---|
-| `enter` | 进入本角色逻辑。带 `mode=`，同时作为对齐视频的锚点 | `enter mode=intro` |
-| `decide: <branch>` | 选了哪个分支，以及决定它的状态值 | `decide: liberate lib_ready=True con=1.000` |
+| `enter` | 进入本角色逻辑。带 `mode=`，同时用作与视频比对的时刻锚点 | `enter mode=intro` |
+| `decide: <branch>` | 选了哪个分支，以及决定该分支的状态值 | `decide: liberate lib_ready=True con=1.000` |
 | `cast E` / `cast R` / `cast echo` / `cast heavy` | 技能尝试与结果 | `cast R: fail reason=no_animation lib_ready=False in_team=True` |
 | `retry E` / `retry R` / `retry echo` | 重试（5-3 的第 2 次尝试） | `retry R: ok attempt=2` |
-| `attack` | 手写普攻循环结束时的汇总（L-4）。用 `continues_normal_attack` 等框架函数时不打：`decide` 行已经记录了分支，时长看时间戳差（L-5） | `attack attacks=12` |
-| `fallback: <what>` | 兜底分支被触发，用 **warning** 级别 | `fallback: switch_without_r` |
+| `send <技能>` | 只发键、没有可靠确认信号的技能，不写 ok/fail | `send E skill=vortex` |
+| `attack` | 手写普攻循环结束时的汇总（L-4）。按组打时每组一行，带 `group`、`ended`。用 `continues_normal_attack` 等框架函数时不打：`decide` 行已经记录了分支，时长看时间戳差（L-5） | `attack attacks=12`、`attack group=2 ended=True` |
+| `wait: <what>` | 上限 ≥2s 的条件等待开始前打，带 `timeout`（L-3） | `wait: con_full timeout=6.00` |
+| `fallback: <what>` | 兜底分支被触发，用 **warning** 级别。早退分支也算兜底 | `fallback: switch_without_r` |
 | `exit` | 离场：原因和下一个上场的人 | `exit reason=done next=Phrolova.f4` |
+| `switch` | 角色代码自己发切人键时的结果，例如带着按住的左键切人 | `switch: ok next=Cantarella held=True switch_s=0.09` |
 | `interrupt` | 角色代码自己识别到的中断：超时、交还框架等 | `interrupt reason=startup_in_progress` |
+| `probe <对象>` | 取证行（L-11），字段不受 L-6 词表限制 | `probe icon icon=vortex inner=0.065` |
 
 新事件要先加进本表再用（L-6 / L-7 同理）。
 
@@ -85,13 +90,14 @@
    3. `natural`：其余情况。
 
    强切时是否带变奏，可以从紧挨着的框架行 `switch_next_char … has_intro …` 里看到。
-2. **`decide`**：每个有分支的决策点，写选了哪支，以及决定它的状态值。
+2. **`decide`**：每个有分支的决策点，写选了哪支，以及决定该分支的状态值。
 3. **`cast X: ok|fail`**：每次技能尝试的结果。失败时带 `reason` 和当时已有的关键状态。
 4. **`fallback`**：兜底分支被触发时打。
 5. **`exit`**：离场原因和下一个上场的人。如果不知道是谁（交给框架选），就写 `next=framework`。
 6. **`interrupt`**：超时、把控制权交还框架等情况。
+7. **`wait`**：等某个条件成立、上限 ≥2s 的等待（`wait_until`、手写轮询循环），开始前打一条，带 `timeout=<上限>`。代码卡住时，最后一行就是卡点。等待正常结束不另打行，结果写在后面的 `cast` / `decide` 行里。
 
-注意：脱战和阵亡是异常，会直接穿过角色代码（5-6），角色代码不捕获它们，也就打不了这类日志。框架会打。
+注意：脱战和阵亡是异常，会直接穿过角色代码（5-6），角色代码不捕获这两种异常，也就打不了这类日志。框架会打。
 
 ## L-4 不打的时机
 
@@ -100,9 +106,14 @@
 - 状态翻转时；
 - 手写循环结束时打一条汇总，例如 `attack attacks=12`。框架普攻函数（`continues_normal_attack` 等）不返回点击次数，不打这一行。
 
-## L-5 不写耗时
+`probe` 行同样只在状态翻转时打。
 
-日志里不写耗时，耗时看两行的时间戳差（精确到毫秒）。
+## L-5 耗时
+
+- 一个动作内部、起止两个时刻都由代码自己量到的耗时，写成 `<名称>_s` 字段：真实时间 `time.time()` 之差，2 位小数。例如按键到出冷却数字写 `cd_s`。
+- 跨动作的耗时不写，看两行的时间戳差（精确到毫秒）。
+- 耗时字段必须是本次实测值。常量和配置值不得写成 `_s` 字段。
+- 字段名和起止点取自 L-6 的耗时字段表。
 
 ## L-6 字段词表与格式
 
@@ -115,7 +126,9 @@
 | 其他浮点 | 2 位小数 |
 | 整数、字符串 | 原样 |
 
-字段名用 snake_case，并且只用下表里的名字。新字段先加进本表再用。
+字段名用 snake_case，并且只用下面两张表里的名字。新字段先加进表再用。
+
+**字段**
 
 | 字段 | 类型 | 含义（来源） |
 |---|---|---|
@@ -136,7 +149,29 @@
 | `attempt` | int | 第几次尝试（5-3） |
 | `skill` | str | 同一个键能放出几种技能时，本行是哪一种。取值按图标起名，不用“强化”“终结”这类各处叫法不一的词，例如坎特蕾拉 E 的 `umbrella`（伞形）/ `vortex`（粉圈漩涡） |
 | `round` | int | 循环轮次 |
+| `group` | int | 按组打普攻时的第几组，从 1 开始；0 表示一组都没打 |
+| `ended` | bool | 本组内认到状态结束，提前收手 |
+| `sends` | int | 本次尝试实际发键次数 |
+| `presses` | int | 按住类动作实际按下次数（含松开重按） |
+| `press` | str | 按法：`hold`（按住）或 `tap`（点按） |
+| `held` | bool | 带着按住的键切入或切出 |
+| `timeout` | float | `wait` 行的等待上限，单位秒 |
 | `note5` | bool | 弗洛洛五线谱第 5 个音符格亮着（工坊弗坎嘉 `is_note5_lit()`） |
+
+**耗时字段**
+
+起点都是本事件的起点：尝试类事件是第一次发键，`wait` 是开始等，`attack` 和 `decide` 是开始普攻。
+
+| 字段 | 终点 |
+|---|---|
+| `ready_s` | 判到技能可用 |
+| `cd_s` | 出冷却数字 |
+| `done_s` | 认到其他完成信号，如进入目标状态 |
+| `fire_s` | 认到出招 |
+| `held_s` | 松开按住的键 |
+| `switch_s` | 认到换人 |
+| `wait_s` | 等待结束 |
+| `attack_s` | 普攻结束，或判定出本行的分支 |
 
 ## L-7 reason 词表
 
@@ -167,7 +202,7 @@ if lib_ready and con < 0.6:
 
 两个坑：
 
-- `get_current_con()` 会写入 `current_con`；读到 1 后它会一直是 1，直到下场，这会影响框架是否按变奏切人。
+- `get_current_con()` 会写入 `current_con`；读到 1 后 `current_con` 会一直是 1，直到下场，这会影响框架是否按变奏切人。
 - `has_cd()` 会触发 OCR（每帧最多一次），有耗时。
 
 **反例**：日志行里写 `con=self.get_current_con()`、`cd=self.has_cd('liberation')`。这是为了打日志而读状态，会改变行为。
@@ -252,3 +287,11 @@ getattr(self, '_raw_logger', self.logger).warning('[F1] fallback: switch_without
 … INFO TaskExecutor BaseCombatTask:switch_next_char Cantarella(MainDps) -> Phrolova(SubDps) has_intro False has_sub_dps_intro False current_con 0.62
 … INFO TaskExecutor Phrolova:[F1] enter mode=forced
 ```
+
+## L-11 取证行（probe）
+
+- 为查某个问题临时加的行，例如图标逐帧读数、截图落盘，统一用 `probe <对象>` 事件、info 级，正式版日志里能看到。
+- 字段可以自定，不受 L-6 词表限制；格式仍按 L-6。
+- 截图路径写相对 `working` 的路径，不写绝对路径。
+- 交付 README 必须列出本版开着的 probe 行和各自要回答的问题。
+- 问题查清后的下一版必须删掉对应的 probe 行。

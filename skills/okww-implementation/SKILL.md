@@ -15,7 +15,8 @@ description: ok-ww 开发的代码实现阶段。用于从通过 G2 的时序模
 2. 读取涉及角色的语义卡和 [代码基线](../../harness/baseline.md)。
 3. 整队生成按 [step2.md §1–6](../../harness/step2.md) 实现。
 4. 局部修改检查直接调用者，核对函数判据和副作用。
-5. 按 [evidence.md §5](../../harness/evidence.md) 记录实现与假设。
+5. 日志按 [日志 Skill](../okww-logging/SKILL.md) 写。
+6. 按 [evidence.md §5](../../harness/evidence.md) 记录实现与假设。
 
 ## 输出与通过条件
 

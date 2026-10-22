@@ -38,7 +38,7 @@ okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照�
    3. 时间戳推算。
 
    写法见 [references/self-impl-patterns.md](references/self-impl-patterns.md)。
-3. **日志**按 [references/logging.md](references/logging.md) 写。
+3. **日志**按 [references/logging.md](references/logging.md) 写，并用 [scripts/check_logs.py](scripts/check_logs.py) 自检。
 4. **工坊脚本化交场链**按 [references/workshop.md](references/workshop.md) 的循环轴骨架写，并用 [templates/verify_chain.py](templates/verify_chain.py) 自检。
 
 ## 规则
@@ -159,14 +159,17 @@ okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照�
   - `cast X: ok|fail`；
   - `fallback`；
   - `exit`：带原因和下一个上场的人；
-  - 中断。
+  - 中断；
+  - `wait`：上限 ≥2s 的条件等待开始前打，带 `timeout`，卡住时最后一行就是卡点。
 - **L-4** 不按帧、不按点击打日志；只在状态翻转时打，或在循环结束时打一条汇总。
-- **L-5** 日志里不写耗时，看两行时间戳的差。
-- **L-6 / L-7** 字段名和 `reason` 码都用固定的 snake_case 词表，新词先加进词表再用。格式：布尔写 True/False，比例保留 3 位小数，其他浮点保留 2 位。fail 行分不出原因时（又不能额外读状态，L-8），省略 `reason`。
+- **L-5** 动作内部由代码量到的耗时写 `<名称>_s` 字段，取 `time.time()` 之差；跨动作的耗时看两行时间戳的差。常量和配置值不得写成 `_s` 字段。
+- **L-6 / L-7** 字段名、耗时字段名和 `reason` 码都用固定的 snake_case 词表，新词先加进词表再用。格式：布尔写 True/False，比例保留 3 位小数，其他浮点保留 2 位。fail 行分不出原因时（又不能额外读状态，L-8），省略 `reason`。
 - **L-8** 不为打日志额外读状态，失败路径也一样；需要的值在做判断时就存进变量。两个坑：`get_current_con()` 会写 `current_con`，`has_cd()` 会触发 OCR。
 - **L-9 / L-10** 两种模式的写法不同：
   - 内置模式：保留框架日志、不重复打，直接内联写 `self.logger.info(f'...')`；
   - 工坊模式：可以用 `_trace` helper。循环轴角色还要把框架 info 降为 debug，并过滤两行切人日志（见 workshop.md）。
+- **L-11** 为查问题临时加的行写成 `probe <对象>`、info 级，字段可以自定。README 列出开着的 probe 行；问题查清后的下一版删掉。
+- 写法流程和交付前检查见 [日志 Skill](skills/okww-logging/SKILL.md)，检查脚本是 `scripts/check_logs.py`。
 
 ### 6 工坊循环轴（摘要，全文见 references/workshop.md）
 
@@ -201,6 +204,6 @@ okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照�
 | [references/basechar-api.md](references/basechar-api.md) | BaseChar 常用函数详条（签名、行为、副作用、坑、对比、何时用、上游例子）+ 全量成员索引 |
 | [references/task-api.md](references/task-api.md) | 角色代码用到的 `self.task.*`（BaseCombatTask / BaseWWTask / ok-script）+ 异常与战斗检查机制 |
 | [references/self-impl-patterns.md](references/self-impl-patterns.md) | 自实现套路：时间谓词、发送-确认-记录、按住、颜色识别、模板流程 |
-| [references/logging.md](references/logging.md) | 日志模板、级别、必打时机、字段词表、reason 词表、`_trace` 参考实现 |
+| [references/logging.md](references/logging.md) | 日志模板、级别、必打时机、字段与耗时字段词表、reason 词表、probe 行、`_trace` 参考实现 |
 | [references/workshop.md](references/workshop.md) | 工坊 zip 格式、循环轴骨架完整代码、日志过滤器、可选案例 |
 | [templates/verify_chain.py](templates/verify_chain.py) | 交场链静态自检模板（填 `FILES` / `EXPECTED` / `STARTUP_END`） |
