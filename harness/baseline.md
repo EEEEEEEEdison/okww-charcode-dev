@@ -13,7 +13,7 @@
 
 | 来源 | 怎么取 | 记录的版本 |
 |---|---|---|
-| 语义卡 | `knowledge/cards/<类名>_C<共鸣链>.md`；分别核对作者链与用户链，缺卡时不得用 C0 直接替代 | 卡片来源与确认日期 |
+| 语义卡 | `knowledge/cards/<类名>_C<共鸣链>.md`；分别核对作者链与用户链，缺卡时不得用 C0 直接替代 | 本 Skill 的 VERSION |
 | 上游内置类 | 在本地配置的上游仓库里先 `git fetch upstream`，再 `git show upstream/master:src/char/<类名>.py`。没有这个文件就记“内置没有” | upstream/master 的提交号 |
 | 在线工坊 | 见下 | 每条代码的 `name`、`author`、`version`、`modifiedAt` |
 | 用户的历史版本 | 查本地配置的历史版本目录和工作区里已有的队。每个含这个角色的队取最新版本，早期版本只在对比时看 | 队名、版本目录 |
