@@ -3,8 +3,6 @@ name: implementation
 description: okwwcharcode（ok-ww 角色代码开发）的代码实现阶段。用于从通过 G2 的时序模型生成工坊角色代码，或按明确依据局部修改 BaseChar 子类；复用框架函数，落实触发、完成、切人和等待判据，记录实现假设。
 ---
 
-> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
-
 # 代码实现
 
 ## 输入

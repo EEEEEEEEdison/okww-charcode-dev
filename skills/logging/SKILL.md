@@ -3,8 +3,6 @@ name: logging
 description: okwwcharcode 的日志 Skill：ok-ww 角色代码的游戏内日志写法与检查。用于给角色代码或工坊循环轴写 logger / _trace 日志行，选事件、字段、reason 与 info/debug/warning 级别；在长等待前打 wait 行定位卡点；按需加 probe 取证行并在问题查清后删除；交付前用 check_logs.py 检查日志模板、字段词表、耗时字段和不额外读状态。适用于日志模板、字段词表、reason 词表、耗时字段、降级过滤、卡点定位、取证行。
 ---
 
-> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
-
 # 日志
 
 单独写或改日志时，可直接调用本 Skill。其他阶段宜读取本文件，不宜调用。

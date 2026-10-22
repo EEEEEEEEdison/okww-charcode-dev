@@ -3,8 +3,6 @@ name: materials
 description: okwwcharcode（ok-ww 角色代码开发）的素材获取阶段。用于整理教程视频、B 站链接、本地录屏、文字轴、口播字幕和说明来源；记录片段覆盖、帧率、倍速、剪辑、时间证据及缺失内容，交给轴解析阶段。
 ---
 
-> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
-
 # 素材获取
 
 ## 输入

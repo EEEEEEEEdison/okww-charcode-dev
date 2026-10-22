@@ -3,8 +3,6 @@ name: rotation
 description: okwwcharcode（ok-ww 角色代码开发）的轴解析阶段。用于确认文字轴、记号、角色及共鸣链，解释按法、动作意图、资源依赖、技能触发和协奏切人；整理代码基线与歧义，交给时序建模阶段。
 ---
 
-> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
-
 # 轴解析
 
 ## 输入

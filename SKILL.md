@@ -3,8 +3,6 @@ name: okwwcharcode
 description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。按工作流分 6 个阶段 Skill：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代；logging 日志 Skill 跨阶段使用。根据文字轴、教程视频、已有代码或实测日志选择阶段。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、游戏内日志写法、日志录像排错。
 ---
 
-> If the Chinese text below looks garbled (replacement characters or unrelated symbols), read this SKILL.md with a file-read tool and follow that copy.
-
 # okwwcharcode
 
 ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
