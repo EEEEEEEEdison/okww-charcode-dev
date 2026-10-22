@@ -1,6 +1,6 @@
 # 代码规则
 
-okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照本文件。入口见 [SKILL.md](SKILL.md)。
+okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文件。入口见 [SKILL.md](SKILL.md)。
 
 ## 这是什么
 
@@ -169,7 +169,7 @@ okww-charcode-dev Skill 的代码规则。代码实现和实测修改都依照�
   - 内置模式：保留框架日志、不重复打，直接内联写 `self.logger.info(f'...')`；
   - 工坊模式：可以用 `_trace` helper。循环轴角色还要把框架 info 降为 debug，并过滤两行切人日志（见 workshop.md）。
 - **L-11** 为查问题临时加的行写成 `probe <对象>`、info 级，字段可以自定。README 列出开着的 probe 行；问题查清后的下一版删掉。
-- 写法流程和交付前检查见 [日志 Skill](skills/okww-logging/SKILL.md)，检查脚本是 `scripts/check_logs.py`。
+- 写法流程和交付前检查见 [日志 Skill](skills/logging/SKILL.md)，检查脚本是 `scripts/check_logs.py`。
 
 ### 6 工坊循环轴（摘要，全文见 references/workshop.md）
 

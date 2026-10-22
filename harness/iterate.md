@@ -74,10 +74,10 @@
 
 | 根因 | 返回阶段 |
 |---|---|
-| 作者意图、按法、依赖或切人解释错误 | [轴解析](../skills/okww-rotation/SKILL.md) |
-| 事件边界、口径、参考测量或模型错误 | [时序建模](../skills/okww-timeline/SKILL.md) |
-| 函数语义、判据或等待实现错误 | [代码实现](../skills/okww-implementation/SKILL.md) |
-| 来源缺失、片段不可读 | [素材获取](../skills/okww-materials/SKILL.md) |
+| 作者意图、按法、依赖或切人解释错误 | [轴解析](../skills/rotation/SKILL.md) |
+| 事件边界、口径、参考测量或模型错误 | [时序建模](../skills/timeline/SKILL.md) |
+| 函数语义、判据或等待实现错误 | [代码实现](../skills/implementation/SKILL.md) |
+| 来源缺失、片段不可读 | [素材获取](../skills/materials/SKILL.md) |
 
 修改写入 `harness-v<N+1>`，不得覆盖旧版。
 沿用的 timeline、baseline 和待测项也必须能从新版定位。

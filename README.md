@@ -1,32 +1,60 @@
-# okww-charcode-dev
+# okwwcharcode
 
 用于 [ok-wuthering-waves](https://github.com/ok-oldking/ok-wuthering-waves)（ok-ww，鸣潮自动战斗脚本）的角色代码开发 Skill。
+仓库名为 `okww-charcode-dev`，安装后的 Skill 名为 `okwwcharcode`。
 输入文字作战轴、教程视频或已有代码，交付工坊配队代码和 zip。
 也支持根据实测日志与录屏修改角色代码。
 
-项目包含一个总入口、六个阶段 Skill 和一个日志 Skill。
+项目按工作流分为总入口 `okwwcharcode`、六个阶段 Skill 和日志 Skill `logging`。
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
-版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.0.1`。
+版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.1.0`。
 普通开发只读取随版本提供的知识；知识维护由独立入口处理。
 
 ## 六个阶段 Skill
 
-| 阶段 | 职责 | 主要交付物 |
-|---|---|---|
-| [素材获取](skills/okww-materials/SKILL.md) | 收集文字、视频、字幕与作者说明，记录素材条件 | 原素材、`media/info.md`、质量限制 |
-| [轴解析](skills/okww-rotation/SKILL.md) | 确认所选轴，解释动作、资源与跨步依赖 | G1 确认、动作解释、代码基线、缺项 |
-| [时序建模](skills/okww-timeline/SKILL.md) | 标记输入、状态变化和切人事件，测量参考耗时 | `timeline.json`、参考耗时表、G2 结果 |
-| [代码实现](skills/okww-implementation/SKILL.md) | 选用框架 API，实现动作、判据与交场链 | 角色代码、`verify_chain.py`、实现说明 |
-| [验证交付](skills/okww-delivery/SKILL.md) | 定向检查代码，校验并打包工坊文件 | 检查结果、zip、README、待实测项 |
-| [实测迭代](skills/okww-iteration/SKILL.md) | 对照日志和录屏定位差异，修改并复验 | 差异表、根因、下一版或验收记录 |
+| 阶段 | Skill 名 | 职责 | 主要交付物 |
+|---|---|---|---|
+| [素材获取](skills/materials/SKILL.md) | `materials` | 收集文字、视频、字幕与作者说明，记录素材条件 | 原素材、`media/info.md`、质量限制 |
+| [轴解析](skills/rotation/SKILL.md) | `rotation` | 确认所选轴，解释动作、资源与跨步依赖 | G1 确认、动作解释、代码基线、缺项 |
+| [时序建模](skills/timeline/SKILL.md) | `timeline` | 标记输入、状态变化和切人事件，测量参考耗时 | `timeline.json`、参考耗时表、G2 结果 |
+| [代码实现](skills/implementation/SKILL.md) | `implementation` | 选用框架 API，实现动作、判据与交场链 | 角色代码、`verify_chain.py`、实现说明 |
+| [验证交付](skills/delivery/SKILL.md) | `delivery` | 定向检查代码，校验并打包工坊文件 | 检查结果、zip、README、待实测项 |
+| [实测迭代](skills/iteration/SKILL.md) | `iteration` | 对照日志和录屏定位差异，修改并复验 | 差异表、根因、下一版或验收记录 |
 
 整队生成按上述顺序推进。
 局部修改可从代码实现或实测迭代进入。
 局部任务只补受影响的依据和验证，不必重建整队时序。
 
-[日志 Skill](skills/okww-logging/SKILL.md) 跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
+[日志 Skill](skills/logging/SKILL.md)（`logging`）跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
+
+## 用法
+
+| 宿主 | 总入口 | 阶段与日志 Skill |
+|---|---|---|
+| Claude Code | `/okwwcharcode` | `/okwwcharcode:materials`、`/okwwcharcode:logging` 等 |
+| pi | `/skill:okwwcharcode` | 按 [pi 安装](#pi) 注册后，用 `/skill:materials`、`/skill:logging` 等 |
+| 其他宿主 | 按宿主的 Skill 命令调用 `okwwcharcode` | 总入口读取 `skills/<阶段名>/SKILL.md` |
+
+不确定从哪个阶段开始时，调用总入口，由总入口按已有产物选择阶段。
+在 Claude Code 中，总入口用 Skill 工具切换到 `okwwcharcode:<阶段名>`。
+显示当前 Skill 的状态栏，例如 ccstatusline 的 skills 组件，随之显示所在阶段。
+直接描述需求时，宿主也可按 Skill 描述自动调用。
+
+请求示例：
+
+- `/okwwcharcode 把这个视频的作战轴做成工坊配队：<视频链接>`：从素材获取开始，依次推进到验证交付。
+- `/okwwcharcode 文字轴如下，视频在 <路径>：<文字轴>`：素材齐全时从轴解析开始。
+- `/okwwcharcode:implementation 修改 <角色 .py> 的 <函数>：<改法与依据>`：局部修改，从代码实现开始。
+- `/okwwcharcode:iteration <队名> harness-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
+- `/okwwcharcode:logging 检查 <角色 .py> 的日志`：单独的日志任务。
+
+检查日志调用：
+
+```text
+<ok-ww python.exe> -I -B scripts/check_logs.py <角色 .py> [<角色 .py> ...]
+```
 
 ## 信息如何贯穿流程
 
@@ -64,71 +92,99 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 缺少录屏或参考数据时，明确列出未验证项。
 详见 [时间测量](harness/timing.md) 和 [实测迭代](harness/iterate.md)。
 
-## 使用与安装
+## 安装
 
 GitHub 的正式版本标签固定指向对应提交。
-例如，“安装 0.0.1 版本”表示安装 `v0.0.1` 标签的内容。
+例如，“安装 0.1.0 版本”表示安装 `v0.1.0` 标签的内容。
 安装不依赖专用 zip，不能用默认分支代替指定版本。
 
 可向 Agent 提出：
 
-> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.0.1。
+> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.1.0。
 > 按该标签的 README 安装，并核对版本、加载路径和重复副本。
 
+安装目录名必须为 `okwwcharcode`，与总入口的 `name` 一致。
 全新安装时，目标目录必须不存在。
 以下命令按宿主选择一条，并保留完整目录结构：
 
 ```sh
-# pi
-git clone --branch v0.0.1 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okww-charcode-dev"
-
 # Claude Code
-git clone --branch v0.0.1 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okww-charcode-dev"
+git clone --branch v0.1.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
+
+# pi
+git clone --branch v0.1.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
 ```
 
-已有安装时，先核对实际路径、链接目标及未提交改动。
-已有安装不是 Git 仓库或含本地改动时，不执行切换命令。
-先将旧安装完整移到宿主不扫描的位置保存，再按全新安装步骤安装。
-不得删除或覆盖旧安装中的用户改动。
-已有安装是干净的 Git 仓库时，在实际仓库中执行：
+其他宿主克隆到宿主的 Skill 目录，目录名同样用 `okwwcharcode`。
 
-```sh
-git fetch origin tag v0.0.1 --no-tags
-git switch --detach v0.0.1
-```
+### Claude Code
 
-安装后核对：
+仓库含 `.claude-plugin/plugin.json`。
+新开会话后，Claude Code 把安装目录加载为插件 `okwwcharcode@skills-dir`：
 
-- `HEAD` 与 `refs/tags/v0.0.1^{commit}` 指向同一提交；
-- 实际安装目录中的 `VERSION` 为 `0.0.1`；
-- `git status --porcelain --untracked-files=all` 没有输出；
-- 宿主加载的是该安装目录，不存在同名旧副本。
+- 总入口注册为 `okwwcharcode`；
+- 六个阶段和日志 Skill 注册为 `okwwcharcode:<阶段名>`。
 
-更新到其他版本时，显式指定新的标签，并重复核对。
-已发布标签不得移动；修复通过新版本发布。
+该方式不经过 marketplace。
+运行 `claude plugin details okwwcharcode@skills-dir` 核对，结果应列出 7 个 Skill。
 
-默认从总入口加载，再按路由读取相应阶段。
-共用规则、知识和脚本使用仓库内的相对路径。
+### pi
 
-在当前 pi 中，扫描到含 `SKILL.md` 的目录后便停止递归。
-因此，上述安装方式只注册总入口；六个阶段和日志 Skill 仍可由总入口读取。
-
+pi 扫描到含 `SKILL.md` 的目录后便停止递归。
+因此，上述安装只注册总入口；六个阶段和日志 Skill 由总入口读取。
 需要分别调用阶段 Skill 时，在 `~/.pi/agent/settings.json` 中添加：
 
 ```json
 {
   "skills": [
-    "~/.pi/agent/skills/okww-charcode-dev/skills"
+    "~/.pi/agent/skills/okwwcharcode/skills"
   ]
 }
 ```
 
 已有 `skills` 数组时，追加该路径并保留其他配置。
 仓库安装在其他位置时，数组需同时列出仓库根目录和其 `skills/` 子目录。
-保存后在 pi 运行 `/reload`；Claude Code 重新开启会话。
-默认启用 Skill 命令时，可用 `/skill:okww-charcode-dev` 调用总入口。
-六个阶段和日志 Skill 可分别用 `/skill:okww-materials`、`/skill:okww-logging` 等命令调用。
-阶段目录必须保留在仓库内，以便读取 `../../` 下的共用文件。
+保存后在 pi 运行 `/reload`。
+
+### 其他宿主
+
+- 总入口和各阶段的 `name` 与所在目录名一致，符合 Agent Skills 规范。
+- 宿主只注册总入口时，总入口读取 `skills/<阶段名>/SKILL.md`。
+- 宿主不加命名空间时，`materials`、`logging` 等阶段名可能与其他 Skill 重名。重名时只注册总入口。
+- 阶段目录必须保留在仓库内，以便读取 `../../` 下的共用文件。
+
+### 已有安装与升级
+
+0.0.1 的安装目录名为 `okww-charcode-dev`，0.1.0 起改为 `okwwcharcode`。
+旧目录留在 Skill 目录时，宿主会同时加载新旧两份。
+
+先核对旧安装的实际路径、链接目标及未提交改动。
+从 0.0.1 升级时：
+
+1. 将旧目录完整移到宿主不扫描的位置，例如 `~/.claude/okww-charcode-dev-v0.0.1`。
+2. 按全新安装步骤安装到 `okwwcharcode`。
+3. pi 的 `settings.json` 中，把 `.../okww-charcode-dev/skills` 改为 `.../okwwcharcode/skills`。
+
+不得删除或覆盖旧安装中的用户改动。
+目录名已是 `okwwcharcode` 且为干净的 Git 仓库时，在实际仓库中切换版本：
+
+```sh
+git fetch origin tag v0.1.0 --no-tags
+git switch --detach v0.1.0
+```
+
+安装后核对：
+
+- `HEAD` 与 `refs/tags/v0.1.0^{commit}` 指向同一提交；
+- 实际安装目录中的 `VERSION` 为 `0.1.0`；
+- `git status --porcelain --untracked-files=all` 没有输出；
+- 宿主加载的是该安装目录，不存在同名旧副本。
+
+更新到其他版本时，显式指定新的标签，并重复核对。
+已发布标签不得移动；修复通过新版本发布。
+
+默认从总入口加载，再按总入口的阶段切换规则加载相应阶段。
+共用规则、知识和脚本使用仓库内的相对路径。
 
 队伍素材和产物放在独立工作区：
 
@@ -163,6 +219,7 @@ git switch --detach v0.0.1
 | 路径 | 内容 |
 |---|---|
 | [VERSION](VERSION) | 发布版本号；对应 `v<版本号>` 标签 |
+| [.claude-plugin/plugin.json](.claude-plugin/plugin.json) | Claude Code 插件清单；阶段注册为 `okwwcharcode:<阶段名>` |
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
 | `skills/*/SKILL.md` | 六个阶段和日志 Skill 的输入、任务、交付与退回条件 |
 | [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |

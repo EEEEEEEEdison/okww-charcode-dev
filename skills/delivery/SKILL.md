@@ -1,6 +1,6 @@
 ---
-name: okww-delivery
-description: ok-ww 开发的验证交付阶段。用于定向语法检查、交场链验证、模型与代码核对、工坊 zip 打包及 inspect_team_archive 校验；检查包内外一致，交付 README、验证结果和待实测项。
+name: delivery
+description: okwwcharcode（ok-ww 角色代码开发）的验证交付阶段。用于定向语法检查、交场链验证、模型与代码核对、工坊 zip 打包及 inspect_team_archive 校验；检查包内外一致，交付 README、验证结果和待实测项。
 ---
 
 # 验证交付
@@ -12,7 +12,7 @@ description: ok-ww 开发的验证交付阶段。用于定向语法检查、交�
 ## 执行
 
 1. 读取 [总入口](../../SKILL.md) 的产物位置要求。
-2. 按 [step2.md §7](../../harness/step2.md) 检查候选代码。日志按 [日志 Skill](../okww-logging/SKILL.md) 检查。
+2. 按 [step2.md §7](../../harness/step2.md) 检查候选代码。读取 [日志 Skill](../logging/SKILL.md)，按其检查日志。
 3. 工坊交付按 step2.md §8 打包与校验。
 4. 局部代码交付只运行改动目标的检查。
 5. 按 [evidence.md §5](../../harness/evidence.md) 记录结果。
@@ -25,7 +25,9 @@ description: ok-ww 开发的验证交付阶段。用于定向语法检查、交�
 - README 列出来源、参考耗时入口和未实测项。
 - 局部任务记录不适用的整队检查及原因。
 
-检查失败时，退回 [代码实现](../okww-implementation/SKILL.md)。
+检查失败时，退回 [代码实现](../implementation/SKILL.md)。
 模型与代码不一致时，先核对模型依据。
-交付后进入 [实测迭代](../okww-iteration/SKILL.md)。
+交付后进入 [实测迭代](../iteration/SKILL.md)。
 静态通过后，动作效果和耗时仍按实测结果验收。
+
+进入、退回或交给其他阶段时，按 [总入口的阶段切换](../../SKILL.md#阶段切换) 加载。

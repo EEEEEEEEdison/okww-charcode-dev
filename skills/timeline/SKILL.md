@@ -1,6 +1,6 @@
 ---
-name: okww-timeline
-description: ok-ww 开发的时序建模阶段。用于把已确认的轴对应到视频事件，建立节点链、动作条件、切人状态和参考耗时表；检查阻断项及 G2，输出可用于实现和实测比较的 timeline.json。
+name: timeline
+description: okwwcharcode（ok-ww 角色代码开发）的时序建模阶段。用于把已确认的轴对应到视频事件，建立节点链、动作条件、切人状态和参考耗时表；检查阻断项及 G2，输出可用于实现和实测比较的 timeline.json。
 ---
 
 # 时序建模
@@ -25,6 +25,8 @@ G1 确认、动作解释、代码基线、素材和问题清单。
 - G2 已逐项检查，阻断项已解决。
 - 试验假设和未验证内容已交给实现与实测阶段。
 
-动作解释有误时，退回 [轴解析](../okww-rotation/SKILL.md)。
-缺少可用画面时，退回 [素材获取](../okww-materials/SKILL.md)。
-通过后进入 [代码实现](../okww-implementation/SKILL.md)。
+动作解释有误时，退回 [轴解析](../rotation/SKILL.md)。
+缺少可用画面时，退回 [素材获取](../materials/SKILL.md)。
+通过后进入 [代码实现](../implementation/SKILL.md)。
+
+进入、退回或交给其他阶段时，按 [总入口的阶段切换](../../SKILL.md#阶段切换) 加载。

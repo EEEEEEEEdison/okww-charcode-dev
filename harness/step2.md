@@ -1,7 +1,7 @@
 # 步骤 2：实现、验证与交付
 
 整队生成的前提是 [G2](timeline.md#3-关口-g2) 通过。
-局部修改的输入见 [代码实现 Skill](../skills/okww-implementation/SKILL.md)。
+局部修改的输入见 [代码实现 Skill](../skills/implementation/SKILL.md)。
 代码遵守 [rules.md](../rules.md)。
 骨架见 [workshop.md](../references/workshop.md)，日志见 [logging.md](../references/logging.md)。
 API 查 [basechar-api.md](../references/basechar-api.md) 和 [task-api.md](../references/task-api.md)。
@@ -79,7 +79,7 @@ self._force_switch_to(self._find_teammate('<下一个类名>'), '<下个节点�
 
 ## 5 日志与实现交接
 
-按 logging.md、骨架和 [日志 Skill](../skills/okww-logging/SKILL.md) 记录：
+按 logging.md、骨架和 [日志 Skill](../skills/logging/SKILL.md) 记录：
 
 - 节点 `enter`、`exit`；
 - 技能 `cast X: ok|fail`，没有确认信号的发键写 `send X`；

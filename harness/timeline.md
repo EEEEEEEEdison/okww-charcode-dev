@@ -204,4 +204,4 @@
 1. 节点 / 轴原文 / 视频区间 / 动作与触发判据 / 切人方式 / 下个节点。
 2. 参考耗时表，按 timing.md 列各遍、口径和待测项。
 
-未通过时，退回 [轴解析](../skills/okww-rotation/SKILL.md) 或 [时序建模](../skills/okww-timeline/SKILL.md) 补证。
+未通过时，退回 [轴解析](../skills/rotation/SKILL.md) 或 [时序建模](../skills/timeline/SKILL.md) 补证。

@@ -1,7 +1,7 @@
 # 日志规范
 
 本篇对应日志组规则 L-0 ～ L-11，外加工坊循环轴相关的 6-6 / 6-7。
-写日志的流程和交付前自检见 [日志 Skill](../skills/okww-logging/SKILL.md)，词表检查用 `scripts/check_logs.py`。
+写日志的流程和交付前自检见 [日志 Skill](../skills/logging/SKILL.md)，词表检查用 `scripts/check_logs.py`。
 
 ## 事实
 

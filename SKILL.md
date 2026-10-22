@@ -1,37 +1,45 @@
 ---
-name: okww-charcode-dev
-description: ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。根据文字轴、教程视频、已有代码或实测日志选择阶段：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、游戏内日志写法、日志录像排错。
+name: okwwcharcode
+description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。按工作流分 6 个阶段 Skill：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代；logging 日志 Skill 跨阶段使用。根据文字轴、教程视频、已有代码或实测日志选择阶段。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、游戏内日志写法、日志录像排错。
 ---
 
-# okww-charcode-dev
+# okwwcharcode
 
 ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
-安装版本见 [VERSION](VERSION)，固定版本安装见 [README](README.md#使用与安装)。
+安装版本见 [VERSION](VERSION)，固定版本安装见 [README](README.md#安装)。
 
 ## 阶段选择
 
 | 阶段 Skill | 进入条件 | 交付物 | 细则 |
 |---|---|---|---|
-| [素材获取](skills/okww-materials/SKILL.md) | 有视频、文字轴或待整理来源 | `media/info.md`、原素材、质量限制 | [step1.md §1](harness/step1.md) |
-| [轴解析](skills/okww-rotation/SKILL.md) | 素材能覆盖选定片段 | G1 确认、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](harness/step1.md) |
-| [时序建模](skills/okww-timeline/SKILL.md) | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、G2 结果 | [step1.md §4–5、§7–8](harness/step1.md)、[timeline.md](harness/timeline.md) |
-| [代码实现](skills/okww-implementation/SKILL.md) | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](harness/step2.md) |
-| [验证交付](skills/okww-delivery/SKILL.md) | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](harness/step2.md) |
-| [实测迭代](skills/okww-iteration/SKILL.md) | 有可定位版本的日志或录屏 | 差异表、根因、下一版依据或验收结果 | [iterate.md](harness/iterate.md) |
+| [`materials`](skills/materials/SKILL.md) 素材获取 | 有视频、文字轴或待整理来源 | `media/info.md`、原素材、质量限制 | [step1.md §1](harness/step1.md) |
+| [`rotation`](skills/rotation/SKILL.md) 轴解析 | 素材能覆盖选定片段 | G1 确认、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](harness/step1.md) |
+| [`timeline`](skills/timeline/SKILL.md) 时序建模 | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、G2 结果 | [step1.md §4–5、§7–8](harness/step1.md)、[timeline.md](harness/timeline.md) |
+| [`implementation`](skills/implementation/SKILL.md) 代码实现 | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](harness/step2.md) |
+| [`delivery`](skills/delivery/SKILL.md) 验证交付 | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](harness/step2.md) |
+| [`iteration`](skills/iteration/SKILL.md) 实测迭代 | 有可定位版本的日志或录屏 | 差异表、根因、下一版依据或验收结果 | [iterate.md](harness/iterate.md) |
 
-- 读取所选阶段的 `SKILL.md`，再读取阶段引用的细则。
 - 从中间阶段进入时，检查该阶段的输入和通过条件。
 - 缺少前提时，退回负责该前提的阶段。
 - 直接改代码时，可从代码实现或实测迭代进入。
 - 局部任务不必创建整队时序。必须记录修改依据和影响范围。
 - 已有确认且仍适用时，不必重复提问。
 
+## 阶段切换
+
+进入、退回或交给其他阶段时，按宿主能力加载该阶段：
+
+- 宿主提供 Skill 调用工具，且已注册本仓库的阶段 Skill 时，必须用该工具调用阶段。Claude Code 中的阶段名为 `okwwcharcode:<阶段名>`，例如 `okwwcharcode:materials`。
+- 其他情况读取 `skills/<阶段名>/SKILL.md`。
+- 加载阶段后，再读取阶段引用的细则。
+- 阶段内用到 [日志 Skill](skills/logging/SKILL.md) 时，宜读取文件，不宜调用。宿主显示的当前 Skill 由此保持为所在阶段。
+
 ## 共用规范
 
 - 信息来源、证据、缺项分级和阶段交接见 [evidence.md](harness/evidence.md)。
 - 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
 - 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
-- 写或改游戏内日志时，按 [日志 Skill](skills/okww-logging/SKILL.md) 写和检查。
+- 写或改游戏内日志时，按 [日志 Skill](skills/logging/SKILL.md) 写和检查。
 - 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
 - 语义卡的读取、冲突记录和安装目录边界见 [knowledge/cards/README.md](knowledge/cards/README.md)。
 
