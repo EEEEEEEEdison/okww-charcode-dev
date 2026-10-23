@@ -19,7 +19,7 @@
 - ok-ww：本机已安装。Skill 用其运行目录 `working` 查框架源码、显示名和 zip 校验器。
 - Python：ok-ww 自带的 `python.exe`。视频处理需能 `import cv2`。
 - ok-ww 上游仓库的本地克隆：收集角色代码基线。
-- gh：可选。安装并登录后，知识反馈可直接创建 Issue。
+- gh：可选。知识反馈时可由 Agent 安装，见 [用 gh 自动反馈](#用-gh-自动反馈)。
 
 所选阶段需要本机路径且尚未记录时，Agent 会询问，并保存在工作区根目录的 `okww-harness.local.md`。
 
@@ -183,17 +183,38 @@ git switch --detach v0.2.0
 1. 按 [提议模板](templates/knowledge-proposal.md) 起草提议，保存到 `<工作区>/<队名>/proposals/`。
 2. 用 `scripts/submit_proposal.py` 检查格式。含本机路径、邮箱或令牌时不能提交。
 3. 给出提议全文，问用户一次是否反馈。
-4. 按用户的选择提交：
+4. 按用户的选择提交。gh 已登录时，选项为“反馈”“用邮件反馈”“不反馈”。gh 未安装或未登录时，增加“安装 gh 后反馈”和“用浏览器反馈”。
 
-| 选项 | 提交方式 | 条件 | 用户操作 |
-|---|---|---|---|
-| 反馈 | 用 `gh issue create` 创建 Issue | 已安装 gh 并登录 GitHub | 无 |
-| 反馈 | 打开预填的新建 Issue 页面 | 没有 gh 或未登录 gh；需要 GitHub 账号 | 在页面点提交；正文过长时先粘贴剪贴板内容 |
-| 用邮件反馈 | 在资源管理器中选中提议文件 | 无 | 把文件作为附件发到 476676559@qq.com |
+| 选项 | 提交方式 | 用户操作 |
+|---|---|---|
+| 反馈 | gh 已登录时用 `gh issue create` 创建 Issue；否则同“用浏览器反馈” | 无 |
+| 安装 gh 后反馈 | 安装并登录 gh，再创建 Issue | 管理员确认点“是”；在授权页粘贴验证码，点 Authorize |
+| 用浏览器反馈 | 打开预填的新建 Issue 页面 | 在页面点提交；正文过长时先粘贴剪贴板内容 |
+| 用邮件反馈 | 在资源管理器中选中提议文件 | 把文件作为附件发到 476676559@qq.com |
 
-Issue 公开可见。提交即同意按 MIT 许可收录提议内容。
+除邮件外都需要 GitHub 账号。Issue 公开可见。提交即同意按 MIT 许可收录提议内容。
 手动提交时，复制提议模板，在本仓库新建 Issue 填写。
 维护者按 [外部提议](maintainer/knowledge-maintenance.md#6-外部提议) 审核，写入的条目随新版本发布。
+
+### 用 gh 自动反馈
+
+经常反馈时，宜安装并登录 gh。之后每次反馈由 Agent 直接创建 Issue。
+选“安装 gh 后反馈”时，`submit_proposal.py --setup-gh` 依次执行：
+
+1. 没装 gh 时，用 winget 安装 GitHub CLI。没有 winget 时，打开 https://cli.github.com 由用户下载安装。
+2. 运行 `gh auth login --web --clipboard`。验证码复制到剪贴板，脚本打开授权页。
+3. 登录后提交本次提议。安装或登录失败时，本次改用浏览器反馈。
+
+gh 已安装但未登录时，该选项名为“登录 gh 后反馈”，跳过安装。
+gh 登录后的最低权限为 `repo`、`read:org` 和 `gist`，能读写本账号的仓库。
+令牌存在系统凭据管理器中。撤销时运行 `gh auth logout`，或在 GitHub 的 Settings → Applications 撤销 GitHub CLI 的授权。
+
+用户有该选项而改选浏览器或邮件时，工作区的 `okww-harness.local.md` 记下 `gh 引导：不再推荐`，之后不再提供。删掉这一行即可恢复。
+不提交提议也可先安装并登录：
+
+```text
+<ok-ww python.exe> -I -B scripts/submit_proposal.py --setup-gh
+```
 
 ## 信息如何贯穿流程
 
@@ -276,7 +297,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [templates/knowledge-proposal.md](templates/knowledge-proposal.md) | 知识提议模板 |
 | [scripts/pack_team.py](scripts/pack_team.py) | 打包 zip，并调用 ok-ww 的校验器 |
 | [scripts/check_logs.py](scripts/check_logs.py) | 按 logging.md 的词表和规则检查日志调用 |
-| [scripts/submit_proposal.py](scripts/submit_proposal.py) | 检查知识提议，用 gh、浏览器或邮件反馈 |
+| [scripts/submit_proposal.py](scripts/submit_proposal.py) | 检查知识提议，用 gh、浏览器或邮件反馈；可安装并登录 gh |
 
 下载、抽帧和分析脚本按任务编写，放在媒体目录或 scratchpad。
 交场链检查使用模板，打包固定使用 `scripts/pack_team.py`。
