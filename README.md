@@ -9,91 +9,19 @@
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
-版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.2.0`。
+版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.2.0`。各版本的变化见 [版本记录](#版本记录)。
 普通开发只读取随版本提供的知识；知识维护由独立入口处理。
 
-## 六个阶段 Skill
+## 准备
 
-| 阶段 | Skill 名 | 职责 | 主要交付物 |
-|---|---|---|---|
-| [素材获取](skills/materials/SKILL.md) | `materials` | 收集文字、视频、字幕与作者说明，记录素材条件 | 原素材、`media/info.md`、质量限制 |
-| [轴解析](skills/rotation/SKILL.md) | `rotation` | 确认所选轴，解释动作、资源与跨步依赖 | G1 确认、动作解释、代码基线、缺项 |
-| [时序建模](skills/timeline/SKILL.md) | `timeline` | 标记输入、状态变化和切人事件，测量参考耗时 | `timeline.json`、参考耗时表、G2 结果 |
-| [代码实现](skills/implementation/SKILL.md) | `implementation` | 选用框架 API，实现动作、判据与交场链 | 角色代码、`verify_chain.py`、实现说明 |
-| [验证交付](skills/delivery/SKILL.md) | `delivery` | 定向检查代码，校验并打包工坊文件 | 检查结果、zip、README、待实测项 |
-| [实测迭代](skills/iteration/SKILL.md) | `iteration` | 对照日志和录屏定位差异，修改并复验 | 差异表、根因、下一版或验收记录 |
+- Agent 宿主：Claude Code、pi，或支持 Agent Skills 的其他宿主。
+- Git：按版本标签安装。
+- ok-ww：本机已安装。Skill 用其运行目录 `working` 查框架源码、显示名和 zip 校验器。
+- Python：ok-ww 自带的 `python.exe`。视频处理需能 `import cv2`。
+- ok-ww 上游仓库的本地克隆：收集角色代码基线。
+- gh：可选。安装并登录后，知识反馈可直接创建 Issue。
 
-整队生成按上述顺序推进。
-局部修改可从代码实现或实测迭代进入。
-局部任务只补受影响的依据和验证，不必重建整队时序。
-
-[日志 Skill](skills/logging/SKILL.md)（`logging`）跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
-
-[知识提议 Skill](skills/proposal/SKILL.md)（`proposal`）在实测迭代后使用：把可入卡的发现整理成提议，经用户同意后反馈给维护者，见 [贡献知识](#贡献知识)。
-
-## 用法
-
-| 宿主 | 总入口 | 阶段与日志 Skill |
-|---|---|---|
-| Claude Code | `/okwwcharcode` | `/okwwcharcode:materials`、`/okwwcharcode:logging` 等 |
-| pi | `/skill:okwwcharcode` | 按 [pi 安装](#pi) 注册后，用 `/skill:materials`、`/skill:logging` 等 |
-| 其他宿主 | 按宿主的 Skill 命令调用 `okwwcharcode` | 总入口读取 `skills/<阶段名>/SKILL.md` |
-
-不确定从哪个阶段开始时，调用总入口，由总入口按已有产物选择阶段。
-在 Claude Code 中，总入口用 Skill 工具切换到 `okwwcharcode:<阶段名>`。
-显示当前 Skill 的状态栏，例如 ccstatusline 的 skills 组件，随之显示所在阶段。
-直接描述需求时，宿主也可按 Skill 描述自动调用。
-
-请求示例：
-
-- `/okwwcharcode 把这个视频的作战轴做成工坊配队：<视频链接>`：从素材获取开始，依次推进到验证交付。
-- `/okwwcharcode 文字轴如下，视频在 <路径>：<文字轴>`：素材齐全时从轴解析开始。
-- `/okwwcharcode:implementation 修改 <角色 .py> 的 <函数>：<改法与依据>`：局部修改，从代码实现开始。
-- `/okwwcharcode:iteration <队名> harness-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
-- `/okwwcharcode:logging 检查 <角色 .py> 的日志`：单独的日志任务。
-- `/okwwcharcode:proposal <队名> harness-v<N>`：把本案可入卡的发现整理成知识提议。
-
-检查日志调用：
-
-```text
-<ok-ww python.exe> -I -B scripts/check_logs.py <角色 .py> [<角色 .py> ...]
-```
-
-## 信息如何贯穿流程
-
-关键判断交接六项：结论、依据、适用条件、未知、影响范围、验证办法。
-原素材、源码和日志必须能定位到时刻、原文或版本。
-口播、字幕及简介可能影响操作时，必须核对对应内容。
-证据冲突先检查版本、资源和事件定义，再决定是否补证。
-
-动作模型分别记录前置状态、按法、触发、生效、结束和切人条件。
-例如，技能可用、图标变化和固定延迟是不同的触发策略。
-每次切人都记录普通或变奏入场、协奏状态和是否允许补资源。
-跨角色效果、延迟生效和跨轮资源也要保留依赖。
-
-缺项分为阻断项、待测项和非关键项。
-阻断项必须解决后才能确定受影响的实现。
-待测项可进入试验版本，但必须有假设、验证办法和失败处理。
-用户确认操作意图后，机制和数值仍需按证据验证。
-详见 [信息获取与交接规则](harness/evidence.md)。
-
-## 参考耗时与实测验收
-
-素材阶段保留帧率、速度、剪辑和计时器信息。
-建模阶段记录整轮、全部角色节点及关键动作段的参考耗时。
-每条记录保留起止事件、各遍结果、计时口径和测量精度。
-
-实测视频沿用相同事件定义，分别比较视频、真实和游戏时间。
-差异表保留本段差值与累计差值，逐层定位延迟来源。
-时间变化还要结合动作效果、协奏切人和场景干扰解释。
-参考耗时用于比较，代码等待仍由动作判据确定。
-
-G1 确认所选文字轴、角色对应、记号和双方共鸣链。
-G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项。
-静态交场链与 zip 检查的结果单独记录。
-整队实测完成还需动作和耗时复验，以及用户认可。
-缺少录屏或参考数据时，明确列出未验证项。
-详见 [时间测量](harness/timing.md) 和 [实测迭代](harness/iterate.md)。
+所选阶段需要本机路径且尚未记录时，Agent 会询问，并保存在工作区根目录的 `okww-harness.local.md`。
 
 ## 安装
 
@@ -186,8 +114,35 @@ git switch --detach v0.2.0
 更新到其他版本时，显式指定新的标签，并重复核对。
 已发布标签不得移动；修复通过新版本发布。
 
-默认从总入口加载，再按总入口的阶段切换规则加载相应阶段。
-共用规则、知识和脚本使用仓库内的相对路径。
+## 用法
+
+| 宿主 | 总入口 | 阶段与日志 Skill |
+|---|---|---|
+| Claude Code | `/okwwcharcode` | `/okwwcharcode:materials`、`/okwwcharcode:logging` 等 |
+| pi | `/skill:okwwcharcode` | 按 [pi 安装](#pi) 注册后，用 `/skill:materials`、`/skill:logging` 等 |
+| 其他宿主 | 按宿主的 Skill 命令调用 `okwwcharcode` | 总入口读取 `skills/<阶段名>/SKILL.md` |
+
+不确定从哪个阶段开始时，调用总入口，由总入口按已有产物选择阶段。
+在 Claude Code 中，总入口用 Skill 工具切换到 `okwwcharcode:<阶段名>`。
+显示当前 Skill 的状态栏，例如 ccstatusline 的 skills 组件，随之显示所在阶段。
+直接描述需求时，宿主也可按 Skill 描述自动调用。
+
+请求示例：
+
+- `/okwwcharcode 把这个视频的作战轴做成工坊配队：<视频链接>`：从素材获取开始，依次推进到验证交付。
+- `/okwwcharcode 文字轴如下，视频在 <路径>：<文字轴>`：素材齐全时从轴解析开始。
+- `/okwwcharcode:implementation 修改 <角色 .py> 的 <函数>：<改法与依据>`：局部修改，从代码实现开始。
+- `/okwwcharcode:iteration <队名> harness-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
+- `/okwwcharcode:logging 检查 <角色 .py> 的日志`：单独的日志任务。
+- `/okwwcharcode:proposal <队名> harness-v<N>`：把本案可入卡的发现整理成知识提议。
+
+检查日志调用：
+
+```text
+<ok-ww python.exe> -I -B scripts/check_logs.py <角色 .py> [<角色 .py> ...]
+```
+
+### 工作区
 
 队伍素材和产物放在独立工作区：
 
@@ -195,11 +150,30 @@ git switch --detach v0.2.0
 <工作区>/<队名>/
   media/           原视频、音频或字幕、info.md、截图、取证脚本
   harness-v<N>/    timeline.json、baseline.md、notes.md、角色代码、检查文件、team.json、README.md、zip
+  proposals/       知识提议文件
 ```
 
 每次迭代新建版本目录，不得覆盖旧版。
-本机路径按总入口保存在工作区的 `okww-harness.local.md`。
 媒体、角色产物和本地配置不得提交到本仓库。
+
+## 六个阶段 Skill
+
+| 阶段 | Skill 名 | 职责 | 主要交付物 |
+|---|---|---|---|
+| [素材获取](skills/materials/SKILL.md) | `materials` | 收集文字、视频、字幕与作者说明，记录素材条件 | 原素材、`media/info.md`、质量限制 |
+| [轴解析](skills/rotation/SKILL.md) | `rotation` | 确认所选轴，解释动作、资源与跨步依赖 | G1 确认、动作解释、代码基线、缺项 |
+| [时序建模](skills/timeline/SKILL.md) | `timeline` | 标记输入、状态变化和切人事件，测量参考耗时 | `timeline.json`、参考耗时表、G2 结果 |
+| [代码实现](skills/implementation/SKILL.md) | `implementation` | 选用框架 API，实现动作、判据与交场链 | 角色代码、`verify_chain.py`、实现说明 |
+| [验证交付](skills/delivery/SKILL.md) | `delivery` | 定向检查代码，校验并打包工坊文件 | 检查结果、zip、README、待实测项 |
+| [实测迭代](skills/iteration/SKILL.md) | `iteration` | 对照日志和录屏定位差异，修改并复验 | 差异表、根因、下一版或验收记录 |
+
+整队生成按上述顺序推进。
+局部修改可从代码实现或实测迭代进入。
+局部任务只补受影响的依据和验证，不必重建整队时序。
+
+[日志 Skill](skills/logging/SKILL.md)（`logging`）跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
+
+[知识提议 Skill](skills/proposal/SKILL.md)（`proposal`）在实测迭代后使用，把可入卡的发现整理成提议。经用户同意后，提议反馈给维护者，见 [贡献知识](#贡献知识)。
 
 ## 贡献知识
 
@@ -220,6 +194,42 @@ git switch --detach v0.2.0
 Issue 公开可见。提交即同意按 MIT 许可收录提议内容。
 手动提交时，复制提议模板，在本仓库新建 Issue 填写。
 维护者按 [外部提议](maintainer/knowledge-maintenance.md#6-外部提议) 审核，写入的条目随新版本发布。
+
+## 信息如何贯穿流程
+
+关键判断交接六项：结论、依据、适用条件、未知、影响范围、验证办法。
+原素材、源码和日志必须能定位到时刻、原文或版本。
+口播、字幕及简介可能影响操作时，必须核对对应内容。
+证据冲突先检查版本、资源和事件定义，再决定是否补证。
+
+动作模型分别记录前置状态、按法、触发、生效、结束和切人条件。
+例如，技能可用、图标变化和固定延迟是不同的触发策略。
+每次切人都记录普通或变奏入场、协奏状态和是否允许补资源。
+跨角色效果、延迟生效和跨轮资源也要保留依赖。
+
+缺项分为阻断项、待测项和非关键项。
+阻断项必须解决后才能确定受影响的实现。
+待测项可进入试验版本，但必须有假设、验证办法和失败处理。
+用户确认操作意图后，机制和数值仍需按证据验证。
+详见 [信息获取与交接规则](harness/evidence.md)。
+
+## 参考耗时与实测验收
+
+素材阶段保留帧率、速度、剪辑和计时器信息。
+建模阶段记录整轮、全部角色节点及关键动作段的参考耗时。
+每条记录保留起止事件、各遍结果、计时口径和测量精度。
+
+实测视频沿用相同事件定义，分别比较视频、真实和游戏时间。
+差异表保留本段差值与累计差值，逐层定位延迟来源。
+时间变化还要结合动作效果、协奏切人和场景干扰解释。
+参考耗时用于比较，代码等待仍由动作判据确定。
+
+G1 确认所选文字轴、角色对应、记号和双方共鸣链。
+G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项。
+静态交场链与 zip 检查的结果单独记录。
+整队实测完成还需动作和耗时复验，以及用户认可。
+缺少录屏或参考数据时，明确列出未验证项。
+详见 [时间测量](harness/timing.md) 和 [实测迭代](harness/iterate.md)。
 
 ## 知识维护
 
@@ -293,6 +303,12 @@ Issue 公开可见。提交即同意按 MIT 许可收录提议内容。
 上游 `2243d465` 的 Skill 示例使用了不存在的 `Priority` 和 `do_get_switch_priority`。
 该版源码实际使用 `SwitchPriority` 和 `get_switch_priority`。
 对应说明见 [BaseChar API](references/basechar-api.md)。
+
+## 版本记录
+
+- 0.2.0：新增知识提议 Skill `proposal`。实测得到可入卡的发现时起草提议，经用户同意后用 gh、预填 Issue 页面或邮件反馈给维护者。
+- 0.1.0：总入口改名为 `okwwcharcode`，拆分出六个阶段 Skill；新增日志 Skill 和 `scripts/check_logs.py`；语义卡改为精简写法。Claude Code 以插件形式注册阶段。
+- 0.0.1：首个版本，Skill 名为 `okww-charcode-dev`。
 
 ## 许可证
 
