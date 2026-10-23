@@ -9,7 +9,7 @@
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
-版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.2.0`。各版本的变化见 [版本记录](#版本记录)。
+版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.3.0`。各版本的变化见 [版本记录](#版本记录)。
 普通开发只读取随版本提供的知识；知识维护由独立入口处理。
 
 ## 准备
@@ -26,12 +26,12 @@
 ## 安装
 
 GitHub 的正式版本标签固定指向对应提交。
-例如，“安装 0.2.0 版本”表示安装 `v0.2.0` 标签的内容。
+例如，“安装 0.3.0 版本”表示安装 `v0.3.0` 标签的内容。
 安装不依赖专用 zip，不能用默认分支代替指定版本。
 
 可向 Agent 提出：
 
-> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.2.0。
+> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.3.0。
 > 按该标签的 README 安装，并核对版本、加载路径和重复副本。
 
 安装目录名必须为 `okwwcharcode`，与总入口的 `name` 一致。
@@ -40,10 +40,10 @@ GitHub 的正式版本标签固定指向对应提交。
 
 ```sh
 # Claude Code
-git clone --branch v0.2.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
+git clone --branch v0.3.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
 
 # pi
-git clone --branch v0.2.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
+git clone --branch v0.3.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
 ```
 
 其他宿主克隆到宿主的 Skill 目录，目录名同样用 `okwwcharcode`。
@@ -100,14 +100,14 @@ pi 扫描到含 `SKILL.md` 的目录后便停止递归。
 目录名已是 `okwwcharcode` 且为干净的 Git 仓库时，在实际仓库中切换版本：
 
 ```sh
-git fetch origin tag v0.2.0 --no-tags
-git switch --detach v0.2.0
+git fetch origin tag v0.3.0 --no-tags
+git switch --detach v0.3.0
 ```
 
 安装后核对：
 
-- `HEAD` 与 `refs/tags/v0.2.0^{commit}` 指向同一提交；
-- 实际安装目录中的 `VERSION` 为 `0.2.0`；
+- `HEAD` 与 `refs/tags/v0.3.0^{commit}` 指向同一提交；
+- 实际安装目录中的 `VERSION` 为 `0.3.0`；
 - `git status --porcelain --untracked-files=all` 没有输出；
 - 宿主加载的是该安装目录，不存在同名旧副本。
 
@@ -327,6 +327,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 版本记录
 
+- 0.3.0：知识提议在 gh 未安装或未登录时提供“安装 gh 后反馈”，由 `submit_proposal.py --setup-gh` 安装并登录 gh。
 - 0.2.0：新增知识提议 Skill `proposal`。实测得到可入卡的发现时起草提议，经用户同意后用 gh、预填 Issue 页面或邮件反馈给维护者。
 - 0.1.0：总入口改名为 `okwwcharcode`，拆分出六个阶段 Skill；新增日志 Skill 和 `scripts/check_logs.py`；语义卡改为精简写法。Claude Code 以插件形式注册阶段。
 - 0.0.1：首个版本，Skill 名为 `okww-charcode-dev`。
