@@ -1,6 +1,6 @@
 ---
 name: okww-knowledge-maintenance
-description: 仅供 okww-charcode-dev 仓库维护者显式调用的知识维护 Skill。用于审核案例证据、补充或修正角色语义卡、通用规则和游戏常识，批量确认条目并检查受影响的引用。普通角色代码开发和实测迭代不调用。
+description: 仅供 okww-charcode-dev 仓库维护者显式调用的知识维护 Skill。用于审核案例证据和外部知识提议（GitHub Issue 或邮件附件），补充或修正角色语义卡、通用规则和游戏常识，批量确认条目并检查受影响的引用。普通角色代码开发和实测迭代不调用。
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 ## 输入
 
-用户明确提出的本仓库知识维护任务，以及可定位的案例证据。
+用户明确提出的本仓库知识维护任务，以及可定位的案例证据或外部知识提议（见规则 §6）。
 未明确要求知识维护时，不执行本 Skill。
 
 ## 执行

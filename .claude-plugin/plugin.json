@@ -1,7 +1,7 @@
 {
   "name": "okwwcharcode",
-  "version": "0.1.0",
-  "description": "ok-ww（鸣潮自动战斗脚本）角色代码开发：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代 6 个阶段 Skill 和日志 Skill。",
+  "version": "0.2.0",
+  "description": "ok-ww（鸣潮自动战斗脚本）角色代码开发：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代 6 个阶段 Skill、日志 Skill 和知识提议 Skill。",
   "author": {
     "name": "EEEEEEEEdison"
   },

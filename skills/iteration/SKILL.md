@@ -17,6 +17,7 @@ description: okwwcharcode（ok-ww 角色代码开发）的实测迭代阶段。�
 4. 按 [timing.md](../../harness/timing.md) 比较参考与实测耗时。
 5. 解释偏差，按根因选择退回阶段。
 6. 按 iterate.md §5–6 更新案例证据和验收状态。
+7. 本轮得到可入卡的新结论，或与现有卡冲突的已验证证据时，进入 [知识提议](../proposal/SKILL.md)。
 
 ## 输出与通过条件
 

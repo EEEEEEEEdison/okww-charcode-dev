@@ -5,11 +5,11 @@
 输入文字作战轴、教程视频或已有代码，交付工坊配队代码和 zip。
 也支持根据实测日志与录屏修改角色代码。
 
-项目按工作流分为总入口 `okwwcharcode`、六个阶段 Skill 和日志 Skill `logging`。
+项目按工作流分为总入口 `okwwcharcode`、六个阶段 Skill、日志 Skill `logging` 和知识提议 Skill `proposal`。
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
-版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.1.0`。
+版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.2.0`。
 普通开发只读取随版本提供的知识；知识维护由独立入口处理。
 
 ## 六个阶段 Skill
@@ -28,6 +28,8 @@
 局部任务只补受影响的依据和验证，不必重建整队时序。
 
 [日志 Skill](skills/logging/SKILL.md)（`logging`）跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
+
+[知识提议 Skill](skills/proposal/SKILL.md)（`proposal`）在实测迭代后使用：把可入卡的发现整理成提议，经用户同意后反馈给维护者，见 [贡献知识](#贡献知识)。
 
 ## 用法
 
@@ -49,6 +51,7 @@
 - `/okwwcharcode:implementation 修改 <角色 .py> 的 <函数>：<改法与依据>`：局部修改，从代码实现开始。
 - `/okwwcharcode:iteration <队名> harness-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
 - `/okwwcharcode:logging 检查 <角色 .py> 的日志`：单独的日志任务。
+- `/okwwcharcode:proposal <队名> harness-v<N>`：把本案可入卡的发现整理成知识提议。
 
 检查日志调用：
 
@@ -95,12 +98,12 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 ## 安装
 
 GitHub 的正式版本标签固定指向对应提交。
-例如，“安装 0.1.0 版本”表示安装 `v0.1.0` 标签的内容。
+例如，“安装 0.2.0 版本”表示安装 `v0.2.0` 标签的内容。
 安装不依赖专用 zip，不能用默认分支代替指定版本。
 
 可向 Agent 提出：
 
-> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.1.0。
+> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.2.0。
 > 按该标签的 README 安装，并核对版本、加载路径和重复副本。
 
 安装目录名必须为 `okwwcharcode`，与总入口的 `name` 一致。
@@ -109,10 +112,10 @@ GitHub 的正式版本标签固定指向对应提交。
 
 ```sh
 # Claude Code
-git clone --branch v0.1.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
+git clone --branch v0.2.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
 
 # pi
-git clone --branch v0.1.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
+git clone --branch v0.2.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
 ```
 
 其他宿主克隆到宿主的 Skill 目录，目录名同样用 `okwwcharcode`。
@@ -123,15 +126,15 @@ git clone --branch v0.1.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charco
 新开会话后，Claude Code 把安装目录加载为插件 `okwwcharcode@skills-dir`：
 
 - 总入口注册为 `okwwcharcode`；
-- 六个阶段和日志 Skill 注册为 `okwwcharcode:<阶段名>`。
+- 六个阶段、日志 Skill 和知识提议 Skill 注册为 `okwwcharcode:<阶段名>`。
 
 该方式不经过 marketplace。
-运行 `claude plugin details okwwcharcode@skills-dir` 核对，结果应列出 7 个 Skill。
+运行 `claude plugin details okwwcharcode@skills-dir` 核对，结果应列出 8 个 Skill。
 
 ### pi
 
 pi 扫描到含 `SKILL.md` 的目录后便停止递归。
-因此，上述安装只注册总入口；六个阶段和日志 Skill 由总入口读取。
+因此，上述安装只注册总入口；阶段、日志和知识提议 Skill 由总入口读取。
 需要分别调用阶段 Skill 时，在 `~/.pi/agent/settings.json` 中添加：
 
 ```json
@@ -169,14 +172,14 @@ pi 扫描到含 `SKILL.md` 的目录后便停止递归。
 目录名已是 `okwwcharcode` 且为干净的 Git 仓库时，在实际仓库中切换版本：
 
 ```sh
-git fetch origin tag v0.1.0 --no-tags
-git switch --detach v0.1.0
+git fetch origin tag v0.2.0 --no-tags
+git switch --detach v0.2.0
 ```
 
 安装后核对：
 
-- `HEAD` 与 `refs/tags/v0.1.0^{commit}` 指向同一提交；
-- 实际安装目录中的 `VERSION` 为 `0.1.0`；
+- `HEAD` 与 `refs/tags/v0.2.0^{commit}` 指向同一提交；
+- 实际安装目录中的 `VERSION` 为 `0.2.0`；
 - `git status --porcelain --untracked-files=all` 没有输出；
 - 宿主加载的是该安装目录，不存在同名旧副本。
 
@@ -198,11 +201,32 @@ git switch --detach v0.1.0
 本机路径按总入口保存在工作区的 `okww-harness.local.md`。
 媒体、角色产物和本地配置不得提交到本仓库。
 
+## 贡献知识
+
+使用者在本地实测得到的新结论，可反馈给维护者审核，不经过服务器。
+实测迭代得到可入卡的发现时，Agent 进入 [知识提议 Skill](skills/proposal/SKILL.md)：
+
+1. 按 [提议模板](templates/knowledge-proposal.md) 起草提议，保存到 `<工作区>/<队名>/proposals/`。
+2. 用 `scripts/submit_proposal.py` 检查格式。含本机路径、邮箱或令牌时不能提交。
+3. 给出提议全文，问用户一次是否反馈。
+4. 按用户的选择提交：
+
+| 选项 | 提交方式 | 条件 | 用户操作 |
+|---|---|---|---|
+| 反馈 | 用 `gh issue create` 创建 Issue | 已安装 gh 并登录 GitHub | 无 |
+| 反馈 | 打开预填的新建 Issue 页面 | 没有 gh 或未登录 gh；需要 GitHub 账号 | 在页面点提交；正文过长时先粘贴剪贴板内容 |
+| 用邮件反馈 | 在资源管理器中选中提议文件 | 无 | 把文件作为附件发到 476676559@qq.com |
+
+Issue 公开可见。提交即同意按 MIT 许可收录提议内容。
+手动提交时，复制提议模板，在本仓库新建 Issue 填写。
+维护者按 [外部提议](maintainer/knowledge-maintenance.md#6-外部提议) 审核，写入的条目随新版本发布。
+
 ## 知识维护
 
 角色代码开发仍可根据日志与录屏迭代队伍代码。
 新证据与知识冲突时，先记录在用户工作区。
 普通开发流程不自动补卡、不发起补卡确认、不改写安装目录。
+可入卡的发现按 [贡献知识](#贡献知识) 反馈给维护者。
 详见 [知识使用边界](knowledge/cards/README.md#使用边界)。
 
 维护源码保存在 `maintainer/`，随仓库源码可见。
@@ -221,7 +245,7 @@ git switch --detach v0.1.0
 | [VERSION](VERSION) | 发布版本号；对应 `v<版本号>` 标签 |
 | [.claude-plugin/plugin.json](.claude-plugin/plugin.json) | Claude Code 插件清单；阶段注册为 `okwwcharcode:<阶段名>` |
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
-| `skills/*/SKILL.md` | 六个阶段和日志 Skill 的输入、任务、交付与退回条件 |
+| `skills/*/SKILL.md` | 六个阶段、日志和知识提议 Skill 的输入、任务、交付与退回条件 |
 | [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
 | [harness/timing.md](harness/timing.md) | 计时口径、参考耗时、差值和时间验收 |
 | [harness/step1.md](harness/step1.md) | 素材、文字轴确认、画面取证与事件标记 |
@@ -239,8 +263,10 @@ git switch --detach v0.1.0
 | [references/logging.md](references/logging.md) | 英文日志模板、词表与参考实现 |
 | [references/workshop.md](references/workshop.md) | 工坊格式、循环轴骨架与案例 |
 | [templates/verify_chain.py](templates/verify_chain.py) | 静态交场链检查模板 |
+| [templates/knowledge-proposal.md](templates/knowledge-proposal.md) | 知识提议模板 |
 | [scripts/pack_team.py](scripts/pack_team.py) | 打包 zip，并调用 ok-ww 的校验器 |
 | [scripts/check_logs.py](scripts/check_logs.py) | 按 logging.md 的词表和规则检查日志调用 |
+| [scripts/submit_proposal.py](scripts/submit_proposal.py) | 检查知识提议，用 gh、浏览器或邮件反馈 |
 
 下载、抽帧和分析脚本按任务编写，放在媒体目录或 scratchpad。
 交场链检查使用模板，打包固定使用 `scripts/pack_team.py`。

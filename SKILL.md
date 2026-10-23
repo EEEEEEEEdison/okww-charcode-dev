@@ -1,6 +1,6 @@
 ---
 name: okwwcharcode
-description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。按工作流分 6 个阶段 Skill：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代；logging 日志 Skill 跨阶段使用。根据文字轴、教程视频、已有代码或实测日志选择阶段。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、游戏内日志写法、日志录像排错。
+description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发 Skill 总入口。按工作流分 6 个阶段 Skill：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代；logging 日志 Skill 跨阶段使用；proposal 知识提议在实测后把可入卡的发现反馈给维护者。根据文字轴、教程视频、已有代码或实测日志选择阶段。各阶段交接证据、动作判据、切人状态、参考耗时与待测项；支持工坊配队 zip 和直接修改角色代码。适用于作战轴转代码、BaseChar、src/char、协奏切人、技能触发、循环轴、工坊代码、team.json、游戏内日志写法、日志录像排错。
 ---
 
 # okwwcharcode
@@ -18,6 +18,7 @@ ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
 | [`implementation`](skills/implementation/SKILL.md) 代码实现 | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](harness/step2.md) |
 | [`delivery`](skills/delivery/SKILL.md) 验证交付 | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](harness/step2.md) |
 | [`iteration`](skills/iteration/SKILL.md) 实测迭代 | 有可定位版本的日志或录屏 | 差异表、根因、下一版依据或验收结果 | [iterate.md](harness/iterate.md) |
+| [`proposal`](skills/proposal/SKILL.md) 知识提议 | 实测得到可入卡的发现，或与现有卡冲突的已验证证据 | 提议文件、反馈结果 | [knowledge-maintenance.md §2–3](maintainer/knowledge-maintenance.md) |
 
 - 从中间阶段进入时，检查该阶段的输入和通过条件。
 - 缺少前提时，退回负责该前提的阶段。
@@ -40,6 +41,7 @@ ok-ww 角色代码开发 Skill。按任务和已有产物选择阶段。
 - 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
 - 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
 - 写或改游戏内日志时，按 [日志 Skill](skills/logging/SKILL.md) 写和检查。
+- 实测得到可入卡的发现时，按 [知识提议 Skill](skills/proposal/SKILL.md) 起草提议，由用户决定是否反馈。
 - 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
 - 语义卡的读取、冲突记录和安装目录边界见 [knowledge/cards/README.md](knowledge/cards/README.md)。
 
