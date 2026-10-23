@@ -27,8 +27,8 @@ EMAIL = '476676559@qq.com'
 TITLE_PREFIX = '# [知识提议] '
 MARKER = '<!-- okwwcharcode-proposal v1 -->'
 CONSENT = '提交即同意按 MIT 许可收录本提议内容。'
-# GitHub 新建 Issue 链接的长度上限按 8000 字符算，超出时正文改走剪贴板
-URL_LIMIT = 8000
+# 未登录时 GitHub 先跳转登录页，链接超过约 7000 字符会返回 500；取 6000 留余量，超出时正文改走剪贴板
+URL_LIMIT = 6000
 PRIVATE_PATTERNS = [
     ('本机绝对路径', re.compile(r'(?<![A-Za-z])[A-Za-z]:[\\/]|/(?:Users|home)/|/[a-z]/Users/')),
     ('邮箱', re.compile(r'[\w.+-]+@[\w-]+\.[\w.-]+')),
