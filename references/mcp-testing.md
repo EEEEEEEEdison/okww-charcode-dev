@@ -61,6 +61,14 @@ Agent 负责从程序未启动推进到测试结束，不默认用户摆好界�
 不得另起服务器或修改宿主连接配置来替代重连。
 两种调用方式均不可用时，记录连接缺口及仍能完成的静态检查。
 
+薄客户端必须使用本机 SDK 的字段名，不得从协议 JSON 推断对象属性。
+历史 `mcp==2.3.0` 使用 `server_info`、`protocol_version` 等 snake_case 属性。
+同版还使用 `input_schema`、`is_error` 和 `structured_content`。
+`serverInfo` 曾触发 `AttributeError`；更换 SDK 版本后必须重新核对。
+Windows Python 使用 `-I` 时会忽略 `PYTHONIOENCODING`。
+客户端需输出中文时，先用 `sys.stdout.reconfigure(encoding='utf-8')`。
+输出重定向到文件时，也必须明确使用 UTF-8。
+
 ### 2.2 通过 ok-ww 启动游戏
 
 MCP 可用后，先按 [MCP Skill](../skills/mcp/SKILL.md) 发现并读取内置指引。
@@ -169,6 +177,22 @@ Agent 必须承担导航和选队，不得默认要求用户先操作到起点�
 发现用户或并行改动时，不得覆盖；应用操作沿用 §1 的授权边界。
 只测试时，仅应用用户指定版本，不得夹带战斗逻辑修改。
 
+输入为工坊 zip 时，在已获导入授权的应用侧 Task 中执行：
+
+1. 用 `src.char.CustomCharLoader.inspect_team_archive(zip_path)` 校验归档。
+2. 从校验结果取得队伍，用 `get_custom_team_folder(info['team'])` 定位目标。
+3. 将旧队伍目录备份到 `self.artifact_directory`，记录原文件校验值。
+4. 检查同名 `.backup` 目录；已存在时停止导入，不得覆盖或删除。
+5. 写入前重查目标。发现并行改动时停止，不覆盖新内容。
+6. 调用 `import_custom_team(info)`，读回 `team.json` 版本和 `code_mode`。
+7. 逐个核对角色 `.py`、`.import.py` 与 `info['codes']` 的源码文本。
+
+以上方法均来自 `src.char.CustomCharLoader`，使用前必须核对当前签名。
+导入会整目录替换，内部备份在成功后删除，不能用作回滚证据。
+文件校验值用于记录原字节；源码比较按加载器的换行规范化规则处理。
+导入读回通过不证明内存已更新，仍需完成下节的加载核对。
+不得因 shell 文件访问被拒绝，改用 Task 绕过同一权限限制。
+
 ### 4.1 核对实际加载的队伍
 
 设备和角色实例操作必须在 MCP Task 的执行器中完成，不得并发调用。
@@ -252,6 +276,10 @@ F 前切还是 F 后切，以该场景可接受输入的画面证据为准。
 行为改动仍放原角色或任务中，薄 Task 不得复制整套战斗逻辑。
 只为观察的 Task 可无状态恢复；会改变游戏状态时不得用空恢复假装可重试。
 
+MCP 提交任务后会准备设备，不必额外点击 GUI“开始”或按 F9。
+GUI 出现黄色 `Remote Control` 横幅表示执行器被占用，不是报错。
+横幅的 `Disconnect` 会请求取消当前执行；点击后仍需等待任务终态。
+
 MCP 运行期间触发任务暂停。
 薄 Task 必须显式调用待测代码，不能等自动战斗触发器接手。
 `AutoCombatTask.run()` 的返回值只说明其执行分支，不能独立证明战斗通过。
@@ -262,6 +290,16 @@ MCP 运行期间触发任务暂停。
 用 `get_run_status(run_id)` 等待 `succeeded`、`failed` 或 `cancelled`。
 `stopping` 仍占执行器；清理完成前不得提交下一次任务。
 截图必须检查 `cached` 和 `captured_at`，旧缓存不能证明本次操作生效。
+
+关键导航、入场、交互、切人和结算节点必须留帧及相对时刻。
+自定义步骤记录写到 `self.artifact_directory`。
+`notes.md` 必须能从运行 ID 定位本次源码、条件和逐局产物。
+内置评估一批包含多局时，另记录局号，不必为每局重造执行器。
+
+Windows `pythonw` 历史案例曾出现控制台写入回溯。
+症状为 `--- Logging error ---` 和 `OSError: [Errno 22]`，日志正文仍有记录。
+只有核实错误来自控制台写入时，才能在分析副本中分离这类噪声。
+必须保留原日志和业务异常，不得按错误名一概过滤。
 
 从返回路径读取日志、状态、截图及评估产物，按待测目标解释结果：
 
@@ -293,6 +331,7 @@ MCP 运行期间触发任务暂停。
 | `ok/cli.py`；`../.pyappify-shortcut.py` | 运行时启动入口及包装行为 |
 | `ok/core/mcp_server.py`；`ok/core/start_controller.py` | 设备准备、游戏启动及实例发现 |
 | `ok/agent_resources/docs/mcp.md` | 工具、生命周期及 Task 契约 |
+| `ok/ui/qt/MainWindow.py`；`ok/task/TaskExecutor.py` | 远控横幅及取消请求的静态依据 |
 | `.agents/skills/evaluate-team/` | 评估起点、采样、设置与清理 |
 | `src/task/AutoLoginTask.py`；`src/task/BaseWWTask.py` | 登录、月卡、通用界面与交互片段 |
 | `src/task/FastTravelTask.py` | 已出现的传送按钮处理 |
@@ -300,8 +339,16 @@ MCP 运行期间触发任务暂停。
 | `src/char/CharFactory.py`；`src/char/CustomCharLoader.py` | 旧识别复用、队伍覆盖及加载失败路径 |
 
 2026-10-27 的今弗坎矩阵案例验证过详情页之后的流程。
-案例依据为队伍工作区的 `media/mcp-setup/report.md` 及 `mcp_matrix_test.py`。
-两者按 [evidence.md](../harness/evidence.md) 定位，不得作为所有队伍的固定参数。
+案例依据为队伍工作区的 `proposals/20261027-mcp-test-loop.md`。
+原始记录见 `media/mcp-setup/report.md`、`mcp_import_team.py`、`mcp_matrix_test.py`。
+战斗结果见 `media/mcp-test-2071/findings.md`，按 [evidence.md](../harness/evidence.md) 定位。
+
+该次已验证导入备份、读回、开战首位修正和主动锁敌。
+导入包与原代码相同，不能证明新代码免重启生效。
+两个隐藏后台启动尝试都在日志写出 `OK start` 后退出，原因未查。
+因此，日志出现启动文字不能替代进程存活检查。
+旧脚本用队伍 HUD 消失判断结束，不能直接作为当前结算判据。
+以上经验不得作为所有队伍的固定参数。
 
 本次未实机验证冷启动、大世界入口导航、自动选队及当前界面适配。
 当前源码没有完整的矩阵或深塔入口导航、通用选队执行器。
