@@ -4,8 +4,9 @@
 仓库名为 `okww-charcode-dev`，安装后的 Skill 名为 `okwwcharcode`。
 输入文字作战轴、教程视频或已有代码，交付工坊配队代码和 zip。
 也支持根据实测日志与录屏修改角色代码。
+也可直接测试已有角色代码的战斗逻辑，不必先生成新代码。
 
-项目按工作流分为总入口 `okwwcharcode`、六个阶段 Skill、日志 Skill `logging` 和知识提议 Skill `proposal`。
+项目按工作流分为总入口 `okwwcharcode`、六个阶段 Skill、日志 Skill `logging`、MCP 辅助 Skill `mcp` 和知识提议 Skill `proposal`。
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
@@ -54,15 +55,15 @@ git clone --branch v0.3.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charco
 新开会话后，Claude Code 把安装目录加载为插件 `okwwcharcode@skills-dir`：
 
 - 总入口注册为 `okwwcharcode`；
-- 六个阶段、日志 Skill 和知识提议 Skill 注册为 `okwwcharcode:<阶段名>`。
+- 六个阶段、日志 Skill、MCP 辅助 Skill `mcp` 和知识提议 Skill 注册为 `okwwcharcode:<阶段名>`。
 
 该方式不经过 marketplace。
-运行 `claude plugin details okwwcharcode@skills-dir` 核对，结果应列出 8 个 Skill。
+运行 `claude plugin details okwwcharcode@skills-dir` 核对，结果应列出 9 个 Skill。
 
 ### pi
 
 pi 扫描到含 `SKILL.md` 的目录后便停止递归。
-因此，上述安装只注册总入口；阶段、日志和知识提议 Skill 由总入口读取。
+因此，上述安装只注册总入口；阶段、日志、MCP 和知识提议 Skill 由总入口读取。
 需要分别调用阶段 Skill 时，在 `~/.pi/agent/settings.json` 中添加：
 
 ```json
@@ -133,6 +134,7 @@ git switch --detach v0.3.0
 - `/okwwcharcode 文字轴如下，视频在 <路径>：<文字轴>`：素材齐全时从轴解析开始。
 - `/okwwcharcode:implementation 修改 <角色 .py> 的 <函数>：<改法与依据>`：局部修改，从代码实现开始。
 - `/okwwcharcode:iteration <队名> harness-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
+- `/okwwcharcode 测试 <代码路径> 在 <队伍与关卡> 中的 <战斗行为>`：直接测试，由 Agent 准备场景并采证。
 - `/okwwcharcode:logging 检查 <角色 .py> 的日志`：单独的日志任务。
 - `/okwwcharcode:proposal <队名> harness-v<N>`：把本案可入卡的发现整理成知识提议。
 
@@ -165,13 +167,30 @@ git switch --detach v0.3.0
 | [时序建模](skills/timeline/SKILL.md) | `timeline` | 标记输入、状态变化和切人事件，测量参考耗时 | `timeline.json`、参考耗时表、G2 结果 |
 | [代码实现](skills/implementation/SKILL.md) | `implementation` | 选用框架 API，实现动作、判据与交场链 | 角色代码、`verify_chain.py`、实现说明 |
 | [验证交付](skills/delivery/SKILL.md) | `delivery` | 定向检查代码，校验并打包工坊文件 | 检查结果、zip、README、待实测项 |
-| [实测迭代](skills/iteration/SKILL.md) | `iteration` | 对照日志和录屏定位差异，修改并复验 | 差异表、根因、下一版或验收记录 |
+| [实测迭代](skills/iteration/SKILL.md) | `iteration` | 测试已有代码，或对照日志和录屏定位差异，修改并复验 | 测试证据、差异表、根因、下一版或验收记录 |
 
 整队生成按上述顺序推进。
 局部修改可从代码实现或实测迭代进入。
+已有待测代码与测试目标，或有可定位版本的日志或录屏时，可从实测迭代进入。
+直接测试已有代码不必先补文字轴或整队时序。
 局部任务只补受影响的依据和验证，不必重建整队时序。
 
 [日志 Skill](skills/logging/SKILL.md)（`logging`）跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
+
+[MCP Skill](skills/mcp/SKILL.md)（`mcp`）跨阶段辅助运行与测试。
+Agent 按任务发现并读取当前 ok-ww 运行时的内置技能。
+覆盖以下操作：
+
+- 启动 ok-ww 与游戏。
+- 准备矩阵或深塔测试起点。
+- 入场选队：目标明确时，在进入副本前选择队伍或槽位，并读回核对。
+- 开战并核对首位角色。
+- 识别异常并将结果用于测试判断。
+
+具体流程见 [MCP Skill](skills/mcp/SKILL.md) 和 [MCP 测试参考](references/mcp-testing.md)。
+实际操作路径必须按当前游戏界面与源码验证，不保证任意页面均已支持。
+未知界面需基于当前截图编写有界 Task。
+未实机验证的路径不得称为全自动可用。
 
 [知识提议 Skill](skills/proposal/SKILL.md)（`proposal`）在实测迭代后使用，把可入卡的发现整理成提议。经用户同意后，提议反馈给维护者，见 [贡献知识](#贡献知识)。
 
@@ -276,7 +295,8 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [VERSION](VERSION) | 发布版本号；对应 `v<版本号>` 标签 |
 | [.claude-plugin/plugin.json](.claude-plugin/plugin.json) | Claude Code 插件清单；阶段注册为 `okwwcharcode:<阶段名>` |
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
-| `skills/*/SKILL.md` | 六个阶段、日志和知识提议 Skill 的输入、任务、交付与退回条件 |
+| `skills/*/SKILL.md` | 六个阶段、日志、MCP 和知识提议 Skill 的输入、任务、交付与退回条件 |
+| [skills/mcp/SKILL.md](skills/mcp/SKILL.md) | 跨阶段发现和使用 ok-ww 内置技能，准备测试与采证 |
 | [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
 | [harness/timing.md](harness/timing.md) | 计时口径、参考耗时、差值和时间验收 |
 | [harness/step1.md](harness/step1.md) | 素材、文字轴确认、画面取证与事件标记 |
@@ -292,6 +312,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [references/task-api.md](references/task-api.md) | `self.task.*` 与战斗检查 |
 | [references/self-impl-patterns.md](references/self-impl-patterns.md) | 框架函数不足时的实现经验 |
 | [references/logging.md](references/logging.md) | 英文日志模板、词表与参考实现 |
+| [references/mcp-testing.md](references/mcp-testing.md) | ok-ww 内置技能发现、测试场景准备和证据采集流程 |
 | [references/workshop.md](references/workshop.md) | 工坊格式、循环轴骨架与案例 |
 | [templates/verify_chain.py](templates/verify_chain.py) | 静态交场链检查模板 |
 | [templates/knowledge-proposal.md](templates/knowledge-proposal.md) | 知识提议模板 |
@@ -327,6 +348,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 版本记录
 
+- 未发布：新增 MCP 辅助技能与直接测试已有代码入口。
 - 0.3.0：知识提议在 gh 未安装或未登录时提供“安装 gh 后反馈”，由 `submit_proposal.py --setup-gh` 安装并登录 gh。
 - 0.2.0：新增知识提议 Skill `proposal`。实测得到可入卡的发现时起草提议，经用户同意后用 gh、预填 Issue 页面或邮件反馈给维护者。
 - 0.1.0：总入口改名为 `okwwcharcode`，拆分出六个阶段 Skill；新增日志 Skill 和 `scripts/check_logs.py`；语义卡改为精简写法。Claude Code 以插件形式注册阶段。
