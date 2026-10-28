@@ -182,12 +182,23 @@ Agent 把 `templates/mcp/` 的 Task 模板复制到工作区，用 `run_task` �
 
 - `preflight.py`：从登录页、菜单或矩阵区域回到大世界。
 - `team_import.py`：导入工坊 zip，备份旧代码，读回核对。
-- `matrix_nav.py`：从大世界或结算页导航到终焉矩阵编队详情页，不保存成绩。
+- `matrix_nav.py`：从大世界或结算页导航到终焉矩阵，按 team.json 找到用户编好的测试队伍，不改编队，不保存成绩。
 - `matrix_run.py`：核对编队，交互回音之钥开战，切开场角色并锁敌，自动战斗，实时录像。
 
 `scripts/mcp_report.py` 汇总日志和技能结果，并给每个问题行配录像帧。
 用户授权自主迭代时，Agent 在上限内重复“实测 → 分析 → 改代码 → 导入”。
 连续 2 局通过的版本才交给用户看录像。
+
+本 Skill 有三种用法：
+
+| 用法 | 迭代依据 |
+|---|---|
+| 从头制作 | 参考视频；MCP 报告作为参考 |
+| 提交 zip 只测稳定性 | 不迭代 |
+| 提交 zip 按 MCP 结果迭代 | MCP 报告的问题行；没有参考视频，耗时未验证 |
+
+开场角色写在 team.json 的 `description` 里，格式为“一号位<中文名>”。
+测试前，用户须把测试队伍编进矩阵，1 号位放开场角色。
 
 前提是 ok-ww 正式版已开启 MCP，并以管理员身份启动。
 已实机验证的场景只有终焉矩阵，见 [MCP 实测指引](references/mcp-testing.md)。
@@ -351,7 +362,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 版本记录
 
-- 未发布：MCP Skill 改为全自动实测，新增 `templates/mcp/` 模板和 `scripts/mcp_report.py`，已在终焉矩阵实机验证；实测迭代增加自主迭代上限。细则目录 `harness/` 改名为 `guides/`，版本目录改为 `skilltest-v<N>`，本机配置改名为 `okwwcharcode.local.md`。
+- 未发布：MCP Skill 改为全自动实测，新增 `templates/mcp/` 模板和 `scripts/mcp_report.py`，已在终焉矩阵实机验证；实测迭代增加自主迭代上限和三种用法。矩阵导航按 team.json 查找测试队伍。细则目录 `harness/` 改名为 `guides/`，版本目录改为 `skilltest-v<N>`，本机配置改名为 `okwwcharcode.local.md`。
 - 0.3.0：知识提议在 gh 未安装或未登录时提供“安装 gh 后反馈”，由 `submit_proposal.py --setup-gh` 安装并登录 gh。
 - 0.2.0：新增知识提议 Skill `proposal`。实测得到可入卡的发现时起草提议，经用户同意后用 gh、预填 Issue 页面或邮件反馈给维护者。
 - 0.1.0：总入口改名为 `okwwcharcode`，拆分出六个阶段 Skill；新增日志 Skill 和 `scripts/check_logs.py`；语义卡改为精简写法。Claude Code 以插件形式注册阶段。

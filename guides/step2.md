@@ -138,6 +138,8 @@ self._force_switch_to(self._find_teammate('<下一个类名>'), '<下个节点�
 
 `team.json.team` 用逗号分隔的英文显示名，按不区分大小写的字母序排列。
 显示名以运行目录 `CustomCharLoader.py` 的 `CHARACTER_DISPLAY_NAMES` 为准。
+`description` 必须写“一号位<中文名>”标明开场角色，如“一号位坎特蕾拉”。
+MCP 实测按这句确定开场角色，见 [mcp-testing.md §3.1](../references/mcp-testing.md#31-参数来源)。
 
 项目要求清洗时，先生成清洗后的 3 个 `.py`。
 使用 `--src <清洗结果目录>`，并把该目录记为实际打包源。

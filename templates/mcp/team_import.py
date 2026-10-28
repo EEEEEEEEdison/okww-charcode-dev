@@ -1,6 +1,6 @@
 """把工坊 zip 导入 ok-ww：先备份已装队伍目录，导入后读回核对。不发按键。
 
-参数读同目录 mcp_test.json：zip（绝对路径）、team（3 个类名）。
+参数读同目录 mcp_test.json：zip（绝对路径）；team（3 个类名）可留空，填了就须与包内 team.json 一致。
 结果写 import.json：旧/新 team.json、各文件 sha256 前 16 位、备份路径。
 新装文件的 sha256 与 matrix_run 记录的 summary.json code[].sha256_16 用同一算法，可直接比对。
 """
@@ -30,7 +30,8 @@ class Task(BaseTask):
 
     def run(self):
         info = loader.inspect_team_archive(CONFIG['zip'])
-        assert set(info['team']) == set(CONFIG['team']), f"zip team {info['team']} != {CONFIG['team']}"
+        assert not CONFIG.get('team') or set(info['team']) == set(CONFIG['team']), \
+            f"zip team {info['team']} != {CONFIG['team']}"
         folder = loader.get_custom_team_folder(info['team'])
         # 加载器导入时会删除同名 .backup；该目录已存在说明上次导入中断，留给人处理
         assert not folder.with_name(folder.name + '.backup').exists(), 'stale .backup folder exists'

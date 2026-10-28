@@ -1,6 +1,6 @@
 ---
 name: okwwcharcode
-description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发与实测 Skill 总入口。支持按文字轴、教程视频生成工坊配队代码，也支持直接测试已有代码的战斗逻辑。按任务选择 6 个阶段：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代。mcp 通过 ok-ww MCP 全自动实测：回大世界、导入代码、导航到终焉矩阵、开战、录像和生成报告。logging 负责日志写法与检查。proposal 把实测发现整理成知识提议。适用于作战轴转代码、BaseChar、src/char、协奏切人和技能触发。支持循环轴、工坊代码、team.json、日志录像排错与测试结果分析。
+description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发与实测 Skill 总入口。三种用法：按文字轴、教程视频从头制作工坊配队代码；提交 zip 只测稳定性；提交 zip 按 MCP 实测结果迭代。按任务选择 6 个阶段：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代。mcp 通过 ok-ww MCP 全自动实测：回大世界、导入代码、导航到终焉矩阵、开战、录像和生成报告。logging 负责日志写法与检查。proposal 把实测发现整理成知识提议。适用于作战轴转代码、BaseChar、src/char、协奏切人和技能触发。支持循环轴、工坊代码、team.json、日志录像排错与测试结果分析。
 ---
 
 # okwwcharcode
@@ -8,6 +8,17 @@ description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚�
 ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现有代码。
 按任务和已有产物选择阶段。
 安装版本见 [VERSION](VERSION)，固定版本安装见 [README](README.md#安装)。
+
+## 三种用法
+
+| 用法 | 入口 | 迭代依据 |
+|---|---|---|
+| 从头制作 | [`materials`](skills/materials/SKILL.md) | 参考视频；MCP 报告作为参考 |
+| 提交 zip 只测稳定性 | [`iteration`](skills/iteration/SKILL.md) | 不迭代 |
+| 提交 zip 按 MCP 结果迭代 | [`iteration`](skills/iteration/SKILL.md) | MCP 报告的问题行 |
+
+用户提交 zip 但没说要改代码时，按“只测稳定性”执行。
+各用法的做法和通过条件见 [iterate.md §1.1](guides/iterate.md#11-三种用法)。
 
 ## 阶段选择
 

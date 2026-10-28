@@ -1,6 +1,6 @@
 """终焉矩阵单局实测：编队详情页 → 前往 → 大厅核对队伍与代码 → 交互回音之钥开战 → 切开场角色 → 锁敌 → 自动战斗 → 结算页停下。
 
-参数读同目录 mcp_test.json。全程后台录像（record.mp4，实时），节点留帧写 steps.json，汇总写 summary.json。
+参数读同目录 mcp_test.json；槽位、队伍和开场角色读 matrix_nav.py 写的 target.json。全程后台录像（record.mp4，实时），节点留帧写 steps.json，汇总写 summary.json。
 结算页不点任何按钮；离开结算页和是否保存成绩由 matrix_nav.py 处理。
 """
 import hashlib
@@ -18,6 +18,7 @@ from src.char import CustomCharLoader as loader
 from src.task.AutoCombatTask import AutoCombatTask
 
 CONFIG = json.loads(Path(__file__).with_name('mcp_test.json').read_text(encoding='utf-8'))
+TARGET = json.loads(Path(__file__).with_name('target.json').read_text(encoding='utf-8'))
 
 
 def local_time(ts):
@@ -106,8 +107,8 @@ class Task(BaseTask):
         assert '终焉矩阵' in joined and '角色编队' in joined, f'not on matrix team detail page: {texts[:20]}'
         # 方括号大号槽位编号全屏 OCR 读不出，裁到编队栏左侧才能读出“(04)”
         slot_texts = [b.name for b in (self.ocr(0.44, 0.64, 0.56, 0.76, log=False) or [])]
-        assert any(CONFIG['slot_label'] in t for t in slot_texts), \
-            f"team slot {CONFIG['slot_label']} not shown: {slot_texts}"
+        assert any(TARGET['slot_label'] in t for t in slot_texts), \
+            f"team slot {TARGET['slot_label']} not shown: {slot_texts}"
         assert self._go_button(), 'no 前往 button'
 
     def _go_button(self):
@@ -146,8 +147,8 @@ class Task(BaseTask):
         rec_cfg = CONFIG.get('record', {})
         recorder = Recorder(self.executor, self.out, rec_cfg.get('fps', 15), rec_cfg.get('size', [960, 540]))
         recorder.start()
-        manifest = loader.read_team_manifest(CONFIG['team']) or {}
-        summary = {'config': CONFIG, 'started': local_time(self.t0),
+        manifest = loader.read_team_manifest(TARGET['team']) or {}
+        summary = {'config': CONFIG, 'target': TARGET, 'started': local_time(self.t0),
                    'manifest': {k: manifest.get(k) for k in ('version', 'code_mode')}}
         try:
             self.click(self._go_button(), after_sleep=1)
@@ -161,14 +162,14 @@ class Task(BaseTask):
             summary['team'] = names
             summary['code'] = [self._code_info(c) for c in combat.chars]
             self._mark('lobby', on_field=name, slot=idx, team=names)
-            assert set(names) == set(CONFIG['team']), f"team mismatch {names} != {CONFIG['team']}"
+            assert set(names) == set(TARGET['team']), f"team mismatch {names} != {TARGET['team']}"
 
             # 大厅里正前方是回音之钥，走到出现 F 提示再交互开战
             combat.walk_until_f(direction='w', time_out=CONFIG.get('walk_time_out', 4))
             self._mark('f_found')
             self.send_key('f')
-            opener = CONFIG.get('opener')
-            if opener and name != opener:
+            opener = TARGET['opener']
+            if name != opener:
                 self.sleep(CONFIG.get('switch_delay', 0.15))
                 self.send_key(str(names.index(opener) + 1))
                 self.sleep(0.5)
