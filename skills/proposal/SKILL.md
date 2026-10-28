@@ -23,7 +23,7 @@ description: okwwcharcode（ok-ww 角色代码开发）的知识提议阶段。�
    <ok-ww python.exe> -I -B <本仓库>/scripts/submit_proposal.py <提议 .md> --dry-run
    ```
 
-8. 给出提议全文，用宿主的结构化提问工具问一次。题干写明条数、反馈后公开在 GitHub Issue、同意按 MIT 许可收录。选项按第 7 步输出的 `gh:` 行和工作区根目录的 `okww-harness.local.md` 确定：
+8. 给出提议全文，用宿主的结构化提问工具问一次。题干写明条数、反馈后公开在 GitHub Issue、同意按 MIT 许可收录。选项按第 7 步输出的 `gh:` 行和工作区根目录的 `okwwcharcode.local.md` 确定：
    - `gh: 已登录`，或本地配置记有 `gh 引导：不再推荐`：选项为“反馈”“用邮件反馈”“不反馈”。
    - 其他情况：选项为“安装 gh 后反馈”“用浏览器反馈”“用邮件反馈”“不反馈”。`gh: 未登录` 时，第一项改为“登录 gh 后反馈”。题干加上下面这段；`gh: 未登录` 时删掉安装那句：
 
@@ -35,7 +35,7 @@ description: okwwcharcode（ok-ww 角色代码开发）的知识提议阶段。�
    - 用浏览器反馈：加 `--method browser` 运行。
    - 用邮件反馈：加 `--method email` 运行，告诉用户收件邮箱、邮件主题和附件路径。
    - 不反馈：保留文件，结束。
-   - 有安装或登录 gh 的选项，而用户选了浏览器或邮件反馈时，在 `okww-harness.local.md` 记一行 `gh 引导：不再推荐`。
+   - 有安装或登录 gh 的选项，而用户选了浏览器或邮件反馈时，在 `okwwcharcode.local.md` 记一行 `gh 引导：不再推荐`。
 
 ## 输出与通过条件
 

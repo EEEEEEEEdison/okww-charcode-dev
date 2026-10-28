@@ -12,10 +12,10 @@ description: okwwcharcode（ok-ww 角色代码开发）的验证交付阶段。�
 ## 执行
 
 1. 读取 [总入口](../../SKILL.md) 的产物位置要求。
-2. 按 [step2.md §7](../../harness/step2.md) 检查候选代码。读取 [日志 Skill](../logging/SKILL.md)，按其检查日志。
+2. 按 [step2.md §7](../../guides/step2.md) 检查候选代码。读取 [日志 Skill](../logging/SKILL.md)，按其检查日志。
 3. 工坊交付按 step2.md §8 打包与校验。
 4. 局部代码交付只运行改动目标的检查。
-5. 按 [evidence.md §5](../../harness/evidence.md) 记录结果。
+5. 按 [evidence.md §5](../../guides/evidence.md) 记录结果。
 
 ## 输出与通过条件
 

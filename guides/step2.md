@@ -129,7 +129,7 @@ self._force_switch_to(self._find_teammate('<下一个类名>'), '<下个节点�
 ## 8 打包交付
 
 1. 从已有确认读取 `name`、`description`、`author`、`version`。缺少时集中提问。
-2. 在新的 `<队名>/harness-v<N>/` 放置 3 个角色文件、`verify_chain.py` 和 `team.json`。
+2. 在新的 `<队名>/skilltest-v<N>/` 放置 3 个角色文件、`verify_chain.py` 和 `team.json`。
 3. 写 README，列出交场链、轴与视频节点对应、参考耗时入口、试验假设和未实测项。
 4. 写 `notes.md`，记录来源、实现选择及实际检查结果。
 5. 用配置的 Python 执行 `scripts/pack_team.py <版本目录> <ok-ww运行目录>`。

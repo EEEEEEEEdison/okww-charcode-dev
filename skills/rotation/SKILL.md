@@ -11,9 +11,9 @@ description: okwwcharcode（ok-ww 角色代码开发）的轴解析阶段。用�
 
 ## 执行
 
-1. 读取 [总入口](../../SKILL.md) 和 [evidence.md](../../harness/evidence.md)。
-2. 按 [step1.md §2](../../harness/step1.md) 完成 G1。
-3. 按 [baseline.md](../../harness/baseline.md) 收集角色代码基线。
+1. 读取 [总入口](../../SKILL.md) 和 [evidence.md](../../guides/evidence.md)。
+2. 按 [step1.md §2](../../guides/step1.md) 完成 G1。
+3. 按 [baseline.md](../../guides/baseline.md) 收集角色代码基线。
 4. 按 step1.md §3、§6 解释动作并处理问题。
 5. 按 evidence.md §5 更新阶段交接。
 

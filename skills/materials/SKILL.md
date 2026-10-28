@@ -12,9 +12,9 @@ description: okwwcharcode（ok-ww 角色代码开发）的素材获取阶段。�
 ## 执行
 
 1. 读取 [总入口](../../SKILL.md) 的工作区要求。
-2. 按 [evidence.md](../../harness/evidence.md) 确定待获取的信息。
-3. 按 [step1.md §1](../../harness/step1.md) 收集素材。
-4. 按 [timing.md §1](../../harness/timing.md) 保留时间证据。
+2. 按 [evidence.md](../../guides/evidence.md) 确定待获取的信息。
+3. 按 [step1.md §1](../../guides/step1.md) 收集素材。
+4. 按 [timing.md §1](../../guides/timing.md) 保留时间证据。
 5. 按 evidence.md §5 更新阶段交接。
 
 ## 输出与通过条件

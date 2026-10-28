@@ -11,10 +11,10 @@ G1 确认、动作解释、代码基线、素材和问题清单。
 
 ## 执行
 
-1. 读取 [总入口](../../SKILL.md) 和 [evidence.md](../../harness/evidence.md)。
-2. 按 [step1.md §4–5、§7–8](../../harness/step1.md) 建立事件与节点。
-3. 按 [timing.md](../../harness/timing.md) 整理参考耗时。
-4. 按 [timeline.md](../../harness/timeline.md) 维护字段并检查 G2。
+1. 读取 [总入口](../../SKILL.md) 和 [evidence.md](../../guides/evidence.md)。
+2. 按 [step1.md §4–5、§7–8](../../guides/step1.md) 建立事件与节点。
+3. 按 [timing.md](../../guides/timing.md) 整理参考耗时。
+4. 按 [timeline.md](../../guides/timeline.md) 维护字段并检查 G2。
 5. 按 evidence.md §5 更新阶段交接。
 
 ## 输出与通过条件

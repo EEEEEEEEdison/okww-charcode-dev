@@ -13,7 +13,7 @@ ok-ww 的 MCP 不需要额外安装脚本。
 | 启动方式 | 必须经 `ok-ww.exe` 以管理员身份启动 |
 | 宿主 | 已配置 ok-ww MCP 连接，能调用 `run_task`、`get_run_status` |
 | 游戏 | 分辨率 16:9；矩阵已解锁，目标队伍已有挑战记录 |
-| 本机路径 | 工作区 `okww-harness.local.md` 里的 `working` 目录和 Python |
+| 本机路径 | 工作区 `okwwcharcode.local.md` 里的 `working` 目录和 Python |
 
 非管理员实例在游戏未运行时不能启动游戏。
 这时 `run_task` 在 `preparing` 阶段失败，报 `Target device could not be started`。
@@ -144,7 +144,7 @@ MCP 运行期间，ok-ww 的触发任务暂停。
 - 保存成绩会覆盖本队记录，并清空其后所有队伍的记录。
 - 结算页的“当前总积分”只是预览。点“返回”后弹“成绩确认”，点“取消”保留原记录。
 - `save_result` 必须保持 `false`，用户要求保存成绩时除外。
-- 每次 `matrix_run.py` 点“前往”消耗 1 点结晶单质。运行局数按 [iterate.md §4.1](../harness/iterate.md#41-自主迭代上限) 的上限计算。
+- 每次 `matrix_run.py` 点“前往”消耗 1 点结晶单质。运行局数按 [iterate.md §4.1](../guides/iterate.md#41-自主迭代上限) 的上限计算。
 
 OCR 识别要点：
 

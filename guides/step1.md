@@ -1,7 +1,7 @@
 # 步骤 1：从素材形成已确认的时序模型
 
 本流程由素材获取、轴解析和时序建模三个阶段共用。
-输出放在工作区的 `<队名>/harness-v<N>/`。
+输出放在工作区的 `<队名>/skilltest-v<N>/`。
 目录与本地配置见 [总入口](../SKILL.md)。
 证据规则见 [evidence.md](evidence.md)，计时规则见 [timing.md](timing.md)。
 取证脚本放在媒体目录或 scratchpad，用配置的 Python `-I -B` 运行。

@@ -12,7 +12,7 @@ description: okwwcharcode 的 MCP 自动实测 Skill：通过 ok-ww MCP 的 run_
 
 - 待测代码：已装队伍，或待导入的工坊 zip。
 - 队伍 3 个类名、开场角色、矩阵模式和队伍槽位。
-- 本机 `working` 目录和 Python 路径，见工作区的 `okww-harness.local.md`。
+- 本机 `working` 目录和 Python 路径，见工作区的 `okwwcharcode.local.md`。
 - 本轮测试目标、运行局数上限和停止条件。
 
 已有日志、录像或报告能回答测试目标时，不必重新实测。
@@ -47,7 +47,7 @@ description: okwwcharcode 的 MCP 自动实测 Skill：通过 ok-ww MCP 的 run_
 - `save_result` 必须保持 `false`，用户要求保存成绩时除外。
 - 只测试时，不得修改角色逻辑、配装或战斗配置。
 - 重启 ok-ww 需要用户以管理员身份启动，见指引 §7。
-- 外来工坊代码的运行边界沿用 [evidence.md](../../harness/evidence.md)。
+- 外来工坊代码的运行边界沿用 [evidence.md](../../guides/evidence.md)。
 
 ## 输出与通过条件
 

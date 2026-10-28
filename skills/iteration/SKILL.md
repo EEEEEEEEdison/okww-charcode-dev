@@ -18,12 +18,12 @@ description: okwwcharcode（ok-ww 角色代码开发）的实测迭代阶段。�
 
 ## 执行
 
-1. 读取 [总入口](../../SKILL.md) 和 [iterate.md](../../harness/iterate.md)。
-2. 按 [evidence.md](../../harness/evidence.md) 核对运行条件与证据。
+1. 读取 [总入口](../../SKILL.md) 和 [iterate.md](../../guides/iterate.md)。
+2. 按 [evidence.md](../../guides/evidence.md) 核对运行条件与证据。
 3. 已有证据时，先检查能否回答测试目标；能回答时不必重跑。
 4. 需要采证或直接测试时，读取 [MCP Skill](../mcp/SKILL.md)，按其流程自动实测并生成报告。
 5. 读取 [日志 Skill](../logging/SKILL.md)，用 `wait` 行和 probe 行定位卡点。
-6. 需要比较耗时时，按 [timing.md](../../harness/timing.md) 核对口径及差值。
+6. 需要比较耗时时，按 [timing.md](../../guides/timing.md) 核对口径及差值。
 7. 解释偏差，按根因选择退回阶段。
 8. 按 iterate.md §5–6 更新案例证据和验收状态。
    用户授权自主迭代时，按 iterate.md §4.1 的上限重复第 4–8 步。

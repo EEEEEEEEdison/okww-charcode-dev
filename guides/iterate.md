@@ -86,7 +86,7 @@ MCP 实测的 `report/report.md` 已列出这些统计，问题行附录像秒�
 | 函数语义、判据或等待实现错误 | [代码实现](../skills/implementation/SKILL.md) |
 | 来源缺失、片段不可读 | [素材获取](../skills/materials/SKILL.md) |
 
-修改写入 `harness-v<N+1>`，不得覆盖旧版。
+修改写入 `skilltest-v<N+1>`，不得覆盖旧版。
 沿用的 timeline、baseline 和待测项也必须能从新版定位。
 改变动作理解或时序时，更新模型并重查受影响的 G2 项。
 然后执行 [step2.md §6–8](step2.md) 的定向检查与打包。

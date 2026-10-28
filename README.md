@@ -22,7 +22,7 @@
 - ok-ww 上游仓库的本地克隆：收集角色代码基线。
 - gh：可选。知识反馈时可由 Agent 安装，见 [用 gh 自动反馈](#用-gh-自动反馈)。
 
-所选阶段需要本机路径且尚未记录时，Agent 会询问，并保存在工作区根目录的 `okww-harness.local.md`。
+所选阶段需要本机路径且尚未记录时，Agent 会询问，并保存在工作区根目录的 `okwwcharcode.local.md`。
 
 ## 安装
 
@@ -133,10 +133,10 @@ git switch --detach v0.3.0
 - `/okwwcharcode 把这个视频的作战轴做成工坊配队：<视频链接>`：从素材获取开始，依次推进到验证交付。
 - `/okwwcharcode 文字轴如下，视频在 <路径>：<文字轴>`：素材齐全时从轴解析开始。
 - `/okwwcharcode:implementation 修改 <角色 .py> 的 <函数>：<改法与依据>`：局部修改，从代码实现开始。
-- `/okwwcharcode:iteration <队名> harness-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
+- `/okwwcharcode:iteration <队名> skilltest-v<N> 的实测日志在 <路径>，<现象>`：实测迭代，按根因退回对应阶段。
 - `/okwwcharcode 测试 <代码路径> 在 <队伍与关卡> 中的 <战斗行为>`：直接测试，由 Agent 准备场景并采证。
 - `/okwwcharcode:logging 检查 <角色 .py> 的日志`：单独的日志任务。
-- `/okwwcharcode:proposal <队名> harness-v<N>`：把本案可入卡的发现整理成知识提议。
+- `/okwwcharcode:proposal <队名> skilltest-v<N>`：把本案可入卡的发现整理成知识提议。
 
 检查日志调用：
 
@@ -151,7 +151,7 @@ git switch --detach v0.3.0
 ```text
 <工作区>/<队名>/
   media/           原视频、音频或字幕、info.md、截图、取证脚本
-  harness-v<N>/    timeline.json、baseline.md、notes.md、角色代码、检查文件、team.json、README.md、zip
+  skilltest-v<N>/  timeline.json、baseline.md、notes.md、角色代码、检查文件、team.json、README.md、zip
   proposals/       知识提议文件
 ```
 
@@ -229,7 +229,7 @@ gh 已安装但未登录时，该选项名为“登录 gh 后反馈”，跳过�
 gh 登录后的最低权限为 `repo`、`read:org` 和 `gist`，能读写本账号的仓库。
 令牌存在系统凭据管理器中。撤销时运行 `gh auth logout`，或在 GitHub 的 Settings → Applications 撤销 GitHub CLI 的授权。
 
-用户有该选项而改选浏览器或邮件时，工作区的 `okww-harness.local.md` 记下 `gh 引导：不再推荐`，之后不再提供。删掉这一行即可恢复。
+用户有该选项而改选浏览器或邮件时，工作区的 `okwwcharcode.local.md` 记下 `gh 引导：不再推荐`，之后不再提供。删掉这一行即可恢复。
 不提交提议也可先安装并登录：
 
 ```text
@@ -252,7 +252,7 @@ gh 登录后的最低权限为 `repo`、`read:org` 和 `gist`，能读写本账�
 阻断项必须解决后才能确定受影响的实现。
 待测项可进入试验版本，但必须有假设、验证办法和失败处理。
 用户确认操作意图后，机制和数值仍需按证据验证。
-详见 [信息获取与交接规则](harness/evidence.md)。
+详见 [信息获取与交接规则](guides/evidence.md)。
 
 ## 参考耗时与实测验收
 
@@ -270,7 +270,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 静态交场链与 zip 检查的结果单独记录。
 整队实测完成还需动作和耗时复验，以及用户认可。
 缺少录屏或参考数据时，明确列出未验证项。
-详见 [时间测量](harness/timing.md) 和 [实测迭代](harness/iterate.md)。
+详见 [时间测量](guides/timing.md) 和 [实测迭代](guides/iterate.md)。
 
 ## 知识维护
 
@@ -298,13 +298,13 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
 | `skills/*/SKILL.md` | 六个阶段、日志、MCP 和知识提议 Skill 的输入、任务、交付与退回条件 |
 | [skills/mcp/SKILL.md](skills/mcp/SKILL.md) | 通过 ok-ww MCP 全自动实测与取证 |
-| [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
-| [harness/timing.md](harness/timing.md) | 计时口径、参考耗时、差值和时间验收 |
-| [harness/step1.md](harness/step1.md) | 素材、文字轴确认、画面取证与事件标记 |
-| [harness/baseline.md](harness/baseline.md) | 上游、工坊和历史代码基线 |
-| [harness/timeline.md](harness/timeline.md) | 时序字段、示例和 G2 清单 |
-| [harness/step2.md](harness/step2.md) | 节点实现、定向检查和打包交付 |
-| [harness/iterate.md](harness/iterate.md) | 日志录像比较、根因、修改和复验 |
+| [guides/evidence.md](guides/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
+| [guides/timing.md](guides/timing.md) | 计时口径、参考耗时、差值和时间验收 |
+| [guides/step1.md](guides/step1.md) | 素材、文字轴确认、画面取证与事件标记 |
+| [guides/baseline.md](guides/baseline.md) | 上游、工坊和历史代码基线 |
+| [guides/timeline.md](guides/timeline.md) | 时序字段、示例和 G2 清单 |
+| [guides/step2.md](guides/step2.md) | 节点实现、定向检查和打包交付 |
+| [guides/iterate.md](guides/iterate.md) | 日志录像比较、根因、修改和复验 |
 | [knowledge/basics.md](knowledge/basics.md) | 游戏操作、记号和画面识别知识 |
 | [knowledge/cards/README.md](knowledge/cards/README.md) | 语义卡读取、适用条件与知识使用边界 |
 | [maintainer/knowledge-maintenance.md](maintainer/knowledge-maintenance.md) | 维护者的补卡、确认与知识审核规则 |
@@ -351,7 +351,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 版本记录
 
-- 未发布：MCP Skill 改为全自动实测，新增 `templates/mcp/` 模板和 `scripts/mcp_report.py`，已在终焉矩阵实机验证；实测迭代增加自主迭代上限。
+- 未发布：MCP Skill 改为全自动实测，新增 `templates/mcp/` 模板和 `scripts/mcp_report.py`，已在终焉矩阵实机验证；实测迭代增加自主迭代上限。细则目录 `harness/` 改名为 `guides/`，版本目录改为 `skilltest-v<N>`，本机配置改名为 `okwwcharcode.local.md`。
 - 0.3.0：知识提议在 gh 未安装或未登录时提供“安装 gh 后反馈”，由 `submit_proposal.py --setup-gh` 安装并登录 gh。
 - 0.2.0：新增知识提议 Skill `proposal`。实测得到可入卡的发现时起草提议，经用户同意后用 gh、预填 Issue 页面或邮件反馈给维护者。
 - 0.1.0：总入口改名为 `okwwcharcode`，拆分出六个阶段 Skill；新增日志 Skill 和 `scripts/check_logs.py`；语义卡改为精简写法。Claude Code 以插件形式注册阶段。

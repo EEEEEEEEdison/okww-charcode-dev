@@ -30,7 +30,7 @@ okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文�
 
 ## 决策阶梯
 
-0. **先看前人怎么写**：改动涉及某个角色时，先读它的语义卡和代码基线（[harness/baseline.md](harness/baseline.md)）。
+0. **先看前人怎么写**：改动涉及某个角色时，先读它的语义卡和代码基线（[guides/baseline.md](guides/baseline.md)）。
 1. **先找内置函数**：查 [references/basechar-api.md](references/basechar-api.md)（角色侧）和 [references/task-api.md](references/task-api.md)（`self.task.*`）。
 2. **内置不够**时（内置模式先讨论），按 **5-1** 的顺序自实现：
    1. 内置 HUD 识别（`*_available`、`current_*`、`in_team`、回路、协奏）；
@@ -81,7 +81,7 @@ okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文�
 - **2-9** 手写的轮询循环必须有真实时间上限，每轮必须调用 `self.sleep()` 或 `self.task.next_frame()`。反例：上游 `normal_attack_until_can_switch` 是忙等。
 - **2-10** `click_liberation` 在 `in_team()` 第一次为真的那一帧返回，那一帧 HUD 可能还在淡入（队伍编号已过阈值、技能栏图标还没亮全）。R 后紧接着判 HUD 图标时，用 `wait_until(图标出现, time_out=0.3)` 从下一帧开始判，不在当前帧上做单帧判定，也不拿一次没认出就当“状态已结束”。案例：弗坎嘉 v7 test_1621，爆发图标在那一帧只有 0.62，两场都判成没进爆发。
 - **2-11** `click_liberation` 和 `click_resonance(has_animation=True)` 默认 `click_f=True`，演出期间（`in_team()` 为假）每 0.1 秒按一次 F。敌人韧性已空时，演出一结束就会触发击破。击破演出是全局时停：挑战计时器、技能冷却都停 1.3–1.5 秒，冻结记账（2-5）也算不进去。演出后紧跟按真实时间计时的动作（2-8 的固定时长普攻、按秒分组的爆发）时，传 `click_f=False`，击破留给切人时的 `f_break(check_f_on_switch=True)`（它的代价见 3-9）。注意治疗位 `check_f_on_switch` 为假，切人时不按 F。案例：弗坎嘉 v10 test_2142、v11 首版 test_2257，嘉贝莉娜 R 后爆发第 1 组被时停吃掉约 1.3 秒，协奏不满、无延奏切人。
-- **2-12** 日志 `cast … ok` 的含义由当前实现决定。先核对发送、生效、冷却和函数返回的对应关系，再选计时锚点，见 [timing.md §2](harness/timing.md)。历史案例中，弗洛洛 E 冷却首帧比 ok 早 0.16–0.34 秒；该值来自 v8 test_1644、v10 test_2142、v11 test_2257，用户于 2026-10-13 确认。不得把该偏移用于所有技能，也不得统一从参考时长扣除。
+- **2-12** 日志 `cast … ok` 的含义由当前实现决定。先核对发送、生效、冷却和函数返回的对应关系，再选计时锚点，见 [timing.md §2](guides/timing.md)。历史案例中，弗洛洛 E 冷却首帧比 ok 早 0.16–0.34 秒；该值来自 v8 test_1644、v10 test_2142、v11 test_2257，用户于 2026-10-13 确认。不得把该偏移用于所有技能，也不得统一从参考时长扣除。
 
 ### 3 切人
 
@@ -97,7 +97,7 @@ okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文�
   - 每场战斗的状态，在覆写的 `reset_state()` 里清（战斗结束和重新读队伍时都会调用）。
 - **3-9** 切人时框架会调出场角色的 `f_break(check_f_on_switch=True)`：有变奏时在发切人键**之前**（`BaseCombatTask.py:642-643`），无变奏时在认到换人**之后**（`:673-674`）。命中击破时 `task.f_break` 连按 F 加左键，直到认不到击破图标才返回，这时击破时停已近结束：v12 切人键在计时器恢复后约 0.1 秒发出，v13 坎 s1 开局的 `decide: break` 在恢复前 0.14–0.32 秒。所以有变奏的切人要等完整段演出：实测从切人日志行到技能栏换人约 1.8 秒，其中时停约 1.5 秒；没有击破时约 0.1 秒。出场节点靠切人取消最后一下的后摇（合轴）时，合轴会被这一段打断。不想在某个节点离场时击破，就覆写出场角色的 `f_break`，对该节点 `check_f_on_switch=True` 的调用返回 False（9b 是不分节点的版本）。案例：弗坎嘉 v12 test_0043 T1、T3。
 - **3-10** `task.can_break` 是粘滞标记：`check_f_break` 在战斗检查（`CombatCheck.py:145`）和 `cycle_sleep`（`BaseChar.py:184`）里认到 `f_break_full`（boss 血条左边的击破环满了）或击破图标就置真，之后只有 `task.f_break` 按过 F、或者战斗状态重置才清。认到以后如果没人按 F，比如离场的 `f_break` 被覆写跳过（3-9），或者 boss 没被击破就死了、换了场，这个旧标记会一直留到下一次 `f_break`。那时对着击破环是空的新 boss，照样连按 F 加左键至少 0.5 秒。节点里主动击破之前，先 `self.task.can_break = False`，只认当下的图标。切人流程中的击破调用遵守 3-9。真击破不受影响：`f_break_full` 每轮都能实时认到。案例：弗坎嘉 v13 test_0110 t2、t3。
-- **3-11** 生成代码前，按 [timeline.md](harness/timeline.md) 记录每次切人的类型、协奏状态、完成判据和 `allow_fill`。切人实现遵守 [step2.md §3](harness/step2.md)，不得默认补满协奏。实测按 `switch_next_char` 日志的 `has_intro`、`current_con` 逐条核对。案例：弗坎嘉 25 秒轴 v2 test_2304，弗洛洛强化重击后至少按住 1.0 秒再切，离场协奏 1，坎特蕾拉变奏入场，没打出普攻。参考视频第 6 音符到切人约 0.35 秒，用户于 2026-10-13 确认。
+- **3-11** 生成代码前，按 [timeline.md](guides/timeline.md) 记录每次切人的类型、协奏状态、完成判据和 `allow_fill`。切人实现遵守 [step2.md §3](guides/step2.md)，不得默认补满协奏。实测按 `switch_next_char` 日志的 `has_intro`、`current_con` 逐条核对。案例：弗坎嘉 25 秒轴 v2 test_2304，弗洛洛强化重击后至少按住 1.0 秒再切，离场协奏 1，坎特蕾拉变奏入场，没打出普攻。参考视频第 6 音符到切人约 0.35 秒，用户于 2026-10-13 确认。
 - **3-12** 节点要“打到能切某人就切”时，宜按框架选人的同一判据等：`self.task.wait_until(lambda: not self.task._target_has_switch_cd(target), post_action=self.click_with_interval, time_out=N)`，N 取 1.5–2.0 秒，超时记 fallback 照切。框架选人会滤掉离场不到 1 秒（扣冻结）的角色（`BaseCombatTask.py:456`），切早了认不到候选，只普攻 0.2 秒就返回（3-1）；改用固定时长普攻又要留余量，会多等。案例：弗坎嘉 25 秒轴坎特蕾拉 s2。v5 固定普攻 1.0 秒，切回时嘉贝莉娜已过切人冷却 0.41 秒和 1.64 秒。2.0.7 改成条件等，`attack_s` 1.02–1.04 秒，节点游戏时长 1.25 秒，参考 1.19 秒（test_2358；用户确认 2026-10-15）。
 
 ### 4 资源判断
@@ -192,7 +192,7 @@ okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文�
 
 ## 迭代工作流（日志 + 视频）
 
-流程与完成标准见 [harness/iterate.md](harness/iterate.md)。
+流程与完成标准见 [guides/iterate.md](guides/iterate.md)。
 按同一事件核对日志和录屏，先确认根因再改代码。
 每次试验隔离因果影响，未知保留缺项。
 知识使用边界见 [语义卡说明](knowledge/cards/README.md#使用边界)。

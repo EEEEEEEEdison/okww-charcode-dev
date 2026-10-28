@@ -13,12 +13,12 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 
 | 阶段 Skill | 进入条件 | 交付物 | 细则 |
 |---|---|---|---|
-| [`materials`](skills/materials/SKILL.md) 素材获取 | 有视频、文字轴或待整理来源 | `media/info.md`、原素材、质量限制 | [step1.md §1](harness/step1.md) |
-| [`rotation`](skills/rotation/SKILL.md) 轴解析 | 素材能覆盖选定片段 | G1 确认、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](harness/step1.md) |
-| [`timeline`](skills/timeline/SKILL.md) 时序建模 | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、G2 结果 | [step1.md §4–5、§7–8](harness/step1.md)、[timeline.md](harness/timeline.md) |
-| [`implementation`](skills/implementation/SKILL.md) 代码实现 | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](harness/step2.md) |
-| [`delivery`](skills/delivery/SKILL.md) 验证交付 | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](harness/step2.md) |
-| [`iteration`](skills/iteration/SKILL.md) 实测迭代 | 已有待测代码与测试目标，或有可定位版本的日志或录屏 | 测试证据、差异表、根因、下一版依据或验收结果 | [iterate.md](harness/iterate.md) |
+| [`materials`](skills/materials/SKILL.md) 素材获取 | 有视频、文字轴或待整理来源 | `media/info.md`、原素材、质量限制 | [step1.md §1](guides/step1.md) |
+| [`rotation`](skills/rotation/SKILL.md) 轴解析 | 素材能覆盖选定片段 | G1 确认、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](guides/step1.md) |
+| [`timeline`](skills/timeline/SKILL.md) 时序建模 | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、G2 结果 | [step1.md §4–5、§7–8](guides/step1.md)、[timeline.md](guides/timeline.md) |
+| [`implementation`](skills/implementation/SKILL.md) 代码实现 | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](guides/step2.md) |
+| [`delivery`](skills/delivery/SKILL.md) 验证交付 | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](guides/step2.md) |
+| [`iteration`](skills/iteration/SKILL.md) 实测迭代 | 已有待测代码与测试目标，或有可定位版本的日志或录屏 | 测试证据、差异表、根因、下一版依据或验收结果 | [iterate.md](guides/iterate.md) |
 | [`proposal`](skills/proposal/SKILL.md) 知识提议 | 实测得到可入卡的发现，或与现有卡冲突的已验证证据 | 提议文件、反馈结果 | [knowledge-maintenance.md §2–3](maintainer/knowledge-maintenance.md) |
 
 - 从中间阶段进入时，检查该阶段的输入和通过条件。
@@ -39,9 +39,9 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 
 ## 共用规范
 
-- 信息来源、证据、缺项分级和阶段交接见 [evidence.md](harness/evidence.md)。
-- 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
-- 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
+- 信息来源、证据、缺项分级和阶段交接见 [evidence.md](guides/evidence.md)。
+- 计时口径、参考耗时和实测差值见 [timing.md](guides/timing.md)。
+- 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](guides/baseline.md)。
 - 写或改游戏内日志时，按 [日志 Skill](skills/logging/SKILL.md) 写和检查。
 - 需要运行、采证或测试时，读取 [MCP Skill](skills/mcp/SKILL.md)，用 `templates/mcp/` 的模板自动实测。
 - 实测得到可入卡的发现时，按 [知识提议 Skill](skills/proposal/SKILL.md) 起草提议，由用户决定是否反馈。
@@ -64,7 +64,7 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 
 ```text
 <工作区>/<队名>/
-  harness-v<N>/   timeline.json、notes.md、baseline.md、角色代码、检查文件、team.json、README.md、zip
+  skilltest-v<N>/ timeline.json、notes.md、baseline.md、角色代码、检查文件、team.json、README.md、zip
   media/          info.md、原视频、口播或字幕、截图、取证脚本
   media/mcp/      templates/mcp/ 的副本和 mcp_test.json
 ```
@@ -75,7 +75,7 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 - 不得覆盖已有版本。
 - 媒体和本地配置不得提交到本仓库。
 
-本机路径保存在工作区根目录的 `okww-harness.local.md`。
+本机路径保存在工作区根目录的 `okwwcharcode.local.md`。
 只在所选阶段需要且无法从已有配置确定时提问。
 
 | 配置项 | 用途 |

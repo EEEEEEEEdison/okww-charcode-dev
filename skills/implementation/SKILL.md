@@ -12,11 +12,11 @@ description: okwwcharcode（ok-ww 角色代码开发）的代码实现阶段。�
 ## 执行
 
 1. 读取 [总入口](../../SKILL.md) 和 [rules.md](../../rules.md)。
-2. 读取涉及角色的语义卡和 [代码基线](../../harness/baseline.md)。
-3. 整队生成按 [step2.md §1–6](../../harness/step2.md) 实现。
+2. 读取涉及角色的语义卡和 [代码基线](../../guides/baseline.md)。
+3. 整队生成按 [step2.md §1–6](../../guides/step2.md) 实现。
 4. 局部修改检查直接调用者，核对函数判据和副作用。
 5. 读取 [日志 Skill](../logging/SKILL.md)，按其写日志。
-6. 按 [evidence.md §5](../../harness/evidence.md) 记录实现与假设。
+6. 按 [evidence.md §5](../../guides/evidence.md) 记录实现与假设。
 
 ## 输出与通过条件
 

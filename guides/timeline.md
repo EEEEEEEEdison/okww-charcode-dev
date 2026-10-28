@@ -1,6 +1,6 @@
 # timeline.json 格式与关口 G2
 
-每个案例维护 `<队名>/harness-v<N>/timeline.json`。
+每个案例维护 `<队名>/skilltest-v<N>/timeline.json`。
 该文件交接动作模型、证据、参考耗时和未知。
 由 Agent 维护并按本文件检查。
 
@@ -12,7 +12,7 @@
 ```json
 {
   "case": {
-    "team": "示例队", "version": "harness-v1",
+    "team": "示例队", "version": "skilltest-v1",
     "chars": ["Cantarella", "Galbrena", "Phrolova"],
     "goal": "复现选定启动轴与循环轴"
   },
