@@ -62,7 +62,8 @@ class Recorder:
             self.writer.write(self.last_img)
             self.written += 1
             self.padded += 1
-        self.last_img = cv2.resize(frame, self.size, interpolation=cv2.INTER_AREA)
+        # do_get_frame_wait 返回 BGRA，VideoWriter 会静默丢弃 4 通道帧，录像因此比墙钟短
+        self.last_img = cv2.resize(frame[:, :, :3], self.size, interpolation=cv2.INTER_AREA)
         self.writer.write(self.last_img)
         self.written += 1
 
