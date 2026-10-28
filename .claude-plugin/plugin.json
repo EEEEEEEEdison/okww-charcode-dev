@@ -1,6 +1,6 @@
 {
   "name": "okwwcharcode",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "ok-ww（鸣潮自动战斗脚本）角色代码开发：素材获取、轴解析、时序建模、代码实现、验证交付、实测迭代 6 个阶段 Skill、日志 Skill、MCP 辅助 Skill 和知识提议 Skill；支持直接测试已有角色代码的战斗逻辑。",
   "author": {
     "name": "EEEEEEEEdison"
