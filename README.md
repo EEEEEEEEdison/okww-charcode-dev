@@ -177,20 +177,21 @@ git switch --detach v0.3.0
 
 [日志 Skill](skills/logging/SKILL.md)（`logging`）跨阶段使用：代码实现时写日志，验证交付时用 `scripts/check_logs.py` 检查，实测迭代时按日志定位卡点。
 
-[MCP Skill](skills/mcp/SKILL.md)（`mcp`）跨阶段辅助运行与测试。
-Agent 按任务发现并读取当前 ok-ww 运行时的内置技能。
-覆盖以下操作：
+[MCP Skill](skills/mcp/SKILL.md)（`mcp`）通过 ok-ww MCP 全自动实测。
+Agent 把 `templates/mcp/` 的 Task 模板复制到工作区，用 `run_task` 依次提交：
 
-- 启动 ok-ww 与游戏。
-- 准备矩阵或深塔测试起点。
-- 入场选队：目标明确时，在进入副本前选择队伍或槽位，并读回核对。
-- 开战并核对首位角色。
-- 识别异常并将结果用于测试判断。
+- `preflight.py`：从登录页、菜单或矩阵区域回到大世界。
+- `team_import.py`：导入工坊 zip，备份旧代码，读回核对。
+- `matrix_nav.py`：从大世界或结算页导航到终焉矩阵编队详情页，不保存成绩。
+- `matrix_run.py`：核对编队，交互回音之钥开战，切开场角色并锁敌，自动战斗，实时录像。
 
-具体流程见 [MCP Skill](skills/mcp/SKILL.md) 和 [MCP 测试参考](references/mcp-testing.md)。
-实际操作路径必须按当前游戏界面与源码验证，不保证任意页面均已支持。
-未知界面需基于当前截图编写有界 Task。
-未实机验证的路径不得称为全自动可用。
+`scripts/mcp_report.py` 汇总日志和技能结果，并给每个问题行配录像帧。
+用户授权自主迭代时，Agent 在上限内重复“实测 → 分析 → 改代码 → 导入”。
+连续 2 局通过的版本才交给用户看录像。
+
+前提是 ok-ww 正式版已开启 MCP，并以管理员身份启动。
+已实机验证的场景只有终焉矩阵，见 [MCP 实测指引](references/mcp-testing.md)。
+其他场景需按当前截图补导航模板，未实机验证前不得称为全自动可用。
 
 [知识提议 Skill](skills/proposal/SKILL.md)（`proposal`）在实测迭代后使用，把可入卡的发现整理成提议。经用户同意后，提议反馈给维护者，见 [贡献知识](#贡献知识)。
 
@@ -296,7 +297,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [.claude-plugin/plugin.json](.claude-plugin/plugin.json) | Claude Code 插件清单；阶段注册为 `okwwcharcode:<阶段名>` |
 | [SKILL.md](SKILL.md) | 总入口、阶段路由、工作区与提问约定 |
 | `skills/*/SKILL.md` | 六个阶段、日志、MCP 和知识提议 Skill 的输入、任务、交付与退回条件 |
-| [skills/mcp/SKILL.md](skills/mcp/SKILL.md) | 跨阶段发现和使用 ok-ww 内置技能，准备测试与采证 |
+| [skills/mcp/SKILL.md](skills/mcp/SKILL.md) | 通过 ok-ww MCP 全自动实测与取证 |
 | [harness/evidence.md](harness/evidence.md) | 信息获取、证据、缺项分级和阶段交接 |
 | [harness/timing.md](harness/timing.md) | 计时口径、参考耗时、差值和时间验收 |
 | [harness/step1.md](harness/step1.md) | 素材、文字轴确认、画面取证与事件标记 |
@@ -312,12 +313,14 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [references/task-api.md](references/task-api.md) | `self.task.*` 与战斗检查 |
 | [references/self-impl-patterns.md](references/self-impl-patterns.md) | 框架函数不足时的实现经验 |
 | [references/logging.md](references/logging.md) | 英文日志模板、词表与参考实现 |
-| [references/mcp-testing.md](references/mcp-testing.md) | ok-ww 内置技能发现、测试场景准备和证据采集流程 |
+| [references/mcp-testing.md](references/mcp-testing.md) | MCP 实测前提、模板、矩阵页面、结果判读和故障处理 |
 | [references/workshop.md](references/workshop.md) | 工坊格式、循环轴骨架与案例 |
 | [templates/verify_chain.py](templates/verify_chain.py) | 静态交场链检查模板 |
 | [templates/knowledge-proposal.md](templates/knowledge-proposal.md) | 知识提议模板 |
+| [templates/mcp/](templates/mcp) | MCP 实测 Task 模板：回大世界、导入、矩阵导航、单局实测，参数在 `mcp_test.json` |
 | [scripts/pack_team.py](scripts/pack_team.py) | 打包 zip，并调用 ok-ww 的校验器 |
 | [scripts/check_logs.py](scripts/check_logs.py) | 按 logging.md 的词表和规则检查日志调用 |
+| [scripts/mcp_report.py](scripts/mcp_report.py) | 汇总一次 MCP 实测：日志切片、技能结果、问题行及录像帧 |
 | [scripts/submit_proposal.py](scripts/submit_proposal.py) | 检查知识提议，用 gh、浏览器或邮件反馈；可安装并登录 gh |
 
 下载、抽帧和分析脚本按任务编写，放在媒体目录或 scratchpad。
@@ -348,7 +351,7 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 版本记录
 
-- 未发布：新增 MCP 辅助技能与直接测试已有代码入口。
+- 未发布：MCP Skill 改为全自动实测，新增 `templates/mcp/` 模板和 `scripts/mcp_report.py`，已在终焉矩阵实机验证；实测迭代增加自主迭代上限。
 - 0.3.0：知识提议在 gh 未安装或未登录时提供“安装 gh 后反馈”，由 `submit_proposal.py --setup-gh` 安装并登录 gh。
 - 0.2.0：新增知识提议 Skill `proposal`。实测得到可入卡的发现时起草提议，经用户同意后用 gh、预填 Issue 页面或邮件反馈给维护者。
 - 0.1.0：总入口改名为 `okwwcharcode`，拆分出六个阶段 Skill；新增日志 Skill 和 `scripts/check_logs.py`；语义卡改为精简写法。Claude Code 以插件形式注册阶段。

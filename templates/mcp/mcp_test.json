@@ -1,0 +1,13 @@
+{
+  "team": ["Cantarella", "Phrolova", "Jinhsi"],
+  "opener": "Cantarella",
+  "zip": "",
+  "mode": "奇点扩张",
+  "slot_label": "04",
+  "save_result": false,
+  "switch_delay": 0.15,
+  "walk_time_out": 4,
+  "fight_cap": 260,
+  "end_out_of_team": 8,
+  "record": {"fps": 15, "size": [960, 540]}
+}

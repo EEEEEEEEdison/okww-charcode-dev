@@ -1,6 +1,6 @@
 ---
 name: okwwcharcode
-description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发与实测 Skill 总入口。支持按文字轴、教程视频生成工坊配队代码，也支持直接测试已有代码的战斗逻辑。按任务选择 6 个阶段：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代。mcp 跨阶段发现并使用内置技能，指导程序与游戏启动、场景导航、入场选队和自动测试。logging 负责日志写法与检查。proposal 把实测发现整理成知识提议。适用于作战轴转代码、BaseChar、src/char、协奏切人和技能触发。支持循环轴、工坊代码、team.json、日志录像排错与测试结果分析。
+description: okwwcharcode：ok-ww（ok-wuthering-waves，鸣潮自动战斗脚本）角色代码开发与实测 Skill 总入口。支持按文字轴、教程视频生成工坊配队代码，也支持直接测试已有代码的战斗逻辑。按任务选择 6 个阶段：materials 素材获取、rotation 轴解析、timeline 时序建模、implementation 代码实现、delivery 验证交付、iteration 实测迭代。mcp 通过 ok-ww MCP 全自动实测：回大世界、导入代码、导航到终焉矩阵、开战、录像和生成报告。logging 负责日志写法与检查。proposal 把实测发现整理成知识提议。适用于作战轴转代码、BaseChar、src/char、协奏切人和技能触发。支持循环轴、工坊代码、team.json、日志录像排错与测试结果分析。
 ---
 
 # okwwcharcode
@@ -43,7 +43,7 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 - 计时口径、参考耗时和实测差值见 [timing.md](harness/timing.md)。
 - 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](harness/baseline.md)。
 - 写或改游戏内日志时，按 [日志 Skill](skills/logging/SKILL.md) 写和检查。
-- 需要运行、采证、测试或评估时，读取 [MCP Skill](skills/mcp/SKILL.md)，发现并使用当前运行时的内置技能。
+- 需要运行、采证或测试时，读取 [MCP Skill](skills/mcp/SKILL.md)，用 `templates/mcp/` 的模板自动实测。
 - 实测得到可入卡的发现时，按 [知识提议 Skill](skills/proposal/SKILL.md) 起草提议，由用户决定是否反馈。
 - 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
 - 语义卡的读取、冲突记录和安装目录边界见 [knowledge/cards/README.md](knowledge/cards/README.md)。
@@ -66,6 +66,7 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 <工作区>/<队名>/
   harness-v<N>/   timeline.json、notes.md、baseline.md、角色代码、检查文件、team.json、README.md、zip
   media/          info.md、原视频、口播或字幕、截图、取证脚本
+  media/mcp/      templates/mcp/ 的副本和 mcp_test.json
 ```
 
 - 开始前读取工作区的 `AGENTS.md` 和 `CLAUDE.md`。
