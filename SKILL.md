@@ -78,6 +78,7 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
   skilltest-v<N>/ timeline.json、notes.md、baseline.md、角色代码、检查文件、team.json、README.md、zip
   media/          info.md、原视频、口播或字幕、截图、取证脚本
   media/mcp/      templates/mcp/ 的副本和 mcp_test.json
+  knowledge-candidates.md  知识候选清单，跨版本累计，见 guides/iterate.md §5
 ```
 
 - 开始前读取工作区的 `AGENTS.md` 和 `CLAUDE.md`。

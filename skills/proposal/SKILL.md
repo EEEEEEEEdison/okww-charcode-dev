@@ -7,12 +7,12 @@ description: okwwcharcode（ok-ww 角色代码开发）的知识提议阶段。�
 
 ## 输入
 
-本案 `notes.md`、`timeline.json.issues`、当前语义卡，以及本轮实测结论。
+本案 `knowledge-candidates.md`、`notes.md`、`timeline.json.issues`、当前语义卡，以及本轮实测结论。
 
 ## 执行
 
 1. 读取 [knowledge-maintenance.md §2–3](../../maintainer/knowledge-maintenance.md) 的入卡条件和条目写法。
-2. 从本案挑出候选。候选必须满足入卡条件，并有可定位的证据。
+2. 从本案挑出候选：先取 `knowledge-candidates.md` 中处理状态为“待处理”的条目，再补本轮的新结论。候选必须满足入卡条件，并有可定位的证据。不满足的条目，在清单里写明不提议的原因。
 3. 没有候选时，说明原因并结束，不生成文件，不提问。
 4. 按 [提议模板](../../templates/knowledge-proposal.md) 逐条填写。原文照抄当前卡片，版本号取 [VERSION](../../VERSION)。
 5. 脱敏：本机路径改为 `<工作区>`、`<ok-ww>` 等占位，删除用户名、账号、邮箱和令牌。视频只写链接和时刻。
@@ -44,6 +44,7 @@ description: okwwcharcode（ok-ww 角色代码开发）的知识提议阶段。�
 - 用户只被问一次，且回答前没有提交任何内容。
 - 反馈后告诉用户 Issue 链接，或页面已打开待提交，或邮件发送信息。
 - 安装或登录 gh 前，用户已在题干中看到权限、令牌位置和撤销方法。
+- `knowledge-candidates.md` 中本次处理的条目已写明处理结果。
 - 未经维护者审核的提议不得写入语义卡。
 
 需要补证据时，退回 [实测迭代](../iteration/SKILL.md)。
