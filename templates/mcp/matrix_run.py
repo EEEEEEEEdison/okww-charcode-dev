@@ -28,12 +28,12 @@ def local_time(ts):
 class Recorder:
     """后台线程把画面写成实时 mp4：视频第 i 帧对应 video_start + i / fps。
 
-    主要读执行器的帧快照。补帧会持有采集锁，任务此时取帧拿到空帧，TaskExecutor.next_frame
-    随即 sleep 1 s，角色操作因此卡顿。所以只在执行器 sleep 且剩余不少于 FILL_IDLE 秒时补帧，
-    持锁不超过 FILL_BUDGET 秒。两帧之间的空档用上一帧补齐。
+    主要读执行器的帧快照。任务超过 FILL_AFTER 秒没取帧（sleep、长等待）时，
+    向采集后端补取一帧；后端正忙就跳过。两帧之间的空档用上一帧补齐。
+    补帧期间任务取帧要等锁，依赖 ok-script 82a37cc（PR #115）：next_frame 最多等锁 0.1 s。
+    框架没有这个提交时，next_frame 撞上补帧会停 1 s。
     """
-    FILL_BUDGET = 0.1
-    FILL_IDLE = 0.2
+    FILL_AFTER = 0.2
 
     def __init__(self, executor, out_dir, fps, size):
         self.executor, self.fps, self.size = executor, fps, tuple(size)
@@ -44,19 +44,12 @@ class Recorder:
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self._loop, daemon=True)
 
-    def _idle_left(self):
-        ex = self.executor
-        # sleep_check_interval >= 0 的任务在 sleep 期间也会取帧，不能补
-        if getattr(ex.current_task, 'sleep_check_interval', -1) >= 0:
-            return 0
-        return getattr(ex, 'pause_end_time', 0) - time.time()
-
     def _grab(self):
-        grab = getattr(self.executor.method, 'get_frame_for_probe', None)
-        if grab is None or self._idle_left() < self.FILL_IDLE:
+        grab = getattr(self.executor.method, 'do_get_frame_wait', None)
+        if grab is None:
             return None
         try:
-            return grab(self.FILL_BUDGET)
+            return grab(0)
         except Exception:
             return None
 
@@ -71,7 +64,7 @@ class Recorder:
             self.writer.write(self.last_img)
             self.written += 1
             self.padded += 1
-        # get_frame_for_probe 返回 BGRA，VideoWriter 会静默丢弃 4 通道帧，录像因此比墙钟短
+        # do_get_frame_wait 返回 BGRA，VideoWriter 会静默丢弃 4 通道帧，录像因此比墙钟短
         self.last_img = cv2.resize(frame[:, :, :3], self.size, interpolation=cv2.INTER_AREA)
         self.writer.write(self.last_img)
         self.written += 1
@@ -84,7 +77,7 @@ class Recorder:
             if snap is not None and snap[1] != last_seen:
                 last_seen = snap[1]
                 self._push(snap[0], snap[1])
-            elif self.t0 is not None and now - max(self.seen[-1], last_try) > 1 / self.fps:
+            elif self.t0 is not None and now - max(self.seen[-1], last_try) > self.FILL_AFTER:
                 last_try = now
                 frame = self._grab()
                 if frame is not None:
