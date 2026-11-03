@@ -9,12 +9,20 @@ ok-ww 的 MCP 不需要额外安装脚本。
 
 | 项 | 要求 |
 |---|---|
-| ok-ww | 正式版 v3.7.12 及以上，设置里已开启 MCP；`working/ok/task/TaskExecutor.py` 含 `NEXT_FRAME_BUSY_WAIT`（ok-script 82a37cc） |
+| ok-ww | v3.7.14-beta.2 及以上，设置里已开启 MCP；带的 ok-script 版本见下文 |
 | 启动方式 | 必须经 `ok-ww.exe` 以管理员身份启动 |
 | 宿主 | 已配置 ok-ww MCP 连接，能调用 `run_task`、`get_run_status` |
 | 游戏 | 分辨率 16:9；矩阵已解锁 |
 | 编队 | 用户已把测试队伍编进矩阵的一个队伍，1 号位是开场角色 |
 | 本机路径 | 工作区 `okwwcharcode.local.md` 里的 `working` 目录和 Python |
+
+ok-ww 带的 ok-script 必须是 2.0.21 及以上，含以下两处修复：
+
+- 82a37cc（PR #115）：取帧撞上录像补帧时最多等 0.1 秒。开启录像而缺少这处修复时，切人会多出约 1 秒。
+- PR #117：MCP 局照常写 `working/logs/ok-script.log`。缺少这处修复时，`mcp_report.py` 读不到日志。
+
+正式版 v3.7.13 带 ok-script 2.0.20，缺 PR #117。v3.7.14-beta.2 带 2.0.22，已实测。
+v3.7.14-beta.3 起改用 ok-script 3.0.0b3，模板尚未实测。
 
 非管理员实例在游戏未运行时不能启动游戏。
 这时 `run_task` 在 `preparing` 阶段失败，报 `Target device could not be started`。
@@ -47,7 +55,7 @@ ok-ww 的 MCP 不需要额外安装脚本。
 | `preflight.py` | 登录页、公告、菜单、矩阵区域 | 大世界 | `steps.json`、各步截图 | 无 |
 | `team_import.py` | 任意 | 不变 | `import.json`、旧队伍目录备份 | 覆盖已装的队伍代码 |
 | `matrix_nav.py` | 大世界、指南、矩阵各页、结算页 | 测试队伍的编队详情页 | `target.json`（模板目录）、`nav.json`、各步截图 | 无 |
-| `matrix_run.py` | 测试队伍的编队详情页 | 矩阵结算页 | `summary.json`、`steps.json`、`record.mp4`、节点截图 | 每局 1 点结晶单质（“前往”旁的 ⚡1） |
+| `matrix_run.py` | 测试队伍的编队详情页 | 矩阵结算页 | `summary.json`、`steps.json`、节点截图；开启录像时另有 `record.mp4` | 每局 1 点结晶单质（“前往”旁的 ⚡1） |
 
 分析脚本是 `scripts/mcp_report.py`，用 ok-ww 的 Python 运行，见 §6。
 
@@ -80,9 +88,24 @@ ok-ww 的 MCP 不需要额外安装脚本。
 | `walk_time_out` | 走向回音之钥的上限秒数 | `matrix_run.py` |
 | `fight_cap` | 从任务开始算的战斗上限秒数 | `matrix_run.py` |
 | `end_out_of_team` | 队伍 HUD 连续消失多少秒判为结算 | `matrix_run.py` |
-| `record` | 录像帧率与尺寸 | `matrix_run.py` |
+| `record` | `enabled` 是否录像，默认 `true`；`fps`、`size` 是录像帧率与尺寸 | `matrix_run.py` |
 
 `switch_delay` 0.15 秒来自今弗坎队的实测。其他队伍必须先按录屏核对。
+
+### 3.2 录像开关
+
+以下情况可把 `record.enabled` 设为 `false`：
+
+- 只测稳定性；
+- 本局只比较日志里的耗时、判定和问题行条数。
+
+以下情况必须开启录像：
+
+- 排查问题；
+- 要交给用户查看的局。
+
+原因：问题可能只在某一局出现。不录像就看不到当时的画面，重跑也不一定复现。
+关闭录像后，`summary.json` 没有 `recorder`，报告没有录像秒数和拼图。
 
 ## 4 一局测试流程
 
@@ -207,7 +230,7 @@ OCR 识别要点：
 - 运行状态、队伍、版本、各角色代码 sha256 前 16 位、队伍得分；
 - 每个角色每种技能的 `ok` / `fail` 次数；
 - 问题行：`fail`、`fallback`、`interrupt`、warning 及以上级别、脱战；
-- 每个问题行的录像秒数与 4 帧拼图；
+- 开启录像时，每个问题行的录像秒数与 4 帧拼图；
 - 启动轴耗时和各循环轮墙钟耗时。
 
 判读顺序：
@@ -286,3 +309,13 @@ shell 读 `working/configs/custom_teams/` 会被拒绝访问。
 | 编队只读 | 读完成员按 ESC 后，04 号队编队不变（截图核对） |
 | 第 4 局 | 按 `target.json` 开战；大厅在场为今汐，切到坎特蕾拉成功，得分 4557 |
 | 结算后回详情页 | 取消保存后回到 04 号详情页，读回成员相符；总积分 27209 和 8488 未变 |
+
+2026-10-29 至 11-02，今弗坎队 2.0.6.10–2.0.6.14，`matrix_run.py` 为 01f0eff 版：
+
+| 环境 | 结果 |
+|---|---|
+| ok-ww 3.7.12，本机补 82a37cc，5 局 | 不含重新锁敌的切人都短于 0.9 秒；mp4 帧数等于 `written` |
+| ok-ww 3.7.13 官方版，5 局 | 结果同上；MCP 局 `ok-script.log` 停写，报告只能读秒级的 `run.log` |
+| ok-ww 3.7.14-beta.2，20 局 | `ok-script.log` 持续写入毫秒行，PR #117 生效 |
+
+`record.enabled` 为 `false` 的分支只做了离线检查，尚未实机运行。

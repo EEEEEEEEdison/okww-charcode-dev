@@ -147,8 +147,8 @@ def main():
              f"- 状态：{status['state']}；错误：{status.get('error') or '无'}；战斗上限超时：{summary.get('timeout', False)}",
              f"- 队伍：{summary.get('team')}；版本：{summary.get('manifest')}；代码：{codes}",
              f"- 队伍得分：{summary.get('team_score')}；战斗段数：{summary.get('fights')}",
-             f"- 录像：{rec.get('written')} 帧 / {fps} fps，补齐 {rec.get('padded')} 帧，"
-             f"最大采集空档 {rec.get('max_gap')} 秒（>0.5 秒共 {len(gaps)} 处）",
+             (f"- 录像：{rec.get('written')} 帧 / {fps} fps，补齐 {rec.get('padded')} 帧，"
+              f"最大采集空档 {rec.get('max_gap')} 秒（>0.5 秒共 {len(gaps)} 处）" if rec else '- 录像：未开启'),
              f"- 启动轴 {stats['startup_s']} 秒；循环起点 {stats['loop_start']}；各轮墙钟 {stats['rounds']}",
              f"- 节点 {len(nodes)} 个；问题行 {len(issues)} 条", '', '## 技能结果', '']
     lines += [f'- {k}: ok {v["ok"]} / fail {v["fail"]}' for k, v in sorted(casts.items())]

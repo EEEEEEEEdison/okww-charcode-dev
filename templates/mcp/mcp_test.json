@@ -8,5 +8,5 @@
   "walk_time_out": 4,
   "fight_cap": 260,
   "end_out_of_team": 8,
-  "record": {"fps": 15, "size": [960, 540]}
+  "record": {"enabled": true, "fps": 15, "size": [960, 540]}
 }

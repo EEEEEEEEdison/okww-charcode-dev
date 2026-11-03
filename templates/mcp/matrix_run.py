@@ -1,6 +1,6 @@
 """终焉矩阵单局实测：编队详情页 → 前往 → 大厅核对队伍与代码 → 交互回音之钥开战 → 切开场角色 → 锁敌 → 自动战斗 → 结算页停下。
 
-参数读同目录 mcp_test.json；槽位、队伍和开场角色读 matrix_nav.py 写的 target.json。全程后台录像（record.mp4，实时），节点留帧写 steps.json，汇总写 summary.json。
+参数读同目录 mcp_test.json；槽位、队伍和开场角色读 matrix_nav.py 写的 target.json。record.enabled 不为 false 时全程后台录像（record.mp4，实时），节点留帧写 steps.json，汇总写 summary.json。
 结算页不点任何按钮；离开结算页和是否保存成绩由 matrix_nav.py 处理。
 """
 import hashlib
@@ -148,8 +148,10 @@ class Task(BaseTask):
         self.out, self.steps, self.t0 = Path(self.artifact_directory), [], time.time()
         combat = self.get_task_by_class(AutoCombatTask)
         rec_cfg = CONFIG.get('record', {})
-        recorder = Recorder(self.executor, self.out, rec_cfg.get('fps', 15), rec_cfg.get('size', [960, 540]))
-        recorder.start()
+        recorder = None
+        if rec_cfg.get('enabled', True):
+            recorder = Recorder(self.executor, self.out, rec_cfg.get('fps', 15), rec_cfg.get('size', [960, 540]))
+            recorder.start()
         manifest = loader.read_team_manifest(TARGET['team']) or {}
         summary = {'config': CONFIG, 'target': TARGET, 'started': local_time(self.t0),
                    'manifest': {k: manifest.get(k) for k in ('version', 'code_mode')}}
@@ -208,7 +210,8 @@ class Task(BaseTask):
             if '队伍得分' in texts and texts.index('队伍得分') + 1 < len(texts):
                 summary['team_score'] = texts[texts.index('队伍得分') + 1]
         finally:
-            summary['recorder'] = recorder.stop()
+            if recorder:
+                summary['recorder'] = recorder.stop()
             summary['finished'] = local_time(time.time())
             (self.out / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=1), encoding='utf-8')
         assert not summary.get('timeout'), 'fight cap reached'

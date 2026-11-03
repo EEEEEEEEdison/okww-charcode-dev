@@ -22,7 +22,7 @@ description: okwwcharcode 的 MCP 自动实测 Skill：通过 ok-ww MCP 的 run_
 
 1. 读取 [总入口](../../SKILL.md) 和 [实测操作指引](../../references/mcp-testing.md)。
 2. 按指引 §2 检查 MCP 连接，读取 ok-ww 内置的 `develop` 技能。
-3. 按指引 §3 把 `templates/mcp/` 复制到 `<工作区>/<队名>/media/mcp/`，填写 `mcp_test.json`。
+3. 按指引 §3 把 `templates/mcp/` 复制到 `<工作区>/<队名>/media/mcp/`，填写 `mcp_test.json`。按指引 §3.2 决定本局是否录像。
 4. 按指引 §4 依次运行 `preflight.py`、`team_import.py`、`matrix_nav.py` 和 `matrix_run.py`。`matrix_nav.py` 在矩阵里找到测试队伍。
 5. 用 `scripts/mcp_report.py --frames` 生成报告，按指引 §6 判读。
 6. 把报告和结论交给 [实测迭代](../iteration/SKILL.md)。
