@@ -32,6 +32,7 @@
 | 单个角色与共鸣链 | `knowledge/cards/<类名>_C<共鸣链>.md` |
 | 所有角色通用的写法 | [rules.md](../rules.md) 对应分组 |
 | 与角色无关的游戏常识 | [basics.md](../knowledge/basics.md) |
+| 动作帧数、中断优先级、能量回收和输入缓存 | 不入卡；由数据汇总生成到 `knowledge/frames/`，见 §7 |
 | 只适用当前轴或仍需验证 | 用户工作区的本案 `notes.md` |
 
 ## 3 起草与确认
@@ -135,3 +136,25 @@ gh issue view <编号> --repo EEEEEEEEdison/okww-charcode-dev --comments
 5. 用户确认后回复并关闭 Issue。邮件来源由维护者自行回复。
 
 提议的证据保留在 Issue 或邮件附件中，不写进卡片。
+
+## 7 帧数据更新
+
+帧数据来自维护者提供的《鸣潮数据汇总》xlsx，是可信资料，不必实测验证。
+xlsx 不得提交到仓库。仓库只保存生成的 Markdown。
+
+拿到新版数据汇总时：
+
+1. 运行生成脚本。ok-ww 自带的 Python 即可，不需要另装依赖：
+
+   ```sh
+   <ok-ww 的 python.exe> -I -B maintainer/build_frames.py <xlsx 路径>
+   ```
+
+2. 脚本报“名称不在 CHAR_FILES、SKIP_CHARS 或 LABELS 中”时，按框架的角色类名补 `CHAR_FILES`。框架没有对应类的名称补进 `SKIP_CHARS`。补完后重新运行。
+3. 输出列出“没有输入缓存的文件”或“未识别的名称”时，补别名后重新运行。别名照数据汇总附页 2 的写法。
+4. 用 `git diff --stat knowledge/frames` 查看改动的文件。抽查 1 个改动角色的派生帧、动作结束帧与数据汇总一致。
+5. 帧数据与语义卡的条目冲突时，按 §3 修正卡片，逐条确认。
+
+生成的文件第一行带生成标记，不得手改。
+脚本只删除带生成标记的文件，`README.md` 由维护者手写。
+数据汇总改了列名或附页结构时，先改脚本，再生成。

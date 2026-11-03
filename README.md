@@ -318,7 +318,9 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 | [guides/iterate.md](guides/iterate.md) | 日志录像比较、根因、修改和复验 |
 | [knowledge/basics.md](knowledge/basics.md) | 游戏操作、记号和画面识别知识 |
 | [knowledge/cards/README.md](knowledge/cards/README.md) | 语义卡读取、适用条件与知识使用边界 |
-| [maintainer/knowledge-maintenance.md](maintainer/knowledge-maintenance.md) | 维护者的补卡、确认与知识审核规则 |
+| [knowledge/frames/README.md](knowledge/frames/README.md) | 角色帧数据：动作帧数、中断优先级、离场规则和输入缓存 |
+| [maintainer/knowledge-maintenance.md](maintainer/knowledge-maintenance.md) | 维护者的补卡、确认、知识审核和帧数据更新规则 |
+| [maintainer/build_frames.py](maintainer/build_frames.py) | 从《鸣潮数据汇总》xlsx 生成 `knowledge/frames/` |
 | [rules.md](rules.md) | 代码规则、API 选择、日志和循环轴约束 |
 | [references/basechar-api.md](references/basechar-api.md) | `BaseChar` API 与成员索引 |
 | [references/task-api.md](references/task-api.md) | `self.task.*` 与战斗检查 |

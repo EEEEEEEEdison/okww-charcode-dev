@@ -52,12 +52,13 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 
 - 信息来源、证据、缺项分级和阶段交接见 [evidence.md](guides/evidence.md)。
 - 计时口径、参考耗时和实测差值见 [timing.md](guides/timing.md)。
-- 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡和 [代码基线](guides/baseline.md)。
+- 代码遵守 [rules.md](rules.md)。涉及角色时，先读语义卡、帧数据和 [代码基线](guides/baseline.md)。
 - 写或改游戏内日志时，按 [日志 Skill](skills/logging/SKILL.md) 写和检查。
 - 需要运行、采证或测试时，读取 [MCP Skill](skills/mcp/SKILL.md)，用 `templates/mcp/` 的模板自动实测。
 - 实测得到可入卡的发现时，按 [知识提议 Skill](skills/proposal/SKILL.md) 起草提议，由用户决定是否反馈。
 - 游戏常识见 [knowledge/basics.md](knowledge/basics.md)。
 - 语义卡的读取、冲突记录和安装目录边界见 [knowledge/cards/README.md](knowledge/cards/README.md)。
+- 帧数据的列含义、衔接与离场规则和使用规则见 [knowledge/frames/README.md](knowledge/frames/README.md)。
 
 ## 执行原则
 

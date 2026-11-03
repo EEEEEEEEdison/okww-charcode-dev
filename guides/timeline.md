@@ -146,7 +146,7 @@
 | `steps[].depends_on` | 依赖的节点、步骤或判断编号；无依赖为 `[]` |
 | `steps[].wait` | 正数 `timeout_s`、依据 `basis`、超时处理 `on_timeout` |
 | `steps[].evidence.grade` | A/B/C/D/none，含义见 evidence.md §3 |
-| `steps[].decided_by` | `video` / `card` / `user` / `text`；决定来自何处，不表示机制已实测 |
+| `steps[].decided_by` | `video` / `card` / `frame` / `user` / `text`；决定来自何处，`frame` 指帧数据；不表示机制已实测 |
 | `steps[].decision_refs` | 解释该动作的 `decisions` 编号 |
 
 `t_start`、`t_end`、`evidence.at` 及 `freeze_intervals` 均为原视频秒数。

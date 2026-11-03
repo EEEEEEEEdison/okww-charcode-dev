@@ -30,7 +30,7 @@ okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文�
 
 ## 决策阶梯
 
-0. **先看前人怎么写**：改动涉及某个角色时，先读它的语义卡和代码基线（[guides/baseline.md](guides/baseline.md)）。
+0. **先看前人怎么写**：改动涉及某个角色时，先读它的语义卡、帧数据（[knowledge/frames](knowledge/frames/README.md)）和代码基线（[guides/baseline.md](guides/baseline.md)）。
 1. **先找内置函数**：查 [references/basechar-api.md](references/basechar-api.md)（角色侧）和 [references/task-api.md](references/task-api.md)（`self.task.*`）。
 2. **内置不够**时（内置模式先讨论），按 **5-1** 的顺序自实现：
    1. 内置 HUD 识别（`*_available`、`current_*`、`in_team`、回路、协奏）；
