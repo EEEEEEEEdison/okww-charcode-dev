@@ -128,7 +128,7 @@ okwwcharcode Skill 的代码规则。代码实现和实测修改都依照本文�
   | 声骸 | `not echo_available()` |
 
   E 的确认信号只适用于放完必进冷却的技能。放完后图标变成另一个无冷却可用技能的（多段、终结后回到普通技能），连按到冷却出现会把下一个也放出来，这类只按一次。案例：弗坎嘉 25 秒轴 v1 test_2216，坎特蕾拉终结技能放完图标回到普通 E，连按多放了一个普通 E（用户确认 2026-10-13）。
-- **5-4** 手写的按住操作（`mouse_down`、`send_key_down`）放进 try/finally，在 finally 里松开。
+- **5-4** 手写的按住操作（`mouse_down`、`send_key_down`）放进 try/finally，在 finally 里松开。按住期间不宜调用其他发键或点击函数。原因：PostMessage 后端的 `send_key_down`、`mouse_down`、`click` 每次都先向游戏窗口发 `WM_ACTIVATE`，可能打断按住（未确认）。
 - **5-5** 自定义识别自由度高，有两种做法：
   - 颜色占比：`box_of_screen_scaled(...)` + `calculate_color_percentage` + 阈值。比例打 debug 日志，颜色优先复用框架已有的；
   - 模板：只限内置代码 PR，按项目的模板流程提交。

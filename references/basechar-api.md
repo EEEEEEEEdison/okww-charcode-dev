@@ -502,7 +502,7 @@ send_liberation_key(after_sleep=0, interval=-1, down_time=0.01)
 | `f_break(check_f_on_switch=False, force=False)` | `:1003` | F 处决。`force=True` 先补按一次 F；`check_f_on_switch=True` 且本角色 `check_f_on_switch` 为假时返回 False；然后调用 `task.f_break()`（检测到可处决时连按 F，最长 5 秒）。切人时 task 会自动调用 |
 | `check_outro()` | `:933` | 带入场时，返回最近下场的队友 `char_name`（视为延奏来源），否则返回 `'null'`；会打 info |
 | `is_first_engage()` | `:952` | 本次上场是否就是开战时的首发（`last_perform - combat_start < 0.4`）；会打 info |
-| `has_buff()` / `has_all_buff()` / `buff_time` | `:154` / `:158` / `:151` | 由 `CharFactory` 按定位配置；task 选人时使用 |
+| `has_buff()` / `has_all_buff()` / `buff_time` | `:154` / `:158` / `:151` | 由 `CharFactory` 按角色配置，默认 14 秒，治疗 28 秒；task 选人时使用 |
 | `char_type` / `is_healer` / `is_main_dps` / `is_sub_dps` | `:124-145` | 定位来自配置，不要写死 |
 | `skip_combat_check()` | `:191` | 默认 False；返回 True 时，task 的战斗检查直接视为在战斗中（`CombatCheck.py:147`）。工坊可选案例见 workshop.md |
 | `use_tool_box()` | `:199` | 有工具箱标记时按工具键 |

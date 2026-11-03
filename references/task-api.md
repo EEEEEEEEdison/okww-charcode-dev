@@ -316,7 +316,7 @@
 位置：`BaseCombatTask.py:730` / `:192` / `:156`。
 
 - `refresh_cd()`：每个场景（帧）最多执行一次。它 OCR 技能栏的 3 个 CD 数字，存进 `cds[当前角色 index]`，并带上时间戳。
-- `get_cd()`：返回存下的 CD 减去扣冻结后的经过时间。查询不在场角色时（传入 `char_index`），用的就是这份推算值。
+- `get_cd()`：返回存下的 CD 减去扣冻结后的经过时间。查询不在场角色时（传入 `char_index`），用的就是这份推算值。CD 走完后继续减，返回负数，不截到 0。
 - `has_cd()`：等于 `get_cd() > 0.2`。
 
 调用者：
@@ -361,5 +361,6 @@ task 侧**不写** `char.current_con`。角色代码用 `self.get_current_con()`
 | `log_error(message, exception=None, notify=False, ...)` / `log_info` | 任务级日志，会显示在 GUI 中。**角色代码用 `self.logger`**，不用这两个 |
 | `info_set(key, value)` | 往 GUI 信息面板写值 |
 | `char_config` | 角色配置 |
-| `f_break()` / `check_f_break()` / `can_break` | 处决检测与执行（`CombatCheck.py:81-103`） |
+| `f_break()` / `check_f_break()` / `can_break` | 处决检测与执行（`CombatCheck.py:81-103`）。`check_f_break()` 每次都找 `f_break_full`；屏幕中央的处决图标每秒最多找一次，大招演出期间不找 |
 | `get_target_names()` | 有目标 / 无目标模板名，会按云游戏和 1600 宽度调整 |
+| `has_target(double_check=False)` | 是否锁定了目标。常规区域都没认到、只在放大区域认到时，先停 1 秒再判一次；仍是这样且 `esc_count` 为 0 时，连按两次 ESC（之后各停 2 秒、1.5 秒）并返回 False。角色代码不宜直接调用 |
