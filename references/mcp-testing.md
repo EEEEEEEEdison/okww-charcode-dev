@@ -283,7 +283,7 @@ shell 读 `working/configs/custom_teams/` 会被拒绝访问。
 | `preparing` 阶段报 `Target device could not be started` | ok-ww 不是管理员实例，游戏未运行 | 请用户以管理员身份重启 ok-ww |
 | `preparing` 卡约 120 秒，日志刷 `capture_by_bitblt invalid params: hwnd=0` | 游戏窗口最小化，ok-ww 判为未连接，走启动游戏分支 | 恢复窗口后重跑。`stop_task` 要等 `start_timeout` 到时才结束 |
 | `verify_start_state` 失败 | 起点页面不对 | 先运行 `matrix_nav.py` 或 `preflight.py` |
-| `no import entry` | 宿主没有注册“角色代码”页签，也没有提供该页签的插件；或 `CustomCharLoader` 不存在 | 停止，不得绕过。提示用户在插件页选择“从 ZIP 添加”，安装 `character_code_tab` 并重启 ok-ww，或换用 v3.7.14 及以前的版本。插件下载地址：【待补：`character_code_tab` 的发布地址】 |
+| `no import entry` | 宿主没有注册“角色代码”页签，也没有提供该页签的插件；或 `CustomCharLoader` 不存在 | 停止，不得绕过。提示用户在插件页选择“从 ZIP 添加”，安装 `character_code_tab` 并重启 ok-ww，或换用 v3.7.14 及以前的版本。本指引不收录该 zip 的下载地址。 |
 | `opener unknown` | team.json 没写“一号位”，`opener` 也为空 | 问用户一次开场角色，填进 `opener` |
 | `no slot has team` | 矩阵里没有成员相符的队伍 | 停止；请用户编好队伍，1 号位放开场角色 |
 | `save_result needs slot` | 要保存成绩，但测试队伍之后还有记录 | 停止，问用户改测哪一队 |
