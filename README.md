@@ -10,7 +10,7 @@
 [总入口 SKILL.md](SKILL.md) 按任务和已有产物选择阶段。
 各阶段共用证据、代码、时间测量和验收规则。
 已有确认仍适用时，直接沿用；缺少前提时，返回对应阶段补齐。
-版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.6.0`。各版本的变化见 [版本记录](#版本记录)。
+版本号见 [VERSION](VERSION)。指定版本通过 `v<版本号>` 标签安装，例如 `v0.7.0`。各版本的变化见 [版本记录](#版本记录)。
 普通开发只读取随版本提供的知识；知识维护由独立入口处理。
 
 ## 准备
@@ -27,12 +27,12 @@
 ## 安装
 
 GitHub 的正式版本标签固定指向对应提交。
-例如，“安装 0.6.0 版本”表示安装 `v0.6.0` 标签的内容。
+例如，“安装 0.7.0 版本”表示安装 `v0.7.0` 标签的内容。
 安装不依赖专用 zip，不能用默认分支代替指定版本。
 
 可向 Agent 提出：
 
-> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.6.0。
+> 安装 EEEEEEEEdison/okww-charcode-dev 的 v0.7.0。
 > 按该标签的 README 安装，并核对版本、加载路径和重复副本。
 
 安装目录名必须为 `okwwcharcode`，与总入口的 `name` 一致。
@@ -41,10 +41,10 @@ GitHub 的正式版本标签固定指向对应提交。
 
 ```sh
 # Claude Code
-git clone --branch v0.6.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
+git clone --branch v0.7.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.claude/skills/okwwcharcode"
 
 # pi
-git clone --branch v0.6.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
+git clone --branch v0.7.0 --depth 1 https://github.com/EEEEEEEEdison/okww-charcode-dev.git "$HOME/.pi/agent/skills/okwwcharcode"
 ```
 
 其他宿主克隆到宿主的 Skill 目录，目录名同样用 `okwwcharcode`。
@@ -101,14 +101,14 @@ pi 扫描到含 `SKILL.md` 的目录后便停止递归。
 目录名已是 `okwwcharcode` 且为干净的 Git 仓库时，在实际仓库中切换版本：
 
 ```sh
-git fetch origin tag v0.6.0 --no-tags
-git switch --detach v0.6.0
+git fetch origin tag v0.7.0 --no-tags
+git switch --detach v0.7.0
 ```
 
 安装后核对：
 
-- `HEAD` 与 `refs/tags/v0.6.0^{commit}` 指向同一提交；
-- 实际安装目录中的 `VERSION` 为 `0.6.0`；
+- `HEAD` 与 `refs/tags/v0.7.0^{commit}` 指向同一提交；
+- 实际安装目录中的 `VERSION` 为 `0.7.0`；
 - `git status --porcelain --untracked-files=all` 没有输出；
 - 宿主加载的是该安装目录，不存在同名旧副本。
 
@@ -364,6 +364,10 @@ G2 检查模型、动作判据、切人、依赖、参考耗时和开放缺项�
 
 ## 版本记录
 
+- 0.7.0：
+  - MCP 导入模板 `team_import.py` 兼容宿主页签和插件页签两种入口。ok-ww v3.7.15 起宿主移除“角色代码”页签，由插件 `character_code_tab` 提供。两种入口都没有时报 `no import entry`，提示安装插件或换用 v3.7.14 及以前的版本。
+  - `mcp-testing.md` 新增导入入口的版本表和“窗口不得最小化”前提。`baseline.md` 新增插件下的工坊主机说明，放行 `cfokwwchar.ok-script.com`。
+  - 验证范围：插件入口已在 v3.7.17 实机导入，宿主入口只跑过桩测试，矩阵开战步骤未在 v3.7.17 实跑。
 - 0.6.0：
   - 知识候选改为按 issue 登记：每轮新增或改过 `status`、`answer` 的 issue 都要登记，是否入卡写在处理状态里；新增“待验证”状态和清单开头的“已登记到”。知识提议先按 id 对比两版 issues，补登漏项再挑候选。
   - `rules.md` 新增 1-9：用 `liberation_available()` 等 R 时，冷却数字单帧漏读会读成就绪，读到就绪后取下一帧确认。新增 1-10：按 R 无演出时在等待上限内重按，不直接跳过。
