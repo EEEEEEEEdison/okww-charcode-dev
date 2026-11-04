@@ -28,7 +28,7 @@ description: okwwcharcode（ok-ww 角色代码开发）的实测迭代阶段。�
 7. 解释偏差，按根因选择退回阶段。
 8. 按 iterate.md §5–6 更新案例证据和验收状态。
    用户授权自主迭代时，按 iterate.md §4.1 的上限重复第 4–8 步。
-9. 本轮得到可入卡的新结论，或与现有卡冲突的已验证证据时，按 iterate.md §5 追加到知识候选清单。
+9. 按 iterate.md §5 把本轮新增或改过的 issue 登记到知识候选清单，不论是否满足入卡条件。
    用户要求推迟时，交付后再进入 [知识提议](../proposal/SKILL.md)；否则本轮进入。
 
 ## 输出与通过条件
@@ -40,7 +40,7 @@ description: okwwcharcode（ok-ww 角色代码开发）的实测迭代阶段。�
 - 根因结论区分观测、解释和待验证假设。
 - 产生新版本时，改动目标和验证办法可复查。
 - 已查清问题的 probe 行在新版本删除。
-- 本轮有知识候选时，已追加到 `knowledge-candidates.md`。
+- 本轮新增或改过的 issue 在 `knowledge-candidates.md` 都有对应行，“已登记到”为本轮版本目录。
 - 完成声明满足 iterate.md §6；用户提交 zip 时按 iterate.md §1.1 下结论。
 
 对照所需的来源缺失或片段不可读时，退回 [素材获取](../materials/SKILL.md)。
