@@ -181,7 +181,7 @@ git switch --detach v0.6.0
 Agent 把 `templates/mcp/` 的 Task 模板复制到工作区，用 `run_task` 依次提交：
 
 - `preflight.py`：从登录页、菜单或矩阵区域回到大世界。
-- `team_import.py`：导入工坊 zip，备份旧代码，读回核对。
+- `team_import.py`：确认导入入口（宿主或插件的角色代码页签），导入工坊 zip，备份旧代码，读回核对。
 - `matrix_nav.py`：从大世界或结算页导航到终焉矩阵，按 team.json 找到用户编好的测试队伍，不改编队，不保存成绩。
 - `matrix_run.py`：核对编队，交互回音之钥开战，切开场角色并锁敌，自动战斗，实时录像。
 

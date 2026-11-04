@@ -12,7 +12,8 @@ ok-ww 的 MCP 不需要额外安装脚本。
 | ok-ww | v3.7.14-beta.2 及以上，设置里已开启 MCP；带的 ok-script 版本见下文 |
 | 启动方式 | 必须经 `ok-ww.exe` 以管理员身份启动 |
 | 宿主 | 已配置 ok-ww MCP 连接，能调用 `run_task`、`get_run_status` |
-| 游戏 | 分辨率 16:9；矩阵已解锁 |
+| 游戏 | 分辨率 16:9；矩阵已解锁；窗口不得最小化，见 §8 |
+| 导入入口 | 导入 zip 时必须有其中 1 种，见 §4.2 |
 | 编队 | 用户已把测试队伍编进矩阵的一个队伍，1 号位是开场角色 |
 | 本机路径 | 工作区 `okwwcharcode.local.md` 里的 `working` 目录和 Python |
 
@@ -134,10 +135,22 @@ v3.7.14-beta.3 起改用 ok-script 3.0.0b3，模板尚未实测。
 
 ### 4.2 导入：team_import.py
 
-1. `team` 不为空时，校验 zip 里的队伍与 `team` 一致。
-2. 把已装的队伍目录复制到运行目录的 `backup_<队名>/`。
-3. 调用 `CustomCharLoader.import_custom_team()` 导入。
-4. 按文本读回，核对每个角色文件与 zip 一致，`code_mode` 为 `import`。
+1. 确认 ok-ww 有导入入口。
+2. `team` 不为空时，校验 zip 里的队伍与 `team` 一致。
+3. 把已装的队伍目录复制到运行目录的 `backup_<队名>/`。
+4. 调用 `CustomCharLoader.import_custom_team()` 导入。
+5. 按文本读回，核对每个角色文件与 zip 一致，`code_mode` 为 `import`。
+
+导入入口有 2 种。模板依次检查，并把结果写进 `import.json` 的 `entry`：
+
+| ok-ww 版本 | 入口 | `entry` | 判定依据 |
+|---|---|---|---|
+| v3.7.14 及以前 | 宿主注册的“角色代码”页签 | `host` | `config.py` 的 `custom_tabs` 含 `CharacterCodeTab` |
+| v3.7.15 起 | 插件提供的“角色代码”页签 | `plugin` | `ok_import/<插件>/manifest.json` 的 `custom_tabs` 含 `CharacterCodeTab` |
+
+2 种入口都没有时，模板报 `no import entry`，不导入。处理见 §8。
+
+说明：v3.7.15 起，上游只删了 `config.py` 的页签注册。`src/char/CustomCharLoader.py` 和 `src/gui/CharacterCodeTab.py` 还在。模板直接调用 `CustomCharLoader`，不操作页面。
 
 队伍目录旁已有 `<队名>.backup` 时，模板停止导入。
 原因：该目录说明上次导入中断，加载器导入时会删除该目录。
@@ -268,7 +281,9 @@ shell 读 `working/configs/custom_teams/` 会被拒绝访问。
 | 现象 | 原因 | 处理 |
 |---|---|---|
 | `preparing` 阶段报 `Target device could not be started` | ok-ww 不是管理员实例，游戏未运行 | 请用户以管理员身份重启 ok-ww |
+| `preparing` 卡约 120 秒，日志刷 `capture_by_bitblt invalid params: hwnd=0` | 游戏窗口最小化，ok-ww 判为未连接，走启动游戏分支 | 恢复窗口后重跑。`stop_task` 要等 `start_timeout` 到时才结束 |
 | `verify_start_state` 失败 | 起点页面不对 | 先运行 `matrix_nav.py` 或 `preflight.py` |
+| `no import entry` | 宿主没有注册“角色代码”页签，也没有提供该页签的插件；或 `CustomCharLoader` 不存在 | 停止，不得绕过。提示用户在插件页选择“从 ZIP 添加”，安装 `character_code_tab` 并重启 ok-ww，或换用 v3.7.14 及以前的版本。插件下载地址：【待补：`character_code_tab` 的发布地址】 |
 | `opener unknown` | team.json 没写“一号位”，`opener` 也为空 | 问用户一次开场角色，填进 `opener` |
 | `no slot has team` | 矩阵里没有成员相符的队伍 | 停止；请用户编好队伍，1 号位放开场角色 |
 | `save_result needs slot` | 要保存成绩，但测试队伍之后还有记录 | 停止，问用户改测哪一队 |
