@@ -163,8 +163,8 @@ git switch --detach v0.7.0
 | 阶段 | Skill 名 | 职责 | 主要交付物 |
 |---|---|---|---|
 | [素材获取](skills/materials/SKILL.md) | `materials` | 收集文字、视频、字幕与作者说明，记录素材条件 | 原素材、`media/info.md`、质量限制 |
-| [轴解析](skills/rotation/SKILL.md) | `rotation` | 确认所选轴，解释动作、资源与跨步依赖 | G1 确认、动作解释、代码基线、缺项 |
-| [时序建模](skills/timeline/SKILL.md) | `timeline` | 标记输入、状态变化和切人事件，测量参考耗时 | `timeline.json`、参考耗时表、G2 结果 |
+| [轴解析](skills/rotation/SKILL.md) | `rotation` | 确认所选轴，写简单验收草案，解释动作、资源与跨步依赖 | G1 确认、简单验收草案、动作解释、代码基线、缺项 |
+| [时序建模](skills/timeline/SKILL.md) | `timeline` | 标记输入、状态变化和切人事件，测量参考耗时，定稿验收目标 | `timeline.json`、参考耗时表、验收目标、G2 结果 |
 | [代码实现](skills/implementation/SKILL.md) | `implementation` | 选用框架 API，实现动作、判据与交场链 | 角色代码、`verify_chain.py`、实现说明 |
 | [验证交付](skills/delivery/SKILL.md) | `delivery` | 定向检查代码，校验并打包工坊文件 | 检查结果、zip、README、待实测项 |
 | [实测迭代](skills/iteration/SKILL.md) | `iteration` | 测试已有代码，或对照日志和录屏定位差异，修改并复验 | 测试证据、差异表、根因、下一版或验收记录 |

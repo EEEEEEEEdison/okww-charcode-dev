@@ -25,8 +25,8 @@ ok-ww 角色代码开发 Skill，可生成角色代码，也可直接测试现�
 | 阶段 Skill | 进入条件 | 交付物 | 细则 |
 |---|---|---|---|
 | [`materials`](skills/materials/SKILL.md) 素材获取 | 有视频、文字轴或待整理来源 | `media/info.md`、原素材、质量限制 | [step1.md §1](guides/step1.md) |
-| [`rotation`](skills/rotation/SKILL.md) 轴解析 | 素材能覆盖选定片段 | G1 确认、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](guides/step1.md) |
-| [`timeline`](skills/timeline/SKILL.md) 时序建模 | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、G2 结果 | [step1.md §4–5、§7–8](guides/step1.md)、[timeline.md](guides/timeline.md) |
+| [`rotation`](skills/rotation/SKILL.md) 轴解析 | 素材能覆盖选定片段 | G1 确认、简单验收草案、动作解释、代码基线、问题清单 | [step1.md §2–3、§6](guides/step1.md) |
+| [`timeline`](skills/timeline/SKILL.md) 时序建模 | 已确认文字轴和动作意图 | `timeline.json`、参考耗时表、验收目标、G2 结果 | [step1.md §4–5、§7–8](guides/step1.md)、[timeline.md](guides/timeline.md) |
 | [`implementation`](skills/implementation/SKILL.md) 代码实现 | G2 通过，或已有明确的局部修改任务 | 角色代码、`verify_chain.py`、实现说明 | [step2.md §1–6](guides/step2.md) |
 | [`delivery`](skills/delivery/SKILL.md) 验证交付 | 候选代码和来源齐全 | 检查结果、zip、README、待实测项 | [step2.md §7–8](guides/step2.md) |
 | [`iteration`](skills/iteration/SKILL.md) 实测迭代 | 已有待测代码与测试目标，或有可定位版本的日志或录屏 | 测试证据、差异表、根因、下一版依据或验收结果 | [iterate.md](guides/iterate.md) |

@@ -87,6 +87,20 @@
       "tolerance": null, "issue_refs": ["I1"]
     }
   ],
+  "acceptance": {
+    "duration_s": 120, "duration_from": "video", "startup_loss_s": 1.0,
+    "simple": [
+      {
+        "char": "Cantarella", "skill": "R", "count": 3, "source": "estimate",
+        "basis": "启动轴 1 次 + 2 轮 × 1 次，尾段来不及", "at": [],
+        "log_match": "Cantarella:.*cast R: ok"
+      }
+    ],
+    "detailed": {
+      "clock": "game", "timing_refs": ["T1"], "last_cast_left_s": 2.5, "budget_s": 1.5,
+      "state_checks": ["切人类型", "出场协奏"]
+    }
+  },
   "issues": [
     {
       "id": "I1", "refs": ["T1", "D1"], "kind": "timing", "impact": "trial",
@@ -176,6 +190,27 @@
 未知用 `null` 或明确的 `unknown`，不得填造值。
 时间测量和差值计算遵守 [timing.md](timing.md)。
 
+### 验收目标
+
+取值办法见 [step1.md §7.1](step1.md#71-验收目标)。
+
+| 字段 | 约定 |
+|---|---|
+| `acceptance.duration_s` | 副本时长，单位秒 |
+| `acceptance.duration_from` | `video` / `text` / `user` |
+| `acceptance.startup_loss_s` | 开战损耗；首局实测后改成实测值 |
+| `simple[].char/skill` | 定义性技能的角色类名与技能名 |
+| `simple[].count` | 目标次数 |
+| `simple[].source` | `video` / `text` / `estimate` |
+| `simple[].basis` | `text` 写原文，`estimate` 写算式和核对结果，`video` 可留空 |
+| `simple[].at` | `video` 来源每次出手的视频秒数；其他来源为 `[]` |
+| `simple[].log_match` | 在 `report/run.log` 统计次数用的正则，必须只匹配该技能的成功行 |
+| `detailed.clock` | 比较口径，默认 `game` |
+| `detailed.timing_refs` | 参与比较的 `reference_timings` 编号 |
+| `detailed.last_cast_left_s` | 最后一个定义性技能出手时的计时器余量 |
+| `detailed.budget_s` | 累计差上限，不含开战损耗 |
+| `detailed.state_checks` | 节点边界要核对的状态，例如切人类型、协奏、能量、角色资源 |
+
 ## 3 关口 G2
 
 以下适用项全部通过，才能生成整队代码。
@@ -198,10 +233,13 @@
 - [ ] 步骤起止事件已定义，输入、生效、结束与返回没有混用。
 - [ ] 参考耗时的事件、口径、各遍观察和精度可复查。
 - [ ] 所有判断、步骤、时间和缺项引用均能定位。
+- [ ] `acceptance` 已定稿，简单验收的来源、详细验收的区间和累计差上限可复查。
+- [ ] 累计差上限小于 1 s 时，用户已回答目标次数是否保留。
 
-检查结果写入 `notes.md`，并输出两张表：
+检查结果写入 `notes.md`，并输出三张表：
 
 1. 节点 / 轴原文 / 视频区间 / 动作与触发判据 / 切人方式 / 下个节点。
 2. 参考耗时表，按 timing.md 列各遍、口径和待测项。
+3. 验收目标表：技能 / 目标次数 / 来源 / 累计差上限。
 
 未通过时，退回 [轴解析](../skills/rotation/SKILL.md) 或 [时序建模](../skills/timeline/SKILL.md) 补证。
